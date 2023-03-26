@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+##SER NI DETTA ELLER"!=!?!?!=!=!
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['192.168.0.16', '10.2.128.86', '127.0.0.1', '172.20.10.3']
 
-
+#
 # Application definition
 
 INSTALLED_APPS = [
