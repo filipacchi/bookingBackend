@@ -27,7 +27,7 @@ export default function Nav() {
                     end={{ x: 1, y: 1 }} style={{ flex: 1 }}></LinearGradient>
             </View>
             <View style={styles.main}>
-                <Home></Home>
+                <Booking></Booking>
             </View>
             <View style={styles.navMenu}>
                 <Pressable style={styles.navButtons} onPress={() => setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" })}>

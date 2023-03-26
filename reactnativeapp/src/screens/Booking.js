@@ -13,7 +13,7 @@ export default function Booking() {
   const loadData = () => {
     async function getAllBookings() {
       try {
-        const bookings = await axios.get('http://192.168.0.16:8000/get/')
+        const bookings = await axios.get('http://localhost:8000/get/')
         console.log(bookings.data)
         setBooking(bookings.data)
         setLoading(false)
@@ -46,7 +46,7 @@ export default function Booking() {
       <View style={{borderRadius: 10}}>
       <Pressable style={styles.button} onPress={() => {
         console.log("KNAPP KLICKAD")
-        axios.post('http://192.168.0.16:8000/post/', {
+        axios.post('http://localhost:8000/post/', {
           headers: {
             'Content-Type': 'application/json;charset=UTF-8',
             "Access-Control-Allow-Origin": "*",
