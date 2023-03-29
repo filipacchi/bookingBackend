@@ -10,7 +10,7 @@ export default function App() {
 //return isLoading ? <Splash setIsLoading={setIsLoading}/> : <Home/> 
   return (
     //<Booking></Booking>
-    //<Login></Login>
-    <Nav></Nav>
+    <Login></Login>
+    //<Nav></Nav>
   )
 }

@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-s+3#u#wvrqn!cxws$r@5-uu)v@m*)g+smb^-ch=oq)v3mkn9=_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.16', '10.2.128.86', '127.0.0.1', '172.20.10.3']
+ALLOWED_HOSTS = ['*']
 
 #
 # Application definition
@@ -41,8 +41,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'washbooking',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
