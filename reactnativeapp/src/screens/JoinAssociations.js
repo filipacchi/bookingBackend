@@ -1,36 +1,35 @@
 
 import { StyleSheet, View, Text, Pressable, SafeAreaView } from "react-native"
-import React from 'react';
+import React, { cloneElement } from 'react';
 
 export default function JoinAssociations() {
 
-    allAssociations = [
+    allAssociations = [ // plocka från databas sen
         {id: 1,
-         name: "a"}, // id får 
+         name: "förening 1"},
         {id: 2,
-        name: "b"},
+        name: "förening 2"},
         {id: 3,
-        name: "c"},
+        name: "förening 3"},
         {id: 4,
-        name: "d"},
+        name: "förening 4"},
         {id: 5,
-        name: "e"}, 
+        name: "förening 5"}, 
         {id: 6,
-        name: "f"}, 
+        name: "förening 6"}, 
         {id: 7,
-        name: "g"}
+        name: "förening 7"}
     ]
-
 
     return (
         
         <SafeAreaView>
-            <View>
-                {allAssociations.map((item) => {
-                    <View>
-                        <Text> item.name </Text>
+            <View style={{justifyContent: "center", alignItems: "center"}}>
+                {allAssociations.map((item) => (
+                    <View style={{height: 20, width: 200, borderRadius: 3, backgroundColor: "red", justifyContent: "center", alignItems: "center"}}>
+                        <Text> {item.name} </Text>
                     </View>
-                })}
+                ))}
             </View>
 
         </SafeAreaView>
