@@ -18,7 +18,5 @@ export const HomeStack = () => {
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Nav" component={Nav} />
     </Stack.Navigator>
-);
-    
-
+    );
 }
