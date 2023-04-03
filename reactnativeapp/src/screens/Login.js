@@ -14,7 +14,7 @@ export default function Login() {
 
 
     function handleRequest() {
-        axios.post('http://192.168.0.16:8000/auth/login/', {
+        axios.post('http://192.168.0.24:8000/auth/login/', {
           username: username,
           password: password
         })
