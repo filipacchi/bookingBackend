@@ -5,15 +5,23 @@ import { useState, useEffect } from "react";
 import axios from 'axios';
 
 export default function Booking() {
+  const username = "filipacchi";
+  const password = "klm123";
   const [bookings, setBooking] = useState([])
   const [loading, setLoading] = useState(true)
   const  [text, onChangeText] = useState("Förnamn Efternamn");
   const [date, onChangeDate] = React.useState('2023-03-24');
-
+  const Buffer = require("buffer").Buffer;
+  const token = new Buffer((`${username}:${password}`, 'utf8')).toString("base64");
   const loadData = () => {
     async function getAllBookings() {
       try {
-        const bookings = await axios.get('http://172.20.10.3:8000/get/')
+        const bookings = await axios.get('http://192.168.0.24:8000/get/', {
+          auth: {
+            username: 'filipacchi',
+            password: 'klm123'
+          }
+        })
         console.log(bookings.data)
         setBooking(bookings.data)
         setLoading(false)
@@ -46,11 +54,12 @@ export default function Booking() {
       <View style={{borderRadius: 10}}>
       <Pressable style={styles.button} onPress={() => {
         console.log("KNAPP KLICKAD")
-        axios.post('http://172.20.10.3:8000/post/', {
-          headers: {
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-          },
+        axios.post('http://192.168.0.24:8000/post/', {
+         headers: {
+             'Content-Type': 'application/json;charset=UTF-8',
+             "Access-Control-Allow-Origin": "http://192.168.0.24:19000",
+             'Authorization': "Basic" + token
+           },
           name: text,
           date: date
         })

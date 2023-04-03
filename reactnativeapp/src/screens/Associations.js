@@ -2,13 +2,13 @@
 import { StyleSheet, View, Text, Pressable } from "react-native"
 import React from 'react';
 
-export default function User() {
+export default function Associations() {
 
 
 
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles.text}>USER</Text>
+            <Text style={styles.text}>Associations</Text>
         </View>
     )
 }

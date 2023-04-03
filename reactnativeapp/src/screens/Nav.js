@@ -8,8 +8,12 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
 //import Booking from "./Booking";
 import Login from "./Login";
+import { useNavigation } from "@react-navigation/native";
+import Book from "./Book";
 
 export default function Nav() {
+
+    const navigation = useNavigation();
 
     const initialColorValues = {
         washC: "#999999",
@@ -28,22 +32,21 @@ export default function Nav() {
                     end={{ x: 1, y: 1 }} style={{ flex: 1 }}></LinearGradient>
             </View>
             <View style={styles.main}>
-                
             </View>
             <View style={styles.navMenu}>
-                <Pressable style={styles.navButtons} onPress={() => setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" })}>
+                <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" }), navigation.navigate('Book')}}>
                     <MaterialCommunityIcons name="washing-machine" size={28} color={colorValues.washC} style={styles.icon} />
                     <Text style={styles.navText}>Tvätta</Text>
                 </Pressable>
-                <Pressable style={styles.navButtons} onPress={() => setColor({colorValues, homeC:"#2f9d9d", washC: "#999999",  calendarC:"#999999", userC:"#999999"})}>
+                <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, homeC:"#2f9d9d", washC: "#999999",  calendarC:"#999999", userC:"#999999"}), navigation.navigate('Associations')}}>
                     <AntDesign name="home" size={28} color={colorValues.homeC} style={styles.icon} />
                     <Text style={styles.navText}>Föreningar</Text>
                 </Pressable>
-                <Pressable style={styles.navButtons} onPress={() => setColor({colorValues, calendarC:"#2f9d9d", washC: "#999999", homeC:"#999999", userC:"#999999"})}>
+                <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, calendarC:"#2f9d9d", washC: "#999999", homeC:"#999999", userC:"#999999"}), navigation.navigate('Booking')}}>
                     <AntDesign name="calendar" size={28} color={colorValues.calendarC} style={styles.icon} />
                     <Text style={styles.navText}>Bokningar</Text>
                 </Pressable>
-                <Pressable style={styles.navButtons} onPress={() => setColor({colorValues, userC:"#2f9d9d", washC: "#999999", homeC:"#999999", calendarC:"#999999"})}>
+                <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, userC:"#2f9d9d", washC: "#999999", homeC:"#999999", calendarC:"#999999"}), navigation.navigate('Login')}}>
                     <AntDesign name="user" size={28} color={colorValues.userC} style={styles.icon} />
                     <Text style={styles.navText}>Profil</Text>
                 </Pressable>
