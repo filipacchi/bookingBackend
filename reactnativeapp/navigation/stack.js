@@ -16,8 +16,8 @@ const Stack = createStackNavigator();
 export const HomeStack = () => {
     return (    
     <Stack.Navigator>
-        <Stack.Screen name="Nav" component={Nav} />
         <Stack.Screen name="NavButtons" component={NavButtons} />
+        <Stack.Screen name="Nav" component={Nav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Booking" component={Booking} />
         <Stack.Screen name="Splash" component={Splash} />
