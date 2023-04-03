@@ -6,6 +6,7 @@ import Login from "../src/screens/Login";
 import Nav from "../src/screens/Nav";
 import Splash from "../src/screens/Splash";
 import NavButtons from "../src/screens/NavButtons";
+import JoinAssociations from "../src/screens/JoinAssociations";
 import User from "../src/screens/User";
 import Associations from "../src/screens/Associations";
 import Book from "../src/screens/Book";
@@ -23,8 +24,7 @@ export const HomeStack = () => {
         <Stack.Screen name="User" component={User}/>
         <Stack.Screen name="Associations" component={Associations}/>
         <Stack.Screen name="Book" component={Book}/>
+        <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
     </Stack.Navigator>
-);
-    
-
+    );
 }
