@@ -3,29 +3,21 @@ import { Card } from "react-native-paper"
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
-import { useState,setState } from "react";
-import { TextInput }from "react-native-paper";
-import axios from "axios";
+import { useState, setState } from "react";
+import { TextInput } from "react-native-paper";
+import { AuthContext } from "../../navigation/AppStack";
+
 
 export default function Login() {
 
+    const { signIn } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Username");
     const [password, onChangePassword] = useState("Password");
 
 
     function handleRequest() {
-        axios.post('http://192.168.0.24:8000/auth/login/', {
-          username: username,
-          password: password
-        })
-        .then(response => {
-          console.log(response.data);
-        })
-        .catch(error => {
-          console.log(error);
-          onChangeUsername("FEL");
-          onChangePassword("FEL")
-        });
+        console.log("KLICKAR")
+        signIn({ username, password });
     }
 
     return (
@@ -46,7 +38,7 @@ export default function Login() {
                     onChangeText={onChangePassword}
                     value={password}
                 />
-                <Pressable style={styles.input} onPress={() => {handleRequest()}}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
                 <View style={styles.input}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>Skapa konto</Text></View>
             </View>
         </LinearGradient>
