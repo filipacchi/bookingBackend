@@ -1,10 +1,13 @@
 
-import { StyleSheet, View, Text, Pressable, SafeAreaView } from "react-native"
+import { StyleSheet, View, Text, Pressable, SafeAreaView, Image, FlatList } from "react-native"
 import React from 'react';
 import { ScrollView } from "react-native-gesture-handler";
+/* import plusIcon from 'reactnativeapp\assets\plus-sign.png'; */
 
 
 export default function JoinAssociations() {
+
+    const plusIcon = require('reactnativeapp/assets/plus-sign.png');
 
     let myLocation =    {coordX: 17.64706376968685,
                          coordY: 59.839267262766334} // byt ut mot platsdata
@@ -23,7 +26,7 @@ export default function JoinAssociations() {
         coordX: 17.6521067898191,
         coordY: 59.840574219846076}, // Ångströmslaboratoriet nära
         {id: 4,
-        name: "akademiska sjukhuset",
+        name: "akademiska sjukhuset sjukhuset sjukhuset sjukhuset",
         coordX: 17.63991410277152, 
         coordY: 59.84862311933962}, // Ångströmslaboratoriet nära
         {id: 5,
@@ -36,7 +39,7 @@ export default function JoinAssociations() {
         coordY: 45.839267262}, // Ångströmslaboratoriet nära
     ]
 
-    // load_all_associations_from_database()
+    // const array = load_all_associations_from_database()
 
     function calculateDistance(myLoc, associationLoc) {
         const xDiff = myLoc.coordX - associationLoc.coordX;
@@ -51,24 +54,79 @@ export default function JoinAssociations() {
     return (
         <SafeAreaView>
 
-                {allAssociations.map((item) => (
-                    <View key={item}>
+            <FlatList
+            data={allAssociations}
+            style={{}}
+            renderItem={({ item }) => 
+            <View style={{...styles.associationWrapper, marginLeft: '10%'}}>
+                <View style={styles.associationLeft}>
+                    <Text style={{fontSize: 17, marginLeft: '10%', flexWrap: 'wrap', overflow: 'hidden'}}>{item.name}</Text>
+                </View>
+                <View style={styles.associationRight}>
+                    <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}></Image>
+                </View>
+            </View>}
+
+
+            /* onRefresh={() => loadData()} aktivera senare när vi har associations i databasen */
+            /* refreshing={loading} --- samma här */
+
+
+            /> 
+
+
+{/*             {allAssociations.map((item, index) => (
+                <View style={styles.associationWrapper} key={index}>
+                    <View style={styles.associationLeft}>
                         <Text>
                             {item.name}
                         </Text>
                     </View>
-                ))}
+                    <View style={styles.associationRight}>
+                            <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}>
+                                
+                            </Image>
+                    </View>
+
+                    
+                </View>
+            ))} */}
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     associationWrapper: {
-        height: 200,
-        width: 200,
-        backgroundColor: 'red',
-        color: "black"
+        flexDirection: "row",
+        left: '7%',
+        height: 70,
+        width: '86%',
+        color: "black",
+        borderWidth: 3,
+        borderRadius: 5,
+        borderColor: "red",
+        border: "solid"
     },
+
+    associationLeft: {
+        position: "left",
+        width: '70%',
+        height: '100%',
+        borderWidth: 3,
+        borderColor: "blue",
+        justifyContent: "center"
+    },
+    associationRight: {
+        position: "right",
+        width: '30%',
+        height: '100%',
+        borderColor: "blue",
+        borderWidth: 3,
+        alignItems: "center",
+        justifyContent: "center"
+
+    },
+
     text: {
       color: "green"  
     },

@@ -38,6 +38,7 @@ export default function Booking() {
   useEffect(() => {
     loadData();
   }, [])
+  
   return (
     
     <View style={styles.container}>

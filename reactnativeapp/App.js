@@ -7,18 +7,16 @@ import Booking from "./src/screens/Booking";
 import Nav from "./src/screens/Nav";
 import Login from "./src/screens/Login";
 
+
 // ...fortsätter
-import { NavigationContainer } from "@react-navigation/native";
-import { HomeStack } from "./navigation/stack";
+import AppStack from "./navigation/AppStack"
 
 export default function App() {
 //const [isLoading, setIsLoading] = React.useState(true);
 //return isLoading ? <Splash setIsLoading={setIsLoading}/> : <Home/> 
   return (
 
-    <NavigationContainer>
-      <HomeStack />
-    </NavigationContainer>
+      <AppStack />
 
     //<Booking></Booking>
     // <Login></Login>
