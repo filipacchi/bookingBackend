@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Booking
+from .models import Association
 from django.contrib.auth import get_user_model;
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -21,3 +22,8 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model=Booking
         fields=('id','name','date')
+
+class AssociationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Association
+        fields=('adress', 'coordinateX', 'coordinatY')
