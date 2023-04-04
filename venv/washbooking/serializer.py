@@ -26,4 +26,4 @@ class BookingSerializer(serializers.ModelSerializer):
 class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Association
-        fields=('adress', 'coordinateX', 'coordinatY')
+        fields=('member', 'adress', 'coordinateX', 'coordinatY')
