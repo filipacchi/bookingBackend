@@ -26,4 +26,5 @@ class BookedTimes(models.Model):
     endTime = models.DateTimeField(unique=True, blank=False)
 
 class Keys(models.Model):
+    key = models.CharField(max_length=10)
     used = models.BooleanField(blank=False)
