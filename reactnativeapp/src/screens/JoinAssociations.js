@@ -9,10 +9,12 @@ export default function JoinAssociations() {
 
     const plusIcon = require('reactnativeapp/assets/plus-sign.png');
 
+
+    let myAssociations = [] /*  */
     let myLocation =    {coordX: 17.64706376968685,
                          coordY: 59.839267262766334} // byt ut mot platsdata
 
-    allAssociations = [
+    const allAssociations = [
         {id: 1,
          name: "17.64 59.84 ångan",
         coordX: 17.64706376968685,
@@ -58,12 +60,18 @@ export default function JoinAssociations() {
             data={allAssociations}
             style={{}}
             renderItem={({ item }) => 
-            <View style={{...styles.associationWrapper, marginLeft: '10%'}}>
+            <View style={{...styles.associationWrapper, marginLeft: '7%'}}>
                 <View style={styles.associationLeft}>
                     <Text style={{fontSize: 17, marginLeft: '10%', flexWrap: 'wrap', overflow: 'hidden'}}>{item.name}</Text>
                 </View>
                 <View style={styles.associationRight}>
-                    <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}></Image>
+                    <Pressable style={{height: '100%', width: '100%', alignItems: "center", justifyContent: "center"}} 
+                    onPress={ () =>
+                    myAssociations
+                    
+                    }>
+                        <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}></Image>
+                    </Pressable>
                 </View>
             </View>}
 
