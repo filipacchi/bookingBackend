@@ -23,7 +23,12 @@ class Association(models.Model):
     coordinateY = models.FloatField(max_length=200, blank=False)
 
 class BookableObjects(models.Model):
-    ...
+    objectId = models.AutoField(primary_key=True)
+    inAssociation = models.ForeignKey(Association, on_delete=models.CASCADE)
+    objectName = models.CharField(blank=False)
+    timeSlotLength = models.FloatField(max_length=2)
+    timesSlotStartTime = models.TimeField()
+
 
 class BookedTimes(models.Model):
     startTime = models.DateTimeField(unique=True, blank=False)
