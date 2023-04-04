@@ -17,10 +17,13 @@ class Booking(models.Model):
 User = get_user_model()
 
 class Association(models.Model):
-    member = models.ForeignKey(User, on_delete=models.CASCADE)  #reffererar till djangos egna
     adress = models.CharField(max_length=200, blank=False)
     coordinateX = models.FloatField(max_length=200, blank=False)
     coordinateY = models.FloatField(max_length=200, blank=False)
+
+class Profile(models.Model): 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    associations = models.ForeignKey(Association, on_delete=models.CASCADE)
 
 class BookableObject(models.Model):
     objectId = models.AutoField(primary_key=True)
