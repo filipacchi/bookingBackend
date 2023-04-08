@@ -6,7 +6,7 @@ import Nav from "../src/screens/Nav";
 import Splash from "../src/screens/Splash";
 import NavButtons from "../src/screens/NavButtons";
 import JoinAssociations from "../src/screens/JoinAssociations";
-import Calendar from "reactnativeapp/src/screens/Calendar.js";
+import Calendar from "reactnativeapp/src/screens/Calendar.tsx";
 import User from "../src/screens/User";
 import Associations from "../src/screens/Associations";
 import Book from "../src/screens/Book";
