@@ -83,15 +83,8 @@ class BookableObject(models.Model):
     timeSlotLength = models.FloatField(max_length=2)
     timesSlotStartTime = models.TimeField()
 
-
-class BookedTime(models.Model):
-    startTime = models.DateTimeField(unique=True, blank=False)
-    endTime = models.DateTimeField(unique=True, blank=False)
-
-class Key(models.Model):
-    key = models.CharField(max_length=10)
-    used = models.BooleanField(blank=False)
-
+    def __str__(self):
+        return self.objectName
 
 class Person(models.Model):
     user = models.OneToOneField(
@@ -100,8 +93,8 @@ class Person(models.Model):
         primary_key=True,
     )
     # måste undersöka om manytomany ska användas eller foreign key
-    # associations = models.ManyToManyField(Association) 
-    assocation = models.ForeignKey(Association,blank=True, null=True,on_delete=models.CASCADE)
+    associations = models.ManyToManyField(Association) 
+    #assocation = models.ForeignKey(Association,blank=True, null=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.name
@@ -112,3 +105,27 @@ def update_profile_signal(sender, instance, created, **kwargs):
     if created:
         Person.objects.create(user=instance)
     instance.person.save()
+
+class BookedTime(models.Model):
+    TIME_SLOTS = (
+        (0, '06:00 - 10:00'),
+        (1, '10:00 - 14:00'),
+        (2, '14:00 - 18:00'),
+        (3, '18:00 - 22:00'),
+    )
+    timeslot = models.IntegerField(choices=TIME_SLOTS, null=True)
+    booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, null=True)
+    booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
+    date = models.DateField(help_text="YYYY-MM-DD", null=True)
+    class Meta:
+        unique_together = ('timeslot', 'date')
+
+    def __str__(self):
+        return str(self.booking_object.objectName + " " + self.TIME_SLOTS[self.timeslot][1])
+
+
+class Key(models.Model):
+    key = models.CharField(max_length=10)
+    used = models.BooleanField(blank=False)
+
+
