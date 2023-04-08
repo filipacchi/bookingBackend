@@ -14,5 +14,7 @@ urlpatterns = [
         name='auth_user_login'),
     path('auth/register/',
         RegisterView.as_view(),
-        name='auth_user_create')
+        name='auth_user_create'),
+    path('book/get/', GetBookingsAPIVIEW.as_view(), name='get_all_bookings'),
+    path('book/add/', CreateBookingAPIVIEW.as_view(), name='add_booking'),
 ]
