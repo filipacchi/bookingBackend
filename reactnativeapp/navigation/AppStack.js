@@ -6,6 +6,7 @@ import Nav from "../src/screens/Nav";
 import Splash from "../src/screens/Splash";
 import NavButtons from "../src/screens/NavButtons";
 import JoinAssociations from "../src/screens/JoinAssociations";
+import Calendar from "reactnativeapp/src/screens/Calendar.tsx";
 import User from "../src/screens/User";
 import Associations from "../src/screens/Associations";
 import Book from "../src/screens/Book";
@@ -125,6 +126,7 @@ export default function Stack() {
         <Stack.Screen name="Associations" component={Associations} />
         <Stack.Screen name="Book" component={Book} />
         <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
+        <Stack.Screen name="Calendar" component={Calendar}/>
       </Stack.Navigator>
     </AuthContext.Provider>
     </NavigationContainer>
