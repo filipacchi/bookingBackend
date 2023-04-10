@@ -15,7 +15,7 @@ import Associations from "./Associations";
 
 export default function Nav() {
 
-    const navigation = useNavigation();
+    /* const navigation = useNavigation(); */
 
     const initialColorValues = {
         washC: "#999999",
@@ -29,30 +29,12 @@ export default function Nav() {
 
     function MainWindow() {
         
-        if (currentView == "") {
-            return (
-                <View style={styles.main}/>
-            ) 
-        } else if (currentView == "JoinAssociations") {
-            return (
-                <JoinAssociations/>
-            )
-        } else if (currentView == "Login") {
-            return (
-                <Login/>
-            )
-        } else if (currentView == "Book") {
-            return (
-                <Book/>
-            )
-        } else if (currentView == "Booking") {
-            return (
-                <Book/>
-            )
-        } else if (currentView == "Associations") {
-            return (
-                <Associations/>
-            )
+        if (currentView == "") {return (<View style={styles.main}/>) 
+        } else if (currentView == "JoinAssociations") {return (<JoinAssociations/>)
+        } else if (currentView == "Login") {return (<Login/>)
+        } else if (currentView == "Book") {return (<Book/>)
+        } else if (currentView == "Booking") {return (<Book/>)
+        } else if (currentView == "Associations") {return (<Associations/>)
         }
     }
 
@@ -123,7 +105,8 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginTop: 10,
         fontSize: 12,
-        fontFamily: "DamascusBold",
+        /* fontFamily: "DamascusBold", ej i Android */
+        
         color: "#999999"
     },
     icon: {
