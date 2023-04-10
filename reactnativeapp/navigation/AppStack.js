@@ -30,7 +30,8 @@ export default function Stack() {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
-            userToken: action.token,
+            userToken: action.token.access,
+            userRefreshToken: action.token.refresh,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -38,6 +39,7 @@ export default function Stack() {
             ...prevState,
             isSignout: false,
             userToken: action.token.access,
+            userRefreshToken: action.token.refresh,
             isStaff: action.token.isStaff,
             username: action.token.username,
           };
@@ -53,6 +55,7 @@ export default function Stack() {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      userRefreshToken: null,
       isStaff: null,
       username: null
     }
@@ -61,13 +64,13 @@ export default function Stack() {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-      let userToken;
+      let userRefreshToken;
 
       try {
-        userToken = await SecureStore.getItemAsync('userToken')
-        console.log(userToken),
-        validateToken(userToken),
-        console.log("THEN")
+        userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
+        console.log(userRefreshToken),
+          validateToken(userRefreshToken),
+          console.log("THEN")
       } catch (e) {
         // Restoring token failed
       }
@@ -76,12 +79,15 @@ export default function Stack() {
         const config = {
           headers: { Authorization: `Bearer ${token}` }
         };
-        axios.get('validate',
-          config
+        const bodyParameters = {
+          refresh: userRefreshToken
+        };
+        axios.post('token/refresh/',
+          bodyParameters
         )
           .then(response => {
             console.log("TOKEN OKAY")
-            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+            dispatch({ type: 'RESTORE_TOKEN', token: response.data });
           })
           .catch(error => {
             console.log(error);
@@ -104,6 +110,7 @@ export default function Stack() {
           .then(response => {
             console.log(response.data.access);
             save("userToken", response.data.access)
+            save("userRefreshToken", response.data.refresh)
             dispatch({ type: 'SIGN_IN', token: response.data });
           })
           .catch(error => {

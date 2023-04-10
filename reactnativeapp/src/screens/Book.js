@@ -49,7 +49,7 @@ export default function Book() {
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles.text}>TOKEN: {token}</Text>
-            <Pressable onPress={console.log(token)}><Text style={styles.text}>Klicka mig</Text></Pressable>
+            <Pressable style={styles.button} onPress={() => {console.log(token)}}><Text>Klicka mig</Text></Pressable>
         </View>
     )
 }
@@ -58,5 +58,11 @@ const styles = StyleSheet.create({
     text: {
         marginTop: 100,
         backgroundColor: "red"
+    },
+    button: {
+        backgroundColor: "grey",
+        alignSelf: "center",
+        padding: 20,
+        margin: 10
     }
 });
