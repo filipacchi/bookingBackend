@@ -7,10 +7,12 @@ from django.http import Http404
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import *
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from .serializer import *
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from .permissions import *
 
 @api_view(['GET'])
 def getBooking(request):
@@ -72,13 +74,38 @@ class LogoutUserAPIView(APIView):
         return Response(status=status.HTTP_200_OK)
     #####
 
+class GetUserBookingAPIVIEW(APIView):
+    permission_classes = [IsAuthenticated]#[checkGroup]
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        print(user_associations)
+        for association in user_associations:
+            bookable_object = BookableObject.objects.filter(inAssociation=association)
+            for object in bookable_object:
+                print(BookedTime.objects.filter(booking_object=object))
+        return Response("GetUserBooking")
+    
 class GetBookingsAPIVIEW(APIView):
+    permission_classes= [AllowAny]#[checkGroup]
     def get(self,request):
-        all_bookings = BookedTime.objects.all()
-        serializer = BookedTimeSerializer(all_bookings, many=True)
+        print(self.request.data)
+        bookings = BookedTime.objects.all()
+        serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
     
-class CreateBookingAPIVIEW(APIView):
+class GetBookingsFromObject(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self,request,object_pk):
+        bookable_object = BookableObject.objects.get(objectId=object_pk)
+        bookings = BookedTime.objects.filter(booking_object=bookable_object)
+        serializer = BookedTimeSerializer(bookings, many=True)
+        print(bookings)
+        return Response(serializer.data)
+    
+class CreateBookingAPIVIEW( APIView):
+    permission_classes= []
     def post(self,request):
         serializer = BookedTimeSerializer(data=request.data)
         if serializer.is_valid():
@@ -87,3 +114,8 @@ class CreateBookingAPIVIEW(APIView):
             return Response(serializer.data)
         else: print("NOT VALID")
         return Response("An error occured, this time might not be available")
+
+class checkValidationAPIVIEW(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        return Response("Validated")
