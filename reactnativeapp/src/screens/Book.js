@@ -13,7 +13,7 @@ export default function Book() {
     const [bookings, setBooking] = useState([])
 
     const loadData = () => {
-        async function getAllBookings() {
+        async function getAssociation() {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -49,7 +49,7 @@ export default function Book() {
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles.text}>TOKEN: {token}</Text>
-            <Pressable style={styles.button} onPress={() => {console.log(token)}}><Text>Klicka mig</Text></Pressable>
+            <Pressable style={styles.button} onPress={() => {console.log(token), loadData()}}><Text>Klicka mig</Text></Pressable>
         </View>
     )
 }
