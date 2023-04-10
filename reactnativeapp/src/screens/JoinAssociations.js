@@ -136,7 +136,7 @@ export default function JoinAssociations() {
 
 
         return (
-            <SafeAreaView>
+            <SafeAreaView style={{flexGrow: 1}}>
                 <FlatList
                 data={allAssociations}
                 style={{}}
@@ -164,7 +164,7 @@ export default function JoinAssociations() {
                     </View>}
                 ></FlatList>
 
-                <View style={{border: "solid", borderWidth: "4"}}>
+                <View style={{border: "solid", borderWidth: 4}}>
                     <Text>
                         {"key match found: " + keyMatchFound}
                     </Text>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
         border: "solid"
     },
     associationLeft: {
-        position: "left",
+/*         position: "left", */
         width: '70%',
         height: '100%',
         borderWidth: 3,
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     associationRight: {
-        position: "right",
+/*         position: "right", */
         width: '30%',
         height: '100%',
         borderColor: "blue",
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
         width: '95%',
         left: '5%',
         bottom: '10%',
-        border: "solid", borderWidth: '2',
+        border: "solid", borderWidth: 2,
         borderColor: "green",
         backgroundColor: "white"
     },
@@ -300,13 +300,13 @@ const styles = StyleSheet.create({
         position: "absolute", 
         width: "100%", height: "30%",
         bottom: "5%",
-        border: "solid", borderWidth: "2", borderRadius: "4", borderColor: "blue"
+        border: "solid", borderWidth: 2, borderRadius: 4, borderColor: "blue"
     },
     modalTextInput: {
         position: "absolute",
         color: "black",
         width: "85%", height: "100%",
-        border: "solid", borderWidth: "2", borderRadius: "4"
+        border: "solid", borderWidth: 2, borderRadius: 4
     },
     modalTextInputButton: {
         height: "100%",

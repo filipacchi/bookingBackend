@@ -132,13 +132,13 @@ export default function Stack() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {state.userToken == null ? (
+          {/* {state.userToken == null ? (
             <Stack.Screen name="Login" component={Login} />
           ) : (
             <Stack.Screen name="Book" component={Book} />
-          )}
-          {/* <Stack.Screen name="NavButtons" component={NavButtons} />
+          )} */}
         <Stack.Screen name="Nav" component={Nav} />
+        <Stack.Screen name="NavButtons" component={NavButtons} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Booking" component={Booking} />
         <Stack.Screen name="Splash" component={Splash} />
@@ -146,7 +146,7 @@ export default function Stack() {
         <Stack.Screen name="Associations" component={Associations} />
         <Stack.Screen name="Book" component={Book} />
         <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-        <Stack.Screen name="Calendar" component={Calendar}/> */}
+        <Stack.Screen name="Calendar" component={Calendar}/>
         </Stack.Navigator>
       </AuthContext.Provider>
     </NavigationContainer>
