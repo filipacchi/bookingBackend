@@ -138,11 +138,12 @@ export default function Stack() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {state.userToken == null ? (
+          {/* {state.userToken == null ? (
             <Stack.Screen name="Login" component={Login} />
           ) : (
             <Stack.Screen name="NavButtons" component={NavButtons} />
-          )}
+          )} */}
+          <Stack.Screen name="NavButtons" component={NavButtons} />
           <Stack.Screen name="Nav" component={Nav} />
           <Stack.Screen name="Booking" component={Booking} />
           <Stack.Screen name="Splash" component={Splash} />
