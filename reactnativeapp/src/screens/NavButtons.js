@@ -19,8 +19,8 @@ const NavButtonScreen = () => {
                 gap: 20
             }}>
             <SafeAreaView>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Booking')}}><Text style={styles.inputText}>Booking</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Nav')}}><Text style={styles.inputText}>Nav</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => {navigation.navigate('Book')}}><Text style={styles.inputText}>Book</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => {navigation.navigate('Associations')}}><Text style={styles.inputText}>Associations</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Login')}}><Text style={styles.inputText}>Log in</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Splash')}}><Text style={styles.inputText}>Splash</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('JoinAssociations')}}><Text style={styles.inputText}>JoinAssociations</Text></Pressable>

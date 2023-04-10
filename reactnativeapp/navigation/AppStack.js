@@ -62,7 +62,6 @@ export default function Stack() {
   );
 
   React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userRefreshToken;
 
@@ -139,21 +138,19 @@ export default function Stack() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {/* {state.userToken == null ? (
+          {state.userToken == null ? (
             <Stack.Screen name="Login" component={Login} />
           ) : (
-            <Stack.Screen name="Book" component={Book} />
-          )} */}
-        <Stack.Screen name="Nav" component={Nav} />
-        <Stack.Screen name="NavButtons" component={NavButtons} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Booking" component={Booking} />
-        <Stack.Screen name="Splash" component={Splash} />
-        <Stack.Screen name="User" component={User} />
-        <Stack.Screen name="Associations" component={Associations} />
-        <Stack.Screen name="Book" component={Book} />
-        <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-        <Stack.Screen name="Calendar" component={Calendar}/>
+            <Stack.Screen name="NavButtons" component={NavButtons} />
+          )}
+          <Stack.Screen name="Nav" component={Nav} />
+          <Stack.Screen name="Booking" component={Booking} />
+          <Stack.Screen name="Splash" component={Splash} />
+          <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="Associations" component={Associations} />
+          <Stack.Screen name="Book" component={Book} />
+          <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
+          <Stack.Screen name="Calendar" component={Calendar} />
         </Stack.Navigator>
       </AuthContext.Provider>
     </NavigationContainer>
