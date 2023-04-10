@@ -11,24 +11,24 @@ export default function JoinAssociations() {
     const plusIcon = require('reactnativeapp/assets/plus-sign.png');
     const closeIcon = require('reactnativeapp/assets/close-window.png')
 
-    const associationKeys = [ // importera från databas efter att vi har valt association
+    const associationunoccupiedKeys = [ // importera från databas efter att vi har valt association
         {id: 1, 
-        keys: ["1", "11", "111", "1111", "11111"]},
+        unoccupiedKeys: ["1", "11", "111", "1111", "11111"]},
         
         {id: 2,
-        keys: ["2", "22", "222", "2222", "22222"]
+        unoccupiedKeys: ["2", "22", "222", "2222", "22222"]
         }, 
         {id: 3,
-        keys: ["3", "33", "333", "3333", "33333"]
+        unoccupiedKeys: ["3", "33", "333", "3333", "33333"]
         }, 
         {id: 4,
-        keys: ["4", "44", "444", "4444", "44444"]
+        unoccupiedKeys: ["4", "44", "444", "4444", "44444"]
         }, 
         {id: 5,
-        keys: ["5", "55", "555", "5555", "55555"]
+        unoccupiedKeys: ["5", "55", "555", "5555", "55555"]
         }, 
         {id: 6,
-        keys: ["6", "66", "666", "6666", "66666"]
+        unoccupiedKeys: ["6", "66", "666", "6666", "66666"]
         }, 
     ]
 
@@ -72,42 +72,33 @@ export default function JoinAssociations() {
         return Math.sqrt(xDiff ** 2 + yDiff ** 2);
     }
 
+
     allAssociations.sort( (obj1, obj2) => calculateDistance(myLocation, obj1) - calculateDistance(myLocation, obj2))
 
+    /* borde hända när vi laddar sidan, inte när vi importerar den i App */
 
 
-    const [modalVisible, setModalVisible] = useState(false)
-    const [selectedAssociation, setSelectedAssociation] = useState({})
 
-    /* selectedAssociation FUNGERAR */
-    
-/*     const closeIcon = () => {
-        setModalVisible(false)
-    } */
+    /* ---- HÄR BÖRJAR KOMPONENTEN! ---- */
 
-    
-    function openPopUp(item) {
-        console.log("item: " + item)
-        console.log("item.name: " + item.name)
-        setSelectedAssociation(item)
-        setModalVisible(true)
-    }
+    function AllAssociations() {
+
+        /* FLATLIST */
+
+        function openPopUp(item) {
+            console.log("item: " + item)
+            console.log("item.name: " + item.name)
+            setSelectedAssociation(item)
+            setModalVisible(true)
+        }
 
 
-/*     function checkKeyMatch(selectedAssociation, associationKeys, inputText) {
-        console.log("From checkKeyMatch:")
-        console.log("inputText = " + inputText)
-        console.log("selectedAssociation.id = " + selectedAssociation.id)
-        console.log("associationKeys(selectedAssociation.id = " + associationKeys(selectedAssociation.id))
+        
+        
+        /* MODAL */
 
-        return (inputText in 
-            associationKeys.find( item => {
-            return item.id === selectedAssociation.id}).keys)
-    } */
-
-    let keyMatchFound = false
-
-    function AssociationPopUp({ selectedAssociation, associationKeys }) {
+        const [modalVisible, setModalVisible] = useState(false)
+        const [selectedAssociation, setSelectedAssociation] = useState({})
 
         const [isFocused, setIsFocused] = useState(false)
         const [inputText, setInputText] = useState("")
@@ -118,148 +109,124 @@ export default function JoinAssociations() {
             setInputText(newText)
         })
 
-        /* updateKeyPopUp = (() => {
-            setSelectedAssociation(data)
-        }, [data]) */
+
+    /* MODAL --> NYCKLAR */
+    
+
+        const [keyMatchFound, setKeyMatchFound] = useState(false)
+
+        function checkKeyMatch(inputText) {
+            console.log("From checkKeyMatch:")
+            console.log("inputText = " + inputText)
+            console.log("selectedAssociation.id = " + selectedAssociation.id)
+
+            const associationIDMatch = associationunoccupiedKeys.find( item => {
+            return item.id === selectedAssociation.id})
+            
+            if (associationIDMatch.unoccupiedKeys.includes(inputText)) {
+                console.log("Key match found for association " + selectedAssociation.id + 
+                " and key " + inputText)
+                setKeyMatchFound(true)
+            } else {
+                setKeyMatchFound(false)
+                console.log("No match found")
+            }
+
+        }
+
 
         return (
-            <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}>
-
-                <View style={styles.modalWindow}>
-                    <View style={styles.modalOuter}>
-                        <View style={styles.modalInner}>
-                            <Text>{"Submit Your Association Key:"}</Text>
-
-                            <View style={styles.inputAndCheckMark}>
-
-                                <TextInput 
-                                    value={inputText}
-                                    /* style={styles.modalTextInput} */
-                                    onPress={() => setIsFocused(true)}
-                                    placeholder={"Enter Association Key"}
-                                    onChangeText={handleChangeText}>
-                                </TextInput>
-                                <Pressable onPress={(selectedAssociation, associationKeys, value) => {
-                                            console.log("From checkKeyMatch:")
-                                            console.log("inputText = " + value)
-                                            console.log("selectedAssociation.id = " + selectedAssociation.id)
-                                            console.log("associationKeys(selectedAssociation.id = " + associationKeys(selectedAssociation.id))
-                                    
-                                            try {
-                                                const associationIDMatch = associationKeys.find( item => {
-                                                return item.id === selectedAssociation.id})
-                                                
-                                                if (associationIDMatch.keys.includes(inputText)) {
-                                                    console.log("Key match found for association " + selectedAssociation.id + 
-                                                    "and key " + inputText)
-                                                    keyMatchFound = true
-                                                }
-                                            }
-                                            catch(error) {
-                                                console.log(error)
-
-                                                console.log("No match found")
-                                            }
-                                        }}>
-                                    <Image 
-                                        source={checkMarkIcon} 
-                                        
-                                        style={styles.modalTextInputButton}>
-                                    </Image>
-                                </Pressable>
-                            </View>
-
-                            
-
+            <SafeAreaView>
+                <FlatList
+                data={allAssociations}
+                style={{}}
+                renderItem={({ item }) => 
+                    <View style={{...styles.associationWrapper, marginLeft: '5%'}}>
+                        <View style={styles.associationLeft}>
+                            <Text style={{fontSize: 17, marginLeft: '10%', flexWrap: 'wrap', overflow: 'hidden'}}>{item.name}</Text>
                         </View>
                         
+                        <View style={styles.associationRight}>
+                            <TouchableOpacity style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center' }}
+                            onPress = { () => {
+                                openPopUp(item);
+                                setSelectedAssociation(item) /* dehär ska bort */
+                            
+                            }}
+                            >
+                            <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}></Image>
+                            </TouchableOpacity>
+                            
+                        </View>
 
-                        <Pressable
-                        style={styles.modalCloseButton}
-                        onPress={() => setModalVisible(false)}
-                        >
-                            <Image source={closeIcon} style={styles.modalCloseIcon} />
-                        </Pressable>
-                    </View>
+                                            {/* onRefresh={() => loadData()} aktivera senare när vi har associations i databasen */
+                                            /* refreshing={loading} --- samma här */}
+                    </View>}
+                ></FlatList>
+
+                <View style={{border: "solid", borderWidth: "4"}}>
+                    <Text>
+                        {"key match found: " + keyMatchFound}
+                    </Text>
                 </View>
-            </Modal>
+
+                <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}>
+
+                    <View style={styles.modalWindow}>
+                        <View style={styles.modalOuter}>
+                            <View style={styles.modalInner}>
+                                <Text>{"Submit Your Association Key:"}</Text>
+
+                                <View style={styles.inputAndCheckMark}>
+                                    <TextInput 
+                                        value={inputText}
+                                        /* style={styles.modalTextInput} */
+                                        onPress={() => setIsFocused(true)}
+                                        placeholder={"Enter Association Key"}
+                                        onChangeText={handleChangeText}>
+                                    </TextInput>
+                                    <Pressable onPress={ () => {
+                                        console.log("Value: " + inputText)
+                                        checkKeyMatch(inputText)}}>
+                                        <Image 
+                                            source={checkMarkIcon} 
+                                            
+                                            style={styles.modalTextInputButton}>
+                                        </Image>
+                                    </Pressable>
+                                </View>
+                            </View>
+                            
+
+                            <Pressable
+                            style={styles.modalCloseButton}
+                            onPress={() => setModalVisible(false)}
+                            >
+                                <Image source={closeIcon} style={styles.modalCloseIcon} />
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+
+            </SafeAreaView>
         )
     }
 
-    function addAssociation(item) {
-        /* om nyckeln matchar --> lägg till currentAssociation i myAssociations */
-    }
+
 
 
     return (
-        <SafeAreaView>
-
-<FlatList
-            data={allAssociations}
-            style={{}}
-            renderItem={({ item }) => 
-                <View style={{...styles.associationWrapper, marginLeft: '5%'}}>
-                    <View style={styles.associationLeft}>
-                        <Text style={{fontSize: 17, marginLeft: '10%', flexWrap: 'wrap', overflow: 'hidden'}}>{item.name}</Text>
-                    </View>
-                    
-                    <View style={styles.associationRight}>
-                        <TouchableOpacity style={{ height: '100%', width: '100%', alignItems: 'center', justifyContent: 'center' }}
-                        onPress = { () => {
-                            openPopUp(item);
-                            setSelectedAssociation(item) /* dehär ska bort */
-                        
-                        }}
-                        >
-                        <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}></Image>
-                        </TouchableOpacity>
-                        
-                    </View>
-
-                                        {/* onRefresh={() => loadData()} aktivera senare när vi har associations i databasen */
-                                        /* refreshing={loading} --- samma här */}
-                </View>}
-            />
-            
-            <View style={{border: "solid", borderWidth: "4"}}>
-                <Text>
-                    {"key match found: " + keyMatchFound}
-                </Text>
-            </View>
-
-            <AssociationPopUp
-            data={allAssociations}>
-
-            </AssociationPopUp>
-
-
-
-{/*             {allAssociations.map((item, index) => (
-                <View style={styles.associationWrapper} key={index}>
-                    <View style={styles.associationLeft}>
-                        <Text>
-                            {item.name}
-                        </Text>
-                    </View>
-                    <View style={styles.associationRight}>
-                            <Image source={plusIcon} style={{height: '50%', width: '50%', resizeMode: "contain"}}>
-                                
-                            </Image>
-                    </View>
-
-                    
-                </View>
-            ))} */}
-        </SafeAreaView>
+        <AllAssociations/>
     )
 }
 
 const styles = StyleSheet.create({
     associationWrapper: {
+        display: "flex",
         flexDirection: "row",
         left: '7%',
         height: 70,
