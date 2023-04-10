@@ -25,3 +25,8 @@ class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Association
         fields=('adress', 'coordinateX', 'coordinatY')
+
+class BookedTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BookedTime
+        fields=('timeslot','booking_object','booked_by','date')

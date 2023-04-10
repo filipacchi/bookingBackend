@@ -24,6 +24,7 @@ const NavButtonScreen = () => {
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Login')}}><Text style={styles.inputText}>Log in</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Splash')}}><Text style={styles.inputText}>Splash</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('JoinAssociations')}}><Text style={styles.inputText}>JoinAssociations</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => {navigation.navigate('Calendar')}}><Text style={styles.inputText}>Calendar</Text></Pressable>
             </SafeAreaView>
             </View>
         </LinearGradient>

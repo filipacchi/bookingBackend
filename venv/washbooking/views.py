@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Booking
+from .models import *
 from .serializer import BookingSerializer
 from django.http import Http404
 from rest_framework import status
@@ -71,3 +71,19 @@ class LogoutUserAPIView(APIView):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
     #####
+
+class GetBookingsAPIVIEW(APIView):
+    def get(self,request):
+        all_bookings = BookedTime.objects.all()
+        serializer = BookedTimeSerializer(all_bookings, many=True)
+        return Response(serializer.data)
+    
+class CreateBookingAPIVIEW(APIView):
+    def post(self,request):
+        serializer = BookedTimeSerializer(data=request.data)
+        if serializer.is_valid():
+            print("Sparar")
+            serializer.save()
+            return Response(serializer.data)
+        else: print("NOT VALID")
+        return Response("An error occured, this time might not be available")
