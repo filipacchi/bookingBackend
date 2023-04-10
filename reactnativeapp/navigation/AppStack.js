@@ -19,6 +19,10 @@ import { NavigationContainer } from "@react-navigation/native";
 
 export const AuthContext = React.createContext();
 
+async function save(key, value) {
+  await SecureStore.setItemAsync(key, value);
+}
+
 export default function Stack() {
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -35,7 +39,7 @@ export default function Stack() {
             isSignout: false,
             userToken: action.token.access,
             isStaff: action.token.isStaff,
-            username: action.token.username
+            username: action.token.username,
           };
         case 'SIGN_OUT':
           return {
@@ -60,16 +64,31 @@ export default function Stack() {
       let userToken;
 
       try {
-        userToken = await SecureStore.getItemAsync('userToken');
+        userToken = await SecureStore.getItemAsync('userToken')
+        console.log(userToken),
+        validateToken(userToken),
+        console.log("THEN")
       } catch (e) {
         // Restoring token failed
       }
 
-      // After restoring token, we may need to validate it in production apps
+      async function validateToken(token) {
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        };
+        axios.get('validate',
+          config
+        )
+          .then(response => {
+            console.log("TOKEN OKAY")
+            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+          })
+          .catch(error => {
+            console.log(error);
+            console.log("TOKEN NOT OKAY")
+          });
+      }
 
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
     };
 
     bootstrapAsync();
@@ -79,11 +98,12 @@ export default function Stack() {
     () => ({
       signIn: async (data) => {
         axios.post('token/', {
-          username: data.username,
+          email: data.username,
           password: data.password
         })
           .then(response => {
             console.log(response.data.access);
+            save("userToken", response.data.access)
             dispatch({ type: 'SIGN_IN', token: response.data });
           })
           .catch(error => {
@@ -108,16 +128,16 @@ export default function Stack() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-    <AuthContext.Provider value={authContext}>
-      <Stack.Navigator screenOptions={{
+      <AuthContext.Provider value={authContext}>
+        <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {/* {state.userToken == null ? (
+          {state.userToken == null ? (
             <Stack.Screen name="Login" component={Login} />
           ) : (
-            <Stack.Screen name="Splash" component={Splash} />
-          )} */}
-        <Stack.Screen name="NavButtons" component={NavButtons} />
+            <Stack.Screen name="Book" component={Book} />
+          )}
+          {/* <Stack.Screen name="NavButtons" component={NavButtons} />
         <Stack.Screen name="Nav" component={Nav} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Booking" component={Booking} />
@@ -126,9 +146,9 @@ export default function Stack() {
         <Stack.Screen name="Associations" component={Associations} />
         <Stack.Screen name="Book" component={Book} />
         <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-        <Stack.Screen name="Calendar" component={Calendar}/>
-      </Stack.Navigator>
-    </AuthContext.Provider>
+        <Stack.Screen name="Calendar" component={Calendar}/> */}
+        </Stack.Navigator>
+      </AuthContext.Provider>
     </NavigationContainer>
   );
 }

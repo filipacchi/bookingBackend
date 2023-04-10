@@ -10,7 +10,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['username'] = self.user.username
+        data['name'] = self.user.name
         data['isStaff'] = self.user.is_staff
         return data
 
