@@ -5,8 +5,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.db.models.signals import post_save;
 from django.dispatch import receiver
+import uuid 
 
-
+def randomHex():
+    randomHex = uuid.uuid4().hex[:1]
+    return randomHex
 
 class UserManager(BaseUserManager):
 
@@ -78,7 +81,7 @@ User = get_user_model()
 
 class BookableObject(models.Model):
     objectId = models.AutoField(primary_key=True)
-    inAssociation = models.ForeignKey(Association, on_delete=models.CASCADE)
+    inAssociation = models.ForeignKey(Association, null= True, on_delete=models.CASCADE)
     objectName = models.CharField(max_length=200,blank=False)
     timeSlotLength = models.FloatField(max_length=2)
     timesSlotStartTime = models.TimeField()
@@ -125,7 +128,13 @@ class BookedTime(models.Model):
 
 
 class Key(models.Model):
-    key = models.CharField(max_length=10)
+    key = models.CharField(max_length = 10, default=randomHex, editable=False, primary_key=False)
     used = models.BooleanField(blank=False)
+    assositionKey = models.ForeignKey(Association, null=True, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('key', 'assositionKey')
 
+    def __str__(self):
+        return str(self.key)
+   
