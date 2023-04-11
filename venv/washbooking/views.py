@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
+from datetime import datetime
 
 @api_view(['GET'])
 def getBooking(request):
@@ -106,16 +107,42 @@ class GetBookingsFromObject(APIView):
     
 class CreateBookingAPIVIEW( APIView):
     permission_classes= []
-    def post(self,request):
+    def post(self,request,object_pk) :
+        request.data["booked_by"] = self.request.user.id
+        request.data["booking_object"] = object_pk
         serializer = BookedTimeSerializer(data=request.data)
         if serializer.is_valid():
-            print("Sparar")
-            serializer.save()
-            return Response(serializer.data)
-        else: print("NOT VALID")
+            return checkBooking(serializer, object_pk)
+            #serializer.save()
         return Response("An error occured, this time might not be available")
 
 class checkValidationAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
         return Response("Validated")
+    
+def checkBooking(serializer, object_pk):
+    bookRequest = serializer.data
+    start_time = datetime.strptime(bookRequest['start_time'], "%H:%M:%S").time()
+    end_time = datetime.strptime(bookRequest['end_time'], "%H:%M:%S").time()
+    book_time_diff = calculateTimeDifference(bookRequest['start_time'], bookRequest['end_time'])
+    bookable_object = BookableObject.objects.get(objectId=object_pk)
+    object_begin_time = bookable_object.timeSlotStartTime
+    object_slot_length = bookable_object.timeSlotLength
+    bookings = BookedTime.objects.filter(booking_object=bookable_object, date=bookRequest['date'])
+    if (book_time_diff == object_slot_length) and (object_begin_time <= start_time):
+        if bookings.exists():
+            for booking in bookings:
+                if (booking.start_time < start_time < booking.end_time) or (booking.start_time < end_time < booking.end_time) or (start_time <= booking.start_time and end_time >= booking.end_time):
+                    return Response("Time overlap, try another time")
+                elif(abs(calculateTimeDifference(start_time.strftime("%H:%M:%S"), booking.start_time.strftime("%H:%M:%S"))) % object_slot_length != 0):
+                    return Response("Bokning får inte lämna obokbara platser")
+        return Response("Bokning okej")        
+                    
+
+    return Response("Error, perhaps incorrect slotlength or timestart")
+
+def calculateTimeDifference(t1, t2):
+    
+    print("CALCULATE: "+t1)
+    return int(t2[0:2]) - int(t1[0:2])
