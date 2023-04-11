@@ -1,0 +1,38 @@
+{
+    "//Create Account": "Översättningar i Login",
+    "Username": "Användarnamn",
+    "Password": "Lösenord",
+    "Email": "Mejladress",
+    "CreateAccount": "Skapa konto",
+
+
+
+    "//Laundry Room": "Lösenord",
+    "Date": "Datum",
+    "StartTime": "Starttid",
+    "EndTime": "Sluttid",
+    "Notification": "Notifikation",
+    "Book": "Boka",
+
+
+
+    "Monday": "Måndag",
+    "MondayShort": "Mån",
+    "Tuesday": "Tisdag",
+    "TuesdayShort": "Tis",
+    "Wednesday": "Onsdag",
+    "WednesdayShort": "Ons",
+    "Thursday": "Torsdag",
+    "ThursdayShort": "Thu",
+    "Friday": "Fredag",
+    "FridayShort": "Fre",
+    "Saturday": "Lördag",
+    "SaturdayShort": "Lör",
+    "Thursday": "",
+    "ThursdayShort": "Thu"
+
+
+
+
+
+}
