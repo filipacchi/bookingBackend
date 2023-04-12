@@ -18,6 +18,8 @@ import axios from "../axios/axios";
 import { NavigationContainer } from "@react-navigation/native";
 import BookableObject from "../src/screens/BookableObject";
 
+
+
 export const AuthContext = React.createContext();
 
 async function save(key, value) {

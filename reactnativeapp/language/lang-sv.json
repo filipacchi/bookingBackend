@@ -1,0 +1,45 @@
+{
+    "//Navigation": "",
+    "MyAssociations": "Mina föreningar",
+    "ScheduledTimes": "Bokade tider",
+    "Settings": "Inställningar",
+    
+    "CreateAccountPage": "Skapa konto",
+    "Username": "Användarnamn",
+    "Password": "Lösenord",
+    "Email": "Mejladress",
+    "CreateAccount": "Skapa konto",
+
+    "Booking": "Bokning",
+    "Date": "Datum",
+    "StartTime": "Starttid",
+    "EndTime": "Sluttid",
+    "Notification": "Notifikation",
+    "Book": "Boka",
+
+    "Monday": "Måndag",
+    "MondayShort": "Mån",
+    "Tuesday": "Tisdag",
+    "TuesdayShort": "Tis",
+    "Wednesday": "Onsdag",
+    "WednesdayShort": "Ons",
+    "Thursday": "Torsdag",
+    "ThursdayShort": "Tor",
+    "Friday": "Fredag",
+    "FridayShort": "Fre",
+    "Saturday": "Lördag",
+    "SaturdayShort": "Lör",
+    "Sunday": "Söndag",
+    "SundayShort": "Sön",
+
+
+    "SettingsPage": "Inställningar",
+    "ChangeLanguage": "Byt språk",
+    "ChangeEmail": "Byt e-postadress",
+    "LogOut": "Logga ut",
+
+    "AssociationsPage": "Mina föreningar",
+    "EnterKey": "Skriv in din nyckel",
+    "AssociationsQMark": "Skriv in nyckeln som du har fått av din förening. Den består av 10 tecken på formen XXXX-XXXXXX."
+
+}
