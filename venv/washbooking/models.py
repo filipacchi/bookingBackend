@@ -5,8 +5,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.db.models.signals import post_save;
 from django.dispatch import receiver
+import uuid 
 
-
+def randomHex():
+    randomHex = uuid.uuid4().hex[:1]
+    return randomHex
 
 class UserManager(BaseUserManager):
 
@@ -78,10 +81,11 @@ User = get_user_model()
 
 class BookableObject(models.Model):
     objectId = models.AutoField(primary_key=True)
-    inAssociation = models.ForeignKey(Association, on_delete=models.CASCADE)
+    inAssociation = models.ForeignKey(Association, null= True, on_delete=models.CASCADE)
     objectName = models.CharField(max_length=200,blank=False)
-    timeSlotLength = models.FloatField(max_length=2)
-    timesSlotStartTime = models.TimeField()
+    timeSlotLength = models.IntegerField(blank=False)
+    timeSlotStartTime = models.TimeField(blank=False)
+    timeSlotEndTime = models.TimeField(blank=False)
 
     def __str__(self):
         return self.objectName
@@ -107,25 +111,25 @@ def update_profile_signal(sender, instance, created, **kwargs):
     instance.person.save()
 
 class BookedTime(models.Model):
-    TIME_SLOTS = (
-        (0, '06:00 - 10:00'),
-        (1, '10:00 - 14:00'),
-        (2, '14:00 - 18:00'),
-        (3, '18:00 - 22:00'),
-    )
-    timeslot = models.IntegerField(choices=TIME_SLOTS, null=True)
+
     booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, null=True)
     booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
     date = models.DateField(help_text="YYYY-MM-DD", null=True)
-    class Meta:
-        unique_together = ('timeslot', 'date')
+    start_time = models.TimeField(help_text="HH:MM:SS", null=True)
+    end_time = models.TimeField(help_text="HH:MM:SS", null=True)
 
     def __str__(self):
-        return str(self.booking_object.objectName + " " + self.TIME_SLOTS[self.timeslot][1])
+        return str(self.booking_object.objectName + " "+ str(self.start_time)+ " - " +str(self.end_time))
 
 
 class Key(models.Model):
-    key = models.CharField(max_length=10)
+    key = models.CharField(max_length = 10, default=randomHex, editable=False, primary_key=False)
     used = models.BooleanField(blank=False)
+    assositionKey = models.ForeignKey(Association, null=True, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('key', 'assositionKey')
 
+    def __str__(self):
+        return str(self.key)
+   
