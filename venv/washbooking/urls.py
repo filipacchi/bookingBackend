@@ -12,7 +12,8 @@ urlpatterns = [
         name='auth_user_create'),
     path('book/get/', GetBookingsAPIVIEW.as_view(), name='get_all_bookings'),
     path('book/user/', GetUserBookingAPIVIEW.as_view(), name='get_user_bookings'),
-    path('book/add/', CreateBookingAPIVIEW.as_view(), name='add_booking'),
+    path('book/add/<int:object_pk>', CreateBookingAPIVIEW.as_view(), name='add_booking'),
     path('book/get/object/<int:object_pk>', GetBookingsFromObject.as_view(), name='get_booking_object'),
-    path('validate', checkValidationAPIVIEW.as_view(), name='check_validation')
+    path('validate', checkValidationAPIVIEW.as_view(), name='check_validation'),
+    path('object/get/<int:object_pk>', GetBookableObject.as_view(), name='get_bookable_object'),
 ]
