@@ -97,12 +97,19 @@ class GetBookingsAPIVIEW(APIView):
         return Response(serializer.data)
     
 class GetBookingsFromObject(APIView):
-    permission_classes=[IsAuthenticated]
+    permission_classes=[]
     def get(self,request,object_pk):
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         bookings = BookedTime.objects.filter(booking_object=bookable_object)
         serializer = BookedTimeSerializer(bookings, many=True)
         print(bookings)
+        return Response(serializer.data)
+    
+class GetBookableObject(APIView):
+    permission_classes = []
+    def get(self, request, object_pk):
+        bookable_object = BookableObject.objects.get(objectId=object_pk)
+        serializer = BookableObjectSerializer(bookable_object)
         return Response(serializer.data)
     
 class CreateBookingAPIVIEW( APIView):

@@ -30,3 +30,8 @@ class BookedTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model=BookedTime
         fields=('start_time','end_time','booking_object','booked_by','date')
+
+class BookableObjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BookableObject
+        fields=("objectId", "inAssociation", "objectName", "timeSlotLength","timeSlotStartTime","timeSlotEndTime")
