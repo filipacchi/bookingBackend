@@ -101,10 +101,26 @@ class GetBookingsFromObject(APIView):
     def get(self,request,object_pk):
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         bookings = BookedTime.objects.filter(booking_object=bookable_object)
-        serializer = BookedTimeSerializer(bookings, many=True)
+        bookedSerializer = BookedTimeSerializer(bookings, many=True)
+        bookableSeralizer = BookableObjectSerializer(bookable_object)
+        
         print(bookings)
-        return Response(serializer.data)
-    
+        print(json.dumps(bookedSerializer.data))
+        return Response([bookableSeralizer.data,bookedSerializer.data] )
+
+
+class GetBookingsFromDay(APIView):
+    permission_classes=[]
+    def get(self,request,object_pk,date):
+        bookable_object = BookableObject.objects.get(objectId=object_pk)
+        bookings = BookedTime.objects.filter(booking_object=bookable_object,date=date)
+        bookedSerializer = BookedTimeSerializer(bookings, many=True)
+        bookableSeralizer = BookableObjectSerializer(bookable_object)
+        
+        print(bookings)
+        print(json.dumps(bookedSerializer.data))
+        return Response([bookableSeralizer.data,bookedSerializer.data] )
+
 class GetBookableObject(APIView):
     permission_classes = []
     def get(self, request, object_pk):
