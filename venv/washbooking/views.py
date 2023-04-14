@@ -114,7 +114,7 @@ class GetBookableObject(APIView):
     
 class CreateBookingAPIVIEW( APIView):
     permission_classes= []
-    def post(self,request,object_pk) :
+    def post(self,request,object_pk) : """  """
         request.data["booked_by"] = self.request.user.id
         request.data["booking_object"] = object_pk
         serializer = BookedTimeSerializer(data=request.data)

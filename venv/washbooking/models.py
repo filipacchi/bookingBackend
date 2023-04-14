@@ -125,10 +125,10 @@ class BookedTime(models.Model):
 class Key(models.Model):
     key = models.CharField(max_length = 10, default=randomHex, editable=False, primary_key=False)
     used = models.BooleanField(blank=False)
-    assositionKey = models.ForeignKey(Association, null=True, on_delete=models.CASCADE)
+    associationKey = models.ForeignKey(Association, null=True, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('key', 'assositionKey')
+        unique_together = ('key', 'associationKey')
 
     def __str__(self):
         return str(self.key)
