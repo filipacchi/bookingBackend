@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as SecureStore from 'expo-secure-store';
-import axios from '../axios/axios';
+import axios from '../axios/useAxios';
 import Stack from '../navigation/AppStack';
 
 
