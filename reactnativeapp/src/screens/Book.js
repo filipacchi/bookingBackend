@@ -13,7 +13,7 @@ export default function Book() {
     const [bookings, setBooking] = useState([])
 
     const loadData = () => {
-        async function getAssociation() {
+        async function getAllBookings() {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };

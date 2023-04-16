@@ -126,7 +126,34 @@ class CreateBookingAPIVIEW( APIView):
 class checkValidationAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        return Response("Validated")
+        return Response(True)
+    
+class GetUserAssociation(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        serializer = AssociationSerializer(user_associations)
+        return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 def checkBooking(serializer, object_pk):
     bookRequest = serializer.data

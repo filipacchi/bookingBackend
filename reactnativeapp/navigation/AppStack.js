@@ -16,6 +16,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createContext } from 'react';
 import axios from "../axios/axios";
 import { NavigationContainer } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
+import { View } from "react-native/Libraries/Components/View/View";
+import Register from "../src/screens/Register";
+import { useAxios } from "../axios/useAxios";
 
 export const AuthContext = React.createContext();
 
@@ -24,6 +28,7 @@ async function save(key, value) {
 }
 
 export default function Stack() {
+  const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -42,12 +47,14 @@ export default function Stack() {
             userRefreshToken: action.token.refresh,
             isStaff: action.token.isStaff,
             username: action.token.username,
+            isLoading: false,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             isSignout: true,
             userToken: null,
+            isLoading: false,
           };
       }
     },
@@ -67,7 +74,7 @@ export default function Stack() {
 
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
-        console.log(userRefreshToken),
+        console.log("LOGGAR "+userRefreshToken),
           validateToken(userRefreshToken),
           console.log("THEN")
       } catch (e) {
@@ -132,26 +139,36 @@ export default function Stack() {
   );
   //const Tab = createBottomTabNavigator();
   const Stack = createNativeStackNavigator();
+
+
+  if (loadingState) {
+    return (
+      // <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
+      //   <ActivityIndicator/>
+      // </View>
+      <Splash setLoadingState={setLoadingState}></Splash>
+    )
+  }
+
   return (
     <NavigationContainer>
       <AuthContext.Provider value={authContext}>
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {/* {state.userToken == null ? (
+          {state.userToken == null ? (
             <Stack.Screen name="Login" component={Login} />
           ) : (
             <Stack.Screen name="NavButtons" component={NavButtons} />
-          )} */}
-          <Stack.Screen name="NavButtons" component={NavButtons} />
+          )}
+          {/* <Stack.Screen name="NavButtons" component={NavButtons} />
           <Stack.Screen name="Nav" component={Nav} />
           <Stack.Screen name="Booking" component={Booking} />
-          <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="User" component={User} />
           <Stack.Screen name="Associations" component={Associations} />
           <Stack.Screen name="Book" component={Book} />
           <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-          <Stack.Screen name="Calendar" component={Calendar} />
+          <Stack.Screen name="Calendar" component={Calendar} /> */}
         </Stack.Navigator>
       </AuthContext.Provider>
     </NavigationContainer>

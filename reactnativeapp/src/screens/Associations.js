@@ -11,7 +11,7 @@ export default function Associations() {
     const [allAssociations, setAssociation] = useState([])
 
     const loadData = () => {
-        async function getAllBookings() {
+        async function getUserAssociation() {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -19,17 +19,17 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('getA',
+            axios.get('user/associations',
                 config
             )
                 .then(response => {
-                    console.log(response.data)
+                    console.log(response)
                 })
                 .catch(error => {
                     console.log(error);
                 });
         }
-        getAllBookings()
+        getUserAssociation()
     }
 
     React.useEffect(() => {

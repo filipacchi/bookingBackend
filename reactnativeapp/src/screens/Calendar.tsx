@@ -116,9 +116,9 @@ const App = () => {
 
 
   function createTimeSlots(bookableObject) {
-    let start_time = parseInt(bookableObject['timeSlotStartTime'].replace(/:/g,"").slice(0,2))
-    let end_time = parseInt(bookableObject['timeSlotEndTime'].replace(/:/g,"").slice(0,2))
-    let slot_length = parseInt(bookableObject['timeSlotLength'])
+    const start_time = parseInt(bookableObject['timeSlotStartTime'].replace(/:/g,"").slice(0,2))
+    const end_time = parseInt(bookableObject['timeSlotEndTime'].replace(/:/g,"").slice(0,2))
+    const slot_length = parseInt(bookableObject['timeSlotLength'])
     console.log("TRIM: "+start_time+" : "+end_time+ " : "+slot_length)
     for (let index = start_time; index <= end_time; index = index + slot_length) {
         DATA.push({

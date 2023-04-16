@@ -8,17 +8,13 @@ import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
 
 
-export default function Login() {
+export default function Register() {
 
     const { signIn } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Email");
     const [password, onChangePassword] = useState("Password");
 
 
-    function handleRequest() {
-        console.log("KLICKAR")
-        signIn({ username, password });
-    }
 
     return (
         <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1 }}>
@@ -38,7 +34,7 @@ export default function Login() {
                     onChangeText={onChangePassword}
                     value={password}
                 />
-                <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => { console.log("Klickish") }}><Text style={styles.inputText}>Register</Text></Pressable>
             </View>
         </LinearGradient>
     )
