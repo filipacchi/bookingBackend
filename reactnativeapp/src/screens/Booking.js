@@ -9,10 +9,11 @@ export default function Booking() {
   const password = "klm123";
   const [bookings, setBooking] = useState([])
   const [loading, setLoading] = useState(true)
-  const  [text, onChangeText] = useState("Förnamn Efternamn");
+  const [text, onChangeText] = useState("Förnamn Efternamn");
   const [date, onChangeDate] = React.useState('2023-03-24');
   const Buffer = require("buffer").Buffer;
   const token = new Buffer((`${username}:${password}`, 'utf8')).toString("base64");
+  
   const loadData = () => {
     async function getAllBookings() {
       try {

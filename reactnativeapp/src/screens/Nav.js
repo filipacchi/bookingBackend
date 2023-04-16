@@ -38,15 +38,27 @@ export default function Nav() {
         }
     }
 
+    function renderTitle(){
+        if (currentView == "") {return <Text style={styles.Title}>Nav</Text> 
+        } else if (currentView == "JoinAssociations") {return <Text style={styles.Title}>JoinAssociations</Text>
+        } else if (currentView == "Login") {return <Text style={styles.Title}>Login</Text>
+        } else if (currentView == "Book") {return <Text style={styles.Title}>Book</Text>
+        } else if (currentView == "Booking") {return <Text style={styles.Title}>Book</Text>
+        } else if (currentView == "Associations") {return <Text style={styles.Title}>Associations</Text>
+        } 
+        return null
+    }
+
 
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.topBar}>
-                <LinearGradient colors={["#2f9d9d", "#53d5d5"]} start={{ x: 0, y: 1 }}
-                    end={{ x: 1, y: 1 }} style={{ flex: 1 }}></LinearGradient>
+                {/* <LinearGradient colors={["#2f9d9d", "#53d5d5"]} start={{ x: 0, y: 1 }}
+                    end={{ x: 1, y: 1 }} style={{ flex: 1 }}></LinearGradient> */}
+                    { renderTitle() }
             </View>
 
-            <MainWindow></MainWindow>
+            <MainWindow language={lang}></MainWindow>
 
             <View style={styles.navMenu}>
 {/*                 <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" }), navigation.navigate('Book')}}>
@@ -111,5 +123,12 @@ const styles = StyleSheet.create({
     },
     icon: {
         width: 28,
-    }
-});
+    },
+    Title: {
+        textAlign:'left',
+        color: "white",
+        fontWeight: 600,
+        marginTop: '15%',
+        fontSize: '35%'
+    },   
+    });

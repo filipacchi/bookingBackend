@@ -20,6 +20,9 @@ import { ActivityIndicator } from "react-native-paper";
 import { View } from "react-native/Libraries/Components/View/View";
 import Register from "../src/screens/Register";
 import { useAxios } from "../axios/useAxios";
+import BookableObject from "../src/screens/BookableObject";
+
+
 
 export const AuthContext = React.createContext();
 
@@ -169,6 +172,7 @@ export default function Stack() {
           <Stack.Screen name="Book" component={Book} />
           <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
           <Stack.Screen name="Calendar" component={Calendar} /> */}
+          <Stack.Screen name="BookableObject" component={BookableObject} />
         </Stack.Navigator>
       </AuthContext.Provider>
     </NavigationContainer>

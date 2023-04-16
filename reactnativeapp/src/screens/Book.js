@@ -1,8 +1,10 @@
 
-import { StyleSheet, View, Text, Pressable } from "react-native"
+import { StyleSheet, View, Text, Pressable } from "react-native";
 import React, { useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import axios from "../../axios/axios"
+import axios from "../../axios/axios";
+import styles from './Style' 
+import { Title } from "react-native-paper";
 
 /*const token = await SecureStore.getItemAsync('userToken');*/
 
@@ -47,22 +49,10 @@ export default function Book() {
     })
 
     return (
-        <View style={{ flex: 1 }}>
-            <Text style={styles.text}>TOKEN: {token}</Text>
-            <Pressable style={styles.button} onPress={() => {console.log(token), loadData()}}><Text>Klicka mig</Text></Pressable>
+        <View style={styles.container}>
+            <Title style={styles.Title}>Titel</Title>
+            <Text style={styles.Text}>TOKEN: {token}</Text>
+            <Pressable style={styles.pressable} onPress={() => {console.log(token), loadData()}}><Text style = {styles.pressableText}>Klicka mig</Text></Pressable>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        marginTop: 100,
-        backgroundColor: "red"
-    },
-    button: {
-        backgroundColor: "grey",
-        alignSelf: "center",
-        padding: 20,
-        margin: 10
-    }
-});

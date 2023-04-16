@@ -78,7 +78,9 @@ const App = () => {
           console.log(error);
         });
     }
+
     getBookableObject()
+    
     async function getBookings() {
       const config = {
         headers: { Authorization: `Bearer ${token}` }
