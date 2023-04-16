@@ -21,6 +21,7 @@ import { View } from "react-native/Libraries/Components/View/View";
 import Register from "../src/screens/Register";
 import { useAxios } from "../axios/useAxios";
 import BookableObject from "../src/screens/BookableObject";
+import Auth from "../src/screens/Auth"
 
 
 
@@ -77,7 +78,7 @@ export default function Stack() {
 
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
-        console.log("LOGGAR "+userRefreshToken),
+        console.log("LOGGAR " + userRefreshToken),
           validateToken(userRefreshToken),
           console.log("THEN")
       } catch (e) {
@@ -85,18 +86,20 @@ export default function Stack() {
       }
 
       async function validateToken(token) {
-        const config = {
-          headers: { Authorization: `Bearer ${token}` }
-        };
+      
         const bodyParameters = {
-          refresh: userRefreshToken
+          refresh: token
         };
         axios.post('token/refresh/',
           bodyParameters
         )
           .then(response => {
             console.log("TOKEN OKAY")
+            console.log("APP TOKEN: " + response.data.access)
+            save("userToken", response.data.access)
+            save("userRefreshToken", response.data.refresh)
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
+
           })
           .catch(error => {
             console.log(error);
@@ -118,14 +121,15 @@ export default function Stack() {
         })
           .then(response => {
             console.log(response.data.access);
-            save("userToken", response.data.access)
+            save("userToken", response.data.access).then(() => {
+              dispatch({ type: 'SIGN_IN', token: response.data });
+            })
             save("userRefreshToken", response.data.refresh)
-            dispatch({ type: 'SIGN_IN', token: response.data });
+
           })
           .catch(error => {
             console.log(error);
           });
-
 
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
@@ -160,18 +164,24 @@ export default function Stack() {
           headerShown: false
         }}>
           {state.userToken == null ? (
-            <Stack.Screen name="Login" component={Login} />
+            <Stack.Group>
+              <Stack.Screen name="Auth" component={Auth} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
+            </Stack.Group>
+
           ) : (
             <Stack.Screen name="NavButtons" component={NavButtons} />
           )}
-          {/* <Stack.Screen name="NavButtons" component={NavButtons} />
+
+          {/* <Stack.Screen name="NavButtons" component={NavButtons} /> */}
           <Stack.Screen name="Nav" component={Nav} />
           <Stack.Screen name="Booking" component={Booking} />
           <Stack.Screen name="User" component={User} />
           <Stack.Screen name="Associations" component={Associations} />
           <Stack.Screen name="Book" component={Book} />
           <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-          <Stack.Screen name="Calendar" component={Calendar} /> */}
+          <Stack.Screen name="Calendar" component={Calendar} />
           <Stack.Screen name="BookableObject" component={BookableObject} />
         </Stack.Navigator>
       </AuthContext.Provider>

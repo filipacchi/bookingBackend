@@ -6,9 +6,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
+import AvoidKeyboardWrapper from "../components/AvoidKeyboardWrapper";
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 
 export default function Login() {
+
+    const navigation = useNavigation()
 
     const { signIn } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Email");
@@ -17,30 +22,40 @@ export default function Login() {
 
     function handleRequest() {
         console.log("KLICKAR")
-        signIn({ username, password });
+        signIn({ username, password })
     }
 
     return (
-        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1 }}>
-            <View style={{
-                position: "absolute",
-                bottom: 150,
-                width: "100%",
-                gap: 20
-            }}>
-                <TextInput
-                    style={styles.inputCredentials}
-                    onChangeText={onChangeUsername}
-                    value={username}
-                />
-                <TextInput
-                    style={styles.inputCredentials}
-                    onChangeText={onChangePassword}
-                    value={password}
-                />
-                <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
-            </View>
-        </LinearGradient>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1 }}>
+                    <View style={{
+                        position: "absolute",
+                        bottom: 150,
+                        width: "100%",
+                        gap: 20
+                    }}>
+                        <TextInput
+                            style={styles.inputCredentials}
+                            onChangeText={onChangeUsername}
+                            value={username}
+                            autoComplete="off"
+                            autoCorrect={false}
+                        />
+                        <TextInput
+                            style={styles.inputCredentials}
+                            onChangeText={onChangePassword}
+                            value={password}
+                            autoComplete="off"
+                            autoCorrect={false}
+                        />
+                        <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                    </View>
+                </LinearGradient>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 
 }

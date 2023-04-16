@@ -7,12 +7,11 @@ import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
 import Logo from "./Logo";
-import Register from "./Register";
 
 import { useNavigation } from "@react-navigation/native";
 
 
-export default function Login() {
+export default function Auth() {
     const navigation = useNavigation()
     return (
         <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -23,8 +22,8 @@ export default function Login() {
                 width: "100%",
                 gap: 20
             }}> 
-                <Pressable style={[styles.input, styles.presslogin]} onPress={() => {navigation.navigate(Login) }}><Text style={[styles.inputText, styles.login]}>Logga in</Text></Pressable>
-                <Pressable style={[styles.input, styles.presslogin]} onPress={() => {navigation.navigate(Register) }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>Skapa konto</Text></Pressable>
+                <Pressable style={[styles.input, styles.presslogin]} onPress={() => {navigation.navigate('Login') }}><Text style={[styles.inputText, styles.login]}>Logga in</Text></Pressable>
+                <Pressable style={[styles.input, styles.presslogin]} onPress={() => {navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>Skapa konto</Text></Pressable>
             </View>
         </LinearGradient>
     )

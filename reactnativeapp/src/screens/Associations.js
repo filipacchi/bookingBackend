@@ -8,10 +8,11 @@ export default function Associations() {
 
 
     const [token, setToken] = useState("")
-    const [allAssociations, setAssociation] = useState([])
+    const [Associations, setAssociation] = useState([])
 
     const loadData = () => {
         async function getUserAssociation() {
+            console.log("Inuti getUser: "+token)
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -23,7 +24,8 @@ export default function Associations() {
                 config
             )
                 .then(response => {
-                    console.log(response)
+                    console.log(response.data)
+                    setAssociation(response.data)
                 })
                 .catch(error => {
                     console.log(error);
@@ -35,30 +37,45 @@ export default function Associations() {
     React.useEffect(() => {
         const getToken = async () => {
             try {
-                setToken(await SecureStore.getItemAsync('userToken'))
+                let access_token = await SecureStore.getItemAsync('userToken')
+                console.log("ASSO: "+access_token)
+                setToken(access_token)
+                loadData()
             } catch (e) {
                 console.log("Error when retrieving SecureStore.")
             }
         }
         getToken()
-        loadData()
-    })
+    },[])
+
+    const getTokenn = async () =>{
+        let token = await SecureStore.getItemAsync('userToken')
+        console.log(token)
+    }
 
 
 
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles.text}>Associations</Text>
+            <Pressable onPress={() => {
+                getTokenn()
+            }}><Text style={styles.text}>Klicka maaj</Text></Pressable>
             <FlatList
-                data={allAssociations}
-                style={{}}
-                renderItem={({ item }) => 
-                    <View>
-                        <View>
-                            <Text style={{fontSize: 17, marginLeft: '10%', flexWrap: 'wrap', overflow: 'hidden'}}>{item.name}</Text>
-                        </View>
-                    </View>}
-                ></FlatList>
+                        data={Associations}
+                        style={{}}
+                        renderItem={
+                            ({ item }) =>
+                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
+                                    <Text suppressHighlighting={true}
+                                        onPress={() => {
+                                            console.log(item.name)
+                                        }}
+                                        style={{ fontSize: 28, padding: 20}}>{item.name}</Text></View>}
+
+                    >
+
+                    </FlatList>
         </View>
     )
 }
