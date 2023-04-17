@@ -10,8 +10,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import Login from "./Login";
 import { useNavigation } from "@react-navigation/native";
 import Book from "./Book";
-import JoinAssociations from "./JoinAssociations";
-import Associations from "./Associations";
+import JoinAssociations from "../components/Associations/JoinAssociations";
+import Associations from "../components/Associations/Associations";
 
 export default function Nav() {
 

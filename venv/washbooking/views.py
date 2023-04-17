@@ -103,7 +103,6 @@ class GetBookingsFromObject(APIView):
         bookings = BookedTime.objects.filter(booking_object=bookable_object)
         bookedSerializer = BookedTimeSerializer(bookings, many=True)
         bookableSeralizer = BookableObjectSerializer(bookable_object)
-        
         print(bookings)
         print(json.dumps(bookedSerializer.data))
         return Response([bookableSeralizer.data,bookedSerializer.data] )
@@ -171,6 +170,16 @@ class GetUserAssociation(APIView):
 
 
     
+class GetUserAssociation(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        serializer = AssociationSerializer(user_associations, many=True)
+        return Response(serializer.data)
+
 def checkBooking(serializer, object_pk):
     bookRequest = serializer.data
     start_time = datetime.strptime(bookRequest['start_time'], "%H:%M:%S").time()

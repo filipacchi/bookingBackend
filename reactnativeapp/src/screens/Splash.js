@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ActivityIndicator } from "react-native-paper";
 import { Svg } from "react-native-svg";
-import Logo from "./Logo";
+import Logo from "../components/assets/Logo";
 import { StyleSheet, Animated } from "react-native"
 import { useEffect, useRef } from "react"
 export default function Splash({ setLoadingState }) {
