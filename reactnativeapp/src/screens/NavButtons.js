@@ -6,7 +6,7 @@ import LottieView from "lottie-react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-const NavButtonScreen = () => {
+const NavButtonScreen = (langText) => {
 
     const navigation = useNavigation()
 
@@ -19,7 +19,7 @@ const NavButtonScreen = () => {
                 gap: 20
             }}>
             <SafeAreaView>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Book')}}><Text style={styles.inputText}>Book</Text></Pressable>
+                <Pressable style={styles.input} onPress={() => {navigation.navigate('Book')}}><Text style={styles.inputText}>{langText.booking}</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Associations')}}><Text style={styles.inputText}>Associations</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('Login')}}><Text style={styles.inputText}>Log in</Text></Pressable>
                 <Pressable style={styles.input} onPress={() => {navigation.navigate('BookableObject')}}><Text style={styles.inputText}>Bookable</Text></Pressable>
