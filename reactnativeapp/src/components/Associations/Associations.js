@@ -4,15 +4,16 @@ import { useState } from 'react';
 import React from 'react';
 import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
-export default function Associations() {
 
+
+export default function Associations() {
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
 
-    const loadData = () => {
-        async function getUserAssociation() {
-            console.log("Inuti getUser: "+token)
+    const loadData = (token) => {
+        async function getUserAssociation(token) {
+            console.log("Inuti getUser: " + token)
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -31,51 +32,44 @@ export default function Associations() {
                     console.log(error);
                 });
         }
-        getUserAssociation()
+        getUserAssociation(token)
     }
 
     React.useEffect(() => {
         const getToken = async () => {
-            try {
-                let access_token = await SecureStore.getItemAsync('userToken')
-                console.log("ASSO: "+access_token)
-                setToken(access_token)
-                loadData()
-            } catch (e) {
-                console.log("Error when retrieving SecureStore.")
-            }
+            let access_token = await SecureStore.getItemAsync('userToken')
+            console.log("ASSO: " + access_token)
+            setToken(access_token)
+            loadData(access_token)
+            
+            
+
         }
         getToken()
-    },[])
-
-    const getTokenn = async () =>{
-        let token = await SecureStore.getItemAsync('userToken')
-        console.log(token)
-    }
-
+    }, [])
 
 
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles.text}>Associations</Text>
             <Pressable onPress={() => {
-                getTokenn()
+                console.log("TOKEN ÄR: " + token)
             }}><Text style={styles.text}>Klicka maaj</Text></Pressable>
             <FlatList
-                        data={Associations}
-                        style={{}}
-                        renderItem={
-                            ({ item }) =>
-                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
-                                    <Text suppressHighlighting={true}
-                                        onPress={() => {
-                                            console.log(item.name)
-                                        }}
-                                        style={{ fontSize: 28, padding: 20}}>{item.name}</Text></View>}
+                data={Associations}
+                style={{}}
+                renderItem={
+                    ({ item }) =>
+                        <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
+                            <Text suppressHighlighting={true}
+                                onPress={() => {
+                                    console.log(item.name)
+                                }}
+                                style={{ fontSize: 28, padding: 20 }}>{item.name}</Text></View>}
 
-                    >
+            >
 
-                    </FlatList>
+            </FlatList>
         </View>
     )
 }
