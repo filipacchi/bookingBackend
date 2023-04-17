@@ -20,7 +20,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { View } from "react-native/Libraries/Components/View/View";
 import Register from "../src/screens/Register";
 import { useAxios } from "../axios/useAxios";
-import BookableObject from "../src/components/Associations/BookableObject";
+import BookableObject from "../src/screens/BookableObject";
 import Auth from "../src/screens/Auth"
 
 
@@ -32,6 +32,7 @@ async function save(key, value) {
 }
 
 export default function Stack() {
+  const [loadingState, setLoadingState] = React.useState(true)
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {

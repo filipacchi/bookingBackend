@@ -129,7 +129,7 @@ class GetBookableObject(APIView):
     
 class CreateBookingAPIVIEW( APIView):
     permission_classes= []
-    def post(self,request,object_pk) :
+    def post(self,request,object_pk) : 
         request.data["booked_by"] = self.request.user.id
         request.data["booking_object"] = object_pk
         serializer = BookedTimeSerializer(data=request.data)
@@ -141,7 +141,34 @@ class CreateBookingAPIVIEW( APIView):
 class checkValidationAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]
     def get(self,request):
-        return Response("Validated")
+        return Response(True)
+    
+class GetUserAssociation(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        serializer = AssociationSerializer(user_associations, many=True)
+        return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]
