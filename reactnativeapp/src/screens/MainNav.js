@@ -10,6 +10,7 @@ import { AuthContext } from "../../App";
 import { TabRouter } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import NavButtons from "../screens/NavButtons"
 
 
 
@@ -23,10 +24,11 @@ export default function MainNav({route}) {
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: "#2f9d9d"
+                tabBarActiveTintColor: "#2f9d9d",
+            
             }}
         >
-            <Tab.Screen name="Associations" component={Associations} options={{tabBarIcon:({focused})=>(  
+            <Tab.Screen name="Associations" component={NavButtons} options={{tabBarIcon:({focused})=>(  
               <AntDesign name="home" size={25} color={this.tabBarActiveTintColor}/>
           )  }} />
                 <Tab.Screen name="Info" component={Info} options={{tabBarIcon:({tintColor})=>(  
