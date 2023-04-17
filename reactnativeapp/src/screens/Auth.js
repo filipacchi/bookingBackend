@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
-import Logo from "./Logo";
+import Logo from "../components/assets/Logo";
 
 import { useNavigation } from "@react-navigation/native";
 

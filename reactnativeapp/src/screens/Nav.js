@@ -9,9 +9,8 @@ import { LinearGradient } from "expo-linear-gradient";
 //import Booking from "./Booking";
 import Login from "./Login";
 import { useNavigation } from "@react-navigation/native";
-import Book from "./Book";
-import JoinAssociations from "./JoinAssociations";
-import Associations from "./Associations";
+import JoinAssociations from "../components/Associations/JoinAssociations";
+import Associations from "../components/Associations/Associations";
 
 export default function Nav() {
 
@@ -32,7 +31,6 @@ export default function Nav() {
         if (currentView == "") {return (<View style={styles.main}/>) 
         } else if (currentView == "JoinAssociations") {return (<JoinAssociations/>)
         } else if (currentView == "Login") {return (<Login/>)
-        } else if (currentView == "Book") {return (<Book/>)
         } else if (currentView == "Booking") {return (<Book/>)
         } else if (currentView == "Associations") {return (<Associations/>)
         }
@@ -42,7 +40,6 @@ export default function Nav() {
         if (currentView == "") {return <Text style={styles.Title}>Nav</Text> 
         } else if (currentView == "JoinAssociations") {return <Text style={styles.Title}>JoinAssociations</Text>
         } else if (currentView == "Login") {return <Text style={styles.Title}>Login</Text>
-        } else if (currentView == "Book") {return <Text style={styles.Title}>Book</Text>
         } else if (currentView == "Booking") {return <Text style={styles.Title}>Book</Text>
         } else if (currentView == "Associations") {return <Text style={styles.Title}>Associations</Text>
         } 
@@ -58,7 +55,7 @@ export default function Nav() {
                     { renderTitle() }
             </View>
 
-            <MainWindow language={lang}></MainWindow>
+            {/* <MainWindow language={lang}></MainWindow> */}
 
             <View style={styles.navMenu}>
 {/*                 <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" }), navigation.navigate('Book')}}>

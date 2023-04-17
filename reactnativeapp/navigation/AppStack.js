@@ -1,15 +1,12 @@
 // NB nb
 
-import Booking from "../src/screens/Booking";
 import Login from "../src/screens/Login";
 import Nav from "../src/screens/Nav";
 import Splash from "../src/screens/Splash";
 import NavButtons from "../src/screens/NavButtons";
-import JoinAssociations from "../src/screens/JoinAssociations";
-import Calendar from "reactnativeapp/src/screens/Calendar.tsx";
+import JoinAssociations from "../src/components/Associations/JoinAssociations";
 import User from "../src/screens/User";
-import Associations from "../src/screens/Associations";
-import Book from "../src/screens/Book";
+import Associations from "../src/components/Associations/Associations";
 import * as React from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -20,8 +17,9 @@ import { ActivityIndicator } from "react-native-paper";
 import { View } from "react-native/Libraries/Components/View/View";
 import Register from "../src/screens/Register";
 import { useAxios } from "../axios/useAxios";
-import BookableObject from "../src/screens/BookableObject";
+import BookableObject from "../src/components/Associations/BookableObject";
 import Auth from "../src/screens/Auth"
+import MainNav from "../src/screens/MainNav";
 
 
 
@@ -171,17 +169,15 @@ export default function Stack() {
             </Stack.Group>
 
           ) : (
-            <Stack.Screen name="NavButtons" component={NavButtons} />
+            <Stack.Screen name="MainNav" component={MainNav} initialParams={{stateValue: state}}/>
+            //<Stack.Screen name="NavButtons" component={NavButtons} />
           )}
 
           {/* <Stack.Screen name="NavButtons" component={NavButtons} /> */}
           <Stack.Screen name="Nav" component={Nav} />
-          <Stack.Screen name="Booking" component={Booking} />
           <Stack.Screen name="User" component={User} />
           <Stack.Screen name="Associations" component={Associations} />
-          <Stack.Screen name="Book" component={Book} />
           <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-          <Stack.Screen name="Calendar" component={Calendar} />
           <Stack.Screen name="BookableObject" component={BookableObject} />
         </Stack.Navigator>
       </AuthContext.Provider>

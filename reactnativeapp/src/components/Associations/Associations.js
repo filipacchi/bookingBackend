@@ -2,7 +2,7 @@
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
 import { useState } from 'react';
 import React from 'react';
-import axios from "../../axios/axios";
+import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
 export default function Associations() {
 

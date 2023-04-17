@@ -6,7 +6,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
-import AvoidKeyboardWrapper from "../components/AvoidKeyboardWrapper";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
-import axios from "../../axios/axios";
+import axios from "../../../axios/axios";
 import { Calendar } from "react-native-calendars";
 
 
@@ -51,7 +51,6 @@ const populateTimeSlots = (timeA, bookA) => {
             if (timeA[index].id == start_time) {
                 timeA[index].booked = true
             }
-
         }
     }
     return timeA
