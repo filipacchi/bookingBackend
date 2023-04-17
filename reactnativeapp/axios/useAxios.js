@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'https://192.168.0.16:8000';
+/* axios.defaults.baseURL = 'https://192.168.0.16:8000'; */
 
 /**
  fixed :
