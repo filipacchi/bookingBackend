@@ -8,7 +8,7 @@ export default function Schedule() {
 
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles.text}>Schedule</Text>
+            <Text style={styles.text}>Info</Text>
         </View>
     )
 }
