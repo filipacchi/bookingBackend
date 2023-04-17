@@ -33,7 +33,6 @@ async function save(key, value) {
 
 export default function Stack() {
   const [loadingState, setLoadingState] = React.useState(true)
-  const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
