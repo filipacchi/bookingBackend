@@ -3,7 +3,10 @@ import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } 
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
-import { Calendar } from "react-native-calendars";
+//import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
+import CalendarStrip from 'react-native-slideable-calendar-strip';
+import DatePicker from 'react-native-date-picker-light';
+import WeekCalendar from "./WeekCalendar";
 
 
 
@@ -97,12 +100,28 @@ export default function BookableObject() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.calendarStyle}>
+                <WeekCalendar/>
+            {/* <CalendarStrip
+            isEnglish
+            showWeekNumber
+            showEnglishLunar
+  selectedDate = {selectedDate}
+  onPressDate={(date) => {
+    this.setState({ selectedDate: date });
+  }}
+  onPressGoToday={(today) => {
+    this.setState({ selectedDate: today });
+  }}
+  markedDate={[]}
+  weekStartsOn={1} // 0,1,2,3,4,5,6 for S M T W T F S
+/>
+<DatePicker locale={'es-mx'} selected={(date) => console.log(date)}></DatePicker>
                 <Calendar
                     onDayPress={({ dateString }) => markDate(dateString)}
                     markedDates={{
                         [selectedDate]: { selected: true, disableTouchEvent: true }
                     }}
-                ></Calendar>
+                ></Calendar> */}
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={timeSlots}
