@@ -58,7 +58,7 @@ export default function Nav() {
                     { renderTitle() }
             </View>
 
-            <MainWindow language={lang}></MainWindow>
+            {/* <MainWindow language={lang}></MainWindow> */}
 
             <View style={styles.navMenu}>
 {/*                 <Pressable style={styles.navButtons} onPress={() => {setColor({colorValues, washC:"#2f9d9d", homeC:"#999999", calendarC:"#999999", userC:"#999999" }), navigation.navigate('Book')}}>
