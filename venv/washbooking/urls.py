@@ -17,4 +17,5 @@ urlpatterns = [
     path('book/get/object/<int:object_pk>/<str:date>', GetBookingsFromDay.as_view(), name='get_booking_object'),
     path('validate', checkValidationAPIVIEW.as_view(), name='check_validation'),
     path('object/get/<int:object_pk>', GetBookableObject.as_view(), name='get_bookable_object'),
+    path('user/associations', GetUserAssociation.as_view(), name="get_user_association")
 ]
