@@ -2,7 +2,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native"
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Associations from "../components/Associations/Associations";
+import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
 import Schedule from "../components/Schedule/Schedule"
 import Info from "..//components/Information/Info"
@@ -38,7 +38,7 @@ export default function MainNav({ route }) {
 
             }}
         >
-            <Tab.Screen name="Associations" component={Associations} options={{
+            <Tab.Screen name="AssociationStack" component={AssociationStack} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="home" size={25} color={color} />
                 )

@@ -4,8 +4,6 @@ import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
-import CalendarStrip from 'react-native-slideable-calendar-strip';
-import DatePicker from 'react-native-date-picker-light';
 import WeekCalendar from "./WeekCalendar";
 
 

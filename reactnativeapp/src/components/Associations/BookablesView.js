@@ -7,12 +7,9 @@ import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
 
 
-export default function Associations() {
-
-    const navigation = useNavigation()
+export default function BookablesView() {
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])

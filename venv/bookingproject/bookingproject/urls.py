@@ -16,7 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt import views as jwt_views
-from .views import MyTokenObtainPairView
+
+from .views import MyTokenObtainPairView, MyTokenRefreshPairView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,7 +25,7 @@ urlpatterns = [
          MyTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('token/refresh/',
-         jwt_views.TokenRefreshView.as_view(),
+         MyTokenRefreshPairView.as_view(),
          name='token_refresh'),
     path('', include('washbooking.urls'))
 ]

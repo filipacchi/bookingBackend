@@ -37,8 +37,10 @@ export default function Stack() {
         case 'RESTORE_TOKEN':
           return {
             ...prevState,
+            isSignout: false,
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
+            isStaff: action.token.isStaff,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -48,7 +50,6 @@ export default function Stack() {
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
             isStaff: action.token.isStaff,
-            username: action.token.username,
             isLoading: false,
           };
         case 'SIGN_OUT':
@@ -66,7 +67,6 @@ export default function Stack() {
       userToken: null,
       userRefreshToken: null,
       isStaff: null,
-      username: null
     }
   );
 
@@ -76,9 +76,9 @@ export default function Stack() {
 
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
-        console.log("LOGGAR " + userRefreshToken),
-          validateToken(userRefreshToken),
-          console.log("THEN")
+        //console.log("LOGGAR " + userRefreshToken),
+          validateToken(userRefreshToken)
+          //console.log("THEN")
       } catch (e) {
         // Restoring token failed
       }
@@ -92,8 +92,8 @@ export default function Stack() {
           bodyParameters
         )
           .then(response => {
-            console.log("TOKEN OKAY")
-            console.log("APP TOKEN: " + response.data.access)
+            //console.log("TOKEN OKAY")
+            console.log("isSTAFF? : " + response.data.isStaff)
             save("userToken", response.data.access)
             save("userRefreshToken", response.data.refresh)
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
@@ -118,7 +118,7 @@ export default function Stack() {
           password: data.password
         })
           .then(response => {
-            console.log(response.data.access);
+            //console.log(response.data.access);
             save("userToken", response.data.access).then(() => {
               dispatch({ type: 'SIGN_IN', token: response.data });
             })
