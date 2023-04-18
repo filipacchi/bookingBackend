@@ -17,7 +17,7 @@ import NavButtons from "../screens/NavButtons"
 const Tab = createBottomTabNavigator();
 
 export default function MainNav({route}) {
-
+    
     console.log(route.params.stateValue)
     const state = route.params.stateValue
     
