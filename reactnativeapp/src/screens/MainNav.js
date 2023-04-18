@@ -15,11 +15,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 1b6f7c00e7168e9e9ceeed5326033835f7eec568
-
 const Tab = createBottomTabNavigator();
 
 export default function MainNav({route}) {
