@@ -1,6 +1,7 @@
 
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
-import { useState } from 'react';
+import { useState, useContext } from "react";
+import { userLanguageContext } from "../../../language/LanguageContext";
 import React from 'react';
 import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
@@ -10,6 +11,9 @@ import { AntDesign } from '@expo/vector-icons';
 
 
 export default function Associations() {
+
+    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
+    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])

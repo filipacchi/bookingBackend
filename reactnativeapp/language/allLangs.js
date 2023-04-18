@@ -9,10 +9,24 @@ export default function AllLanguages (lang) {
         return engLang
     }
  */
-    return (
+
+    const allLangs = [
         {
-            eng: engLang,
-            swe: sweLang
+        lang: "swe",
+        translationPackage: sweLang
+        },
+
+        {
+        lang: "eng",
+        eng: engLang
         }
-    )
+    ]
+
+    const returnLanguagePackage = (lang) => {
+        const languageMatch = allLangs.find( item => {
+            return item.lang = lang
+        })
+
+        return languageMatch.translationPackage
+    }
 }
