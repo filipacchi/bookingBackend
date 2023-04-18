@@ -2,7 +2,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native"
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Associations from "../components/Associations/Associations";
+import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
 import Schedule from "../components/Schedule/Schedule"
 import Info from "..//components/Information/Info"
@@ -30,7 +30,7 @@ export default function MainNav({ route }) {
             screenOptions={{
                 tabBarActiveTintColor: "#2f9d9d",
                 tabBarStyle: {
-                    height: 90,
+                    height: 70,
                     padding: 10
                 },
                 headerStyle: {
@@ -50,12 +50,12 @@ export default function MainNav({ route }) {
                 }} />)}
             <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
-                    <Ionicons focused={focused} name="chatbubble-outline" size={25} color={color} />
+                    <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />
                 )
             }} />
             <Tab.Screen name="Schedule" component={Schedule} options={{
                 tabBarIcon: ({ focused, color }) => (
-                    <AntDesign focused={focused} name="calendar" size={25} color={color} />
+                    <AntDesign focused={focused} name="calendar" size={28} color={color} />
                 )
             }} />
 
