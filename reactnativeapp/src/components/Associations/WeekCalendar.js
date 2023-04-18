@@ -110,7 +110,7 @@ const WeekCalendar = () => {
                   backgroundColor: currentDate.isSame(selectedDay, 'day') ? "#53d5d5" : 'transparent',
                 }}
               >
-                <Text>{currentDate.format('dddd').slice(0, 3)}</Text>
+                <Text>{currentDate.format('dddd').slice(0, 1)}</Text>
                 <Text style={{ marginTop: 4 }}>{currentDate.format('D')}</Text>
               </View>
             </TouchableWithoutFeedback>

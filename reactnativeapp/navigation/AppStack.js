@@ -161,7 +161,7 @@ export default function Stack() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {state.userToken == null /* bytte håll på token temporärt */ ? (
+          {state.userToken != null /* bytte håll på token temporärt */ ? (
             <Stack.Group>
               <Stack.Screen name="Auth" component={Auth} />
               <Stack.Screen name="Login" component={Login} />
