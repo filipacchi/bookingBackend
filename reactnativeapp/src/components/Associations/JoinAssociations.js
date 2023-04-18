@@ -2,11 +2,15 @@
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
 import React from 'react';
 import { ScrollView, TextInput } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
 /* import plusIcon from 'reactnativeapp\assets\plus-sign.png'; */
 
 
 export default function JoinAssociations() {
+
+
+    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
 
     const plusIcon = require('reactnativeapp/assets/plus-sign.png');
     const closeIcon = require('reactnativeapp/assets/close-window.png')
@@ -61,6 +65,10 @@ export default function JoinAssociations() {
         name: "9 45",
         coordX: 9.647063769,
         coordY: 45.839267262}, // Ångströmslaboratoriet nära
+        {id: 7, 
+        name: userLanguage,
+        coordX: 9.647063769,
+        coordY: 45.839267262}
     ]
 
     // const array = load_all_associations_from_database()
@@ -91,9 +99,6 @@ export default function JoinAssociations() {
             setSelectedAssociation(item)
             setModalVisible(true)
         }
-
-
-        
         
         /* MODAL */
 

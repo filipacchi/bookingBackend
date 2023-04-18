@@ -1,72 +1,38 @@
 
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
-import { useState, useContext } from "react";
-import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
-import { NativeModules, Platform } from 'react-native';
+import { useState } from 'react';
 import React from 'react';
-import axios from "../../../axios/axios";
+import axios from "../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
-import Style from "../../screens/Style";
+import Style from "./Style";
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
-//import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 
 
-export default function Associations() {
-
-    const navigation = useNavigation()
-
-    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
-    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
-
-    
+export default function AdminStart() {
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
-
-
-    /* myAssociations */
     const [AssociationTest, setAssociationTest] = useState([
         {
             name: "BRF Gjuke",
             region: "Uppsala",
             id: 1,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-           ],
         },
         {
             name: "BRF Rosen",
             region: "Uppsala",
+            id: 1,
+        },
+        {
+            name: "BRF Sandstrand",
+            region: "Uppsala",
             id: 2,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-           ],
         },
         {
-            name: "BRF Gjuke",
+            name: "Triangelgatan 87",
             region: "Uppsala",
-            id: 3,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-           ],
-        },
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 4,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-           ],
+            id: 2,
         }
 
     ])
@@ -185,16 +151,7 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            <Pressable 
-            style={Style.addAssociation}
-            onPress={( () => {
-                console.log(
-            Platform.OS === 'ios'
-            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
-            : NativeModules.I18nManager.localeIdentifier
-            )
-            })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+            <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }

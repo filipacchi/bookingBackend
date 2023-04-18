@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model;
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
-        fields = ["id", "email", "name", "password"]
+        fields = ["id", "email", "name", "password", "is_staff"]
 
     def create(self, validated_data):
         user = UserData.objects.create(email=validated_data['email'],

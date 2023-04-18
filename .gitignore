@@ -87,3 +87,6 @@ local_settings.py
 
 .env
 db.sqlite3
+venv/washbooking/__pycache__/
+venv/bookingproject/bookingproject/__pycache__/
+venv/bookingproject/db.sqlite3
