@@ -12,7 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
-import { Header } from "@react-navigation/native"; ;
+import { Header } from "@react-navigation/native";import AdminStart from "./AdminStart";
+;
 
 
 
@@ -36,13 +37,17 @@ export default function MainNav({ route }) {
                     backgroundColor: "#53d5d5"
                 }
 
-            }}
-        >
-            <Tab.Screen name="Associations" component={Associations} options={{
-                tabBarIcon: ({ focused, color }) => (
-                    <AntDesign focused={focused} name="home" size={25} color={color} />
-                )
-            }} />
+            }}>
+            {state.isStaff ? (
+                <Tab.Screen name="Admin" component={AdminStart} options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <AntDesign focused={focused} name="home" size={25} color={color} />
+                    )
+                }} />):( <Tab.Screen name="Associations" component={Associations} options={{
+                    tabBarIcon: ({ focused, color }) => (
+                        <AntDesign focused={focused} name="home" size={25} color={color} />
+                    )
+                }} />)}
             <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <Ionicons focused={focused} name="chatbubble-outline" size={25} color={color} />
