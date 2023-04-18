@@ -15,45 +15,42 @@ export default function BookablesView() {
     const [Associations, setAssociation] = useState([])
     const [AssociationTest, setAssociationTest] = useState([
         {
-            name: "BRF Gjuke",
-            region: "Uppsala",
+            name: "Grill 1",
+            region: "BRF Gjuke",
             id: 1,
             bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
+                { name: "06:00 - 10:00" },
+                { name: "14:00 - 18:00" },
            ],
         },
         {
-            name: "BRF Rosen",
-            region: "Uppsala",
+            name: "Grill 2",
+            region: "BRF Gjuke",
             id: 2,
             bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
+                { name: "10:00 - 14:00" },
+                { name: "18:00 - 22:00" },
            ],
         },
         {
-            name: "BRF Gjuke",
-            region: "Uppsala",
+            name: "Bastu",
+            region: "BRF Gjuke",
             id: 3,
             bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
+                { name: "14:00 - 18:00" },
            ],
         },
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 4,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-           ],
-        }
+        
 
     ])
 
