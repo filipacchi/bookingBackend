@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Text, View } from "react-native"
-import UserLanguageProvider from "./language/LanguageContext"
+import UserLanguageProvider from 'reactnativeapp/language/languageContext.js'
 
 // ...fortsätter
 import AppStack from "./navigation/AppStack"
