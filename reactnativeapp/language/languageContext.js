@@ -5,8 +5,14 @@ export const userLanguageContext = createContext();
 
 const UserLanguageProvider = (props) => {
         // this state will be shared with all components 
-    const [userLanguage, setUserLanguage] = useState("swe"); /* här lägger vi till mobilens standardspråk */
+
+    const [userLanguage, setUserLanguage] = useState(); /* här lägger vi till mobilens standardspråk */
     const [languagePackage, setLanguagePackage] = useState();
+
+    setUserLanguage(Platform.OS === 'ios'
+    ? NativeModules.SettingsManager.settings.AppleLocale
+    : NativeModules.I18nManager.localeIdentifier
+    )
 
     return (
                 // this is the provider providing state

@@ -2,12 +2,14 @@
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
 import { useState, useContext } from "react";
 import { userLanguageContext } from "../../../language/LanguageContext";
+import { NativeModules, Platform } from 'react-native';
 import React from 'react';
 import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
+import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 
 
 export default function Associations() {
@@ -15,8 +17,13 @@ export default function Associations() {
     const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
     const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
 
+    
+
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
+
+
+    /* myAssociations */
     const [AssociationTest, setAssociationTest] = useState([
         {
             name: "BRF Gjuke",
@@ -175,7 +182,16 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+            <Pressable 
+            style={Style.addAssociation}
+            onPress={( () => {
+                console.log(
+            Platform.OS === 'ios'
+            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
+            : NativeModules.I18nManager.localeIdentifier
+            )
+            })}>
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }
