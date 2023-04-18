@@ -12,9 +12,14 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
+<<<<<<< HEAD
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
 
+=======
+import { Header } from "@react-navigation/native";import AdminStart from "./AdminStart";
+;
+>>>>>>> 7e7bbad30bdf2fa98784cf3f168eed26247d6b66
 
 
 

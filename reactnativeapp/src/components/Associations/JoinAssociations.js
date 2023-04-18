@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Imag
 import React from 'react';
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState, useContext } from "react";
-import { userLanguageContext } from "../../../language/LanguageContext";
+import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
 /* import plusIcon from 'reactnativeapp\assets\plus-sign.png'; */
 
 
