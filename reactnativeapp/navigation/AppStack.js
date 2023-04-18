@@ -55,9 +55,11 @@ export default function Stack() {
         case 'SIGN_OUT':
           return {
             ...prevState,
+            isLoading: true,
             isSignout: true,
             userToken: null,
-            isLoading: false,
+            userRefreshToken: null,
+            isStaff: null,
           };
       }
     },
@@ -77,14 +79,14 @@ export default function Stack() {
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
         //console.log("LOGGAR " + userRefreshToken),
-          validateToken(userRefreshToken)
-          //console.log("THEN")
+        validateToken(userRefreshToken)
+        //console.log("THEN")
       } catch (e) {
         // Restoring token failed
       }
 
       async function validateToken(token) {
-      
+
         const bodyParameters = {
           refresh: token
         };
@@ -161,7 +163,7 @@ export default function Stack() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {state.userToken != null /* bytte håll på token temporärt */ ? (
+          {state.userToken == null /* bytte håll på token temporärt */ ? (
             <Stack.Group>
               <Stack.Screen name="Auth" component={Auth} />
               <Stack.Screen name="Login" component={Login} />
@@ -169,7 +171,7 @@ export default function Stack() {
             </Stack.Group>
 
           ) : (
-            <Stack.Screen name="MainNav" component={MainNav} initialParams={{stateValue: state}}/>
+            <Stack.Screen name="MainNav" component={MainNav} initialParams={{ stateValue: state }} />
             //<Stack.Screen name="NavButtons" component={NavButtons} />
           )}
 

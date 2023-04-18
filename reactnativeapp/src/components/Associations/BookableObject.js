@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import WeekCalendar from "./WeekCalendar";
+import BookablesView from "./BookablesView";
 
 
 
@@ -99,6 +100,7 @@ export default function BookableObject() {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.calendarStyle}>
                 <WeekCalendar/>
+                <BookablesView></BookablesView>
             {/* <CalendarStrip
             isEnglish
             showWeekNumber
@@ -120,7 +122,7 @@ export default function BookableObject() {
                         [selectedDate]: { selected: true, disableTouchEvent: true }
                     }}
                 ></Calendar> */}
-                <View style={{ flex: 1 }}>
+                {/* <View style={{ flex: 1 }}>
                     <FlatList
                         data={timeSlots}
                         style={{}}
@@ -139,7 +141,7 @@ export default function BookableObject() {
 
                     </FlatList>
                     <Pressable style={styles.input} onPress={() => {bookTime()}}><Text style={styles.inputText}>Boka tid</Text></Pressable>
-                </View>
+                </View> */}
             </View>
         </SafeAreaView>
     )

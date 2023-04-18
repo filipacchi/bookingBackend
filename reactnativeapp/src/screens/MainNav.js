@@ -12,15 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
-<<<<<<< HEAD
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
-
-=======
-import { Header } from "@react-navigation/native";import AdminStart from "./AdminStart";
-;
->>>>>>> 7e7bbad30bdf2fa98784cf3f168eed26247d6b66
-
 
 
 const Tab = createBottomTabNavigator();
@@ -40,16 +33,16 @@ export default function MainNav({ route }) {
                     padding: 10
                 },
                 headerStyle: {
-                    backgroundColor: "#53d5d5"
+                    backgroundColor: "white"
                 }
 
             }}>
             {state.isStaff ? (
-                <Tab.Screen name="Admin" component={AdminStart} options={{
+                <Tab.Screen name="Admin" component={AdminStart} initialParams={{stateValue: state}} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )
-                }} />):( <Tab.Screen name="Associations" component={Associations} options={{
+                }} />):( <Tab.Screen name="AssociationStack" component={AssociationStack} initialParams={{stateValue: state}} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )

@@ -22,17 +22,17 @@ export default function AdminStart() {
         {
             name: "BRF Rosen",
             region: "Uppsala",
-            id: 1,
+            id: 2,
         },
         {
             name: "BRF Sandstrand",
             region: "Uppsala",
-            id: 2,
+            id: 3,
         },
         {
             name: "Triangelgatan 87",
             region: "Uppsala",
-            id: 2,
+            id: 4,
         }
 
     ])
