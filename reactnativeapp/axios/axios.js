@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'http://172.20.10.2:8000/'
+    baseURL: '130.243.216.165:8000/' /* eduroam */
     /*axios.defaults.headers.common = {'Authorization': `Bearer ${token}`}*/
 });
