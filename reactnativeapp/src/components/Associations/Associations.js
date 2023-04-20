@@ -1,5 +1,5 @@
 
-import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
+import { StyleSheet, View, Text, Pressable, TextInput, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
 import { useState, useContext } from "react";
 import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
 import { NativeModules, Platform } from 'react-native';
@@ -19,8 +19,12 @@ export default function Associations() {
 
     const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
     const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
+    const [modalVisible, setModalVisible] = useState(false)
+    const [isFocused, setIsFocused] = useState(false)
+    const [inputText, setInputText] = useState("")
+    const [isCheckMarkPressed, setCheckMarkPressed] = useState(false)
 
-    
+
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
@@ -36,7 +40,7 @@ export default function Associations() {
                 { name: "Grill 1" },
                 { name: "Bastu" },
                 { name: "Tvättstuga" }
-           ],
+            ],
         },
         {
             name: "BRF Rosen",
@@ -46,7 +50,7 @@ export default function Associations() {
                 { name: "Grill 1" },
                 { name: "Bastu" },
                 { name: "Tvättstuga" }
-           ],
+            ],
         },
         {
             name: "BRF Gjuke",
@@ -56,7 +60,7 @@ export default function Associations() {
                 { name: "Grill 1" },
                 { name: "Bastu" },
                 { name: "Tvättstuga" }
-           ],
+            ],
         },
         {
             name: "BRF Gjuke",
@@ -66,7 +70,7 @@ export default function Associations() {
                 { name: "Grill 1" },
                 { name: "Bastu" },
                 { name: "Tvättstuga" }
-           ],
+            ],
         }
 
     ])
@@ -74,9 +78,9 @@ export default function Associations() {
     const [bookableObjects, setBookObjects] = useState(
         {
             1: [
-                 { name: "Grill 1" },
-                 { name: "Bastu" },
-                 { name: "Tvättstuga" }
+                { name: "Grill 1" },
+                { name: "Bastu" },
+                { name: "Tvättstuga" }
             ],
             2: [
                 { name: "Pingis" },
@@ -88,10 +92,22 @@ export default function Associations() {
     )
 
     const bo = [
-        {"name": "Grill 1"},
-        {"name": "Bastu"},
-        {"name": "Tvättstuga"}
-      ];
+        {
+            name: "BRF Rosen",
+            region: "Uppsala",
+            id: 1
+        },
+        {
+            name: "BRF Gjuke",
+            region: "Uppsala",
+            id: 2
+        },
+        {
+            name: "BRF Torsgården",
+            region: "Uppsala",
+            id: 3
+        },
+    ];
 
     const loadData = (token) => {
         async function getUserAssociation(token) {
@@ -103,7 +119,7 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('user/associations',
+            axios.get('user/association/get',
                 config
             )
                 .then(response => {
@@ -130,7 +146,71 @@ export default function Associations() {
         getToken()
     }, [])
 
-    if (AssociationTest.length == 0) {
+    async function JoinAssociation() {
+        console.log("Inuti getUser: " + token)
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+
+        const bodyParameters = {
+            key: "value"
+        };
+        axios.post('join/association/add/'+inputText,
+            config
+        )
+            .then(response => {
+                console.log(response.data)
+                loadData()
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const checkKeyMatch = () => {
+        JoinAssociation()
+    }
+
+    const PopUpModal = () => {
+        return (
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}>
+
+                <View style={Style.modalWindow}>
+                    <View style={Style.modalOuter}>
+                        < View style={Style.inputAndCheckMark}>
+                            <TextInput
+                                style={Style.modalInput}
+                                value={inputText}
+                                /* style={styles.modalTextInput} */
+                                onPress={() => setIsFocused(true)}
+                                placeholder={"Enter Association Key"}
+                                onChangeText={setInputText}>
+                            </TextInput>
+                            <Pressable style={{ justifyContent: "center" }} onPress={() => {
+                                console.log("Value: " + inputText)
+                                checkKeyMatch(inputText)
+                            }}>
+                                <AntDesign name="check" size={20} color="black" />
+                            </Pressable>
+                        </View>
+
+
+                        <Pressable
+                            style={Style.modalCloseButton}
+                            onPress={() => setModalVisible(false)}>
+                            <AntDesign name="close" size={24} color="black" />
+                        </Pressable>
+                    </View>
+                </View>
+            </Modal >
+        )
+    }
+
+    if (Associations.length == 0) {
         return (
             <View style={{ flex: 1, justifyContent: "center" }}>
                 <View style={{
@@ -149,7 +229,7 @@ export default function Associations() {
     return (
         <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
             <FlatList
-                data={AssociationTest}
+                data={Associations}
                 style={Style.expandFlatlist}
                 renderItem={
                     ({ item }) =>
@@ -172,7 +252,7 @@ export default function Associations() {
                                     style={{}}
                                     horizontal={true}
                                     renderItem={
-                                        ({item}) => (
+                                        ({ item }) => (
                                             <View style={Style.bookObject}>
                                                 <Text>{item.name}</Text>
                                             </View>
@@ -185,6 +265,8 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
+            <PopUpModal />
+
             {/* <Pressable 
             style={Style.addAssociation}
             onPress={( () => {
@@ -195,6 +277,7 @@ export default function Associations() {
             )
             })}>
                 <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
+            <Pressable onPress={() => setModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }

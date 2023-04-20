@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
 from django.db.models.signals import post_save;
 from django.dispatch import receiver
+from django.core.validators import RegexValidator
 import uuid 
 
 def randomHex():
@@ -38,6 +39,7 @@ class UserManager(BaseUserManager):
 class Association(models.Model):
     name = models.CharField(max_length=200, blank=False, default="")
     adress = models.CharField(max_length=200, blank=False)
+    join_key = models.CharField(max_length=6, unique=True, validators=[RegexValidator(r'^\d{1,10}$')])
     # city = models.CharField(max_length=200, blank=False)
     # postalcode =  models.CharField(max_length=200, blank=False)
     coordinateX = models.FloatField(max_length=200, blank=False)

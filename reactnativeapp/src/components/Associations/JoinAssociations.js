@@ -4,7 +4,6 @@ import React from 'react';
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useState, useContext } from "react";
 import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
-/* import plusIcon from 'reactnativeapp\assets\plus-sign.png'; */
 
 
 export default function JoinAssociations() {
