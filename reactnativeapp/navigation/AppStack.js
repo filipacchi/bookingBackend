@@ -93,6 +93,7 @@ export default function Stack() {
         )
           .then(response => {
             //console.log("TOKEN OKAY")
+            /* response.data innehåller data från databasen */
             console.log("isSTAFF? : " + response.data.isStaff)
             save("userToken", response.data.access)
             save("userRefreshToken", response.data.refresh)
