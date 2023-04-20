@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableWithoutFeedback } from 'react-native';
+
 import moment from 'moment';
 
 const WeekCalendar = () => {
@@ -36,28 +37,27 @@ const WeekCalendar = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ padding: 10}}>
       {/* Render the week days */}
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingHorizontal: 16,
-          marginBottom: 16,
+          marginBottom: 20,
         }}
       >
         {/* Render the previous week arrow */}
         <TouchableWithoutFeedback onPress={handlePrevWeek}>
           <View
             style={{
-              padding: 16,
               backgroundColor: prevArrowPressed ? 'lightblue' : 'transparent',
               borderRadius: 50,
             }}
           >
             <Text>{'<'}</Text>
           </View>
-        </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback >
 
         {/* Render the current month and year */}
         <View
@@ -66,7 +66,8 @@ const WeekCalendar = () => {
             alignItems: 'center',
             fontSize: 20,
             fontWeight: 'bold',
-            marginVertical: 16,
+            
+            //marginVertical: 16,
           }}
         >
           <Text>{selectedDay.format('MMMM YYYY')}</Text>
@@ -76,7 +77,7 @@ const WeekCalendar = () => {
         <TouchableWithoutFeedback onPress={handleNextWeek}>
           <View
             style={{
-              padding: 16,
+              //padding: 16,
               backgroundColor: nextArrowPressed ? 'lightblue' : 'transparent',
               borderRadius: 50,
             }}
@@ -107,17 +108,28 @@ const WeekCalendar = () => {
                   alignItems: 'center',
                   borderRadius: 50,
                   overflow: 'hidden',
-                  backgroundColor: currentDate.isSame(selectedDay, 'day') ? "#53d5d5" : 'transparent',
                 }}
               >
-                <Text>{currentDate.format('dddd').slice(0, 1)}</Text>
-                <Text style={{ marginTop: 4 }}>{currentDate.format('D')}</Text>
+                <Text style={{}}>{currentDate.format('dddd').slice(0, 1)}</Text>
+                <View
+                  style={{
+                    marginTop: 10,
+                    height: 30,
+                    width: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: 60,
+                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? "#53d5d5" : 'transparent',
+                  }}
+                >
+                  <Text style={{color: currentDate.isSame(selectedDay, 'day') ? "white" : currentDate.isSame(today, 'day') ? 'red' : 'black', }}>{currentDate.format('D')}</Text>
+                </View>
               </View>
             </TouchableWithoutFeedback>
           );
         })}
       </View>
-      </View>
+    </View>
   );
 };
 

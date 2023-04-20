@@ -22,7 +22,6 @@ export default function MainNav({route}) {
     console.log(route.params.stateValue)
     const state = route.params.stateValue
 
-
     return (
         <Tab.Navigator
             screenOptions={{
@@ -36,16 +35,11 @@ export default function MainNav({route}) {
                 }
 
             }}>
-            {state.isStaff ? (
-                <Tab.Screen name="Admin" component={AdminStart} initialParams={{stateValue: state}} options={{
+            <Tab.Screen name="Associations" component={AssociationStack} initialParams={{stateValue: state}} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )
-                }} />):( <Tab.Screen name="AssociationStack" component={AssociationStack} initialParams={{stateValue: state}} options={{
-                    tabBarIcon: ({ focused, color }) => (
-                        <AntDesign focused={focused} name="home" size={25} color={color} />
-                    )
-                }} />)}
+                }} />
             <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />

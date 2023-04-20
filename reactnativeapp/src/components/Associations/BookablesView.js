@@ -168,7 +168,7 @@ export default function BookablesView() {
                         </View>}
             >
             </FlatList>
-            <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+            {/* <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
         </View>
     )
 }

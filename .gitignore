@@ -89,6 +89,7 @@ local_settings.py
 venv/washbooking/__pycache__/
 venv/bookingproject/bookingproject/__pycache__/
 venv/bookingproject/db.sqlite3
+node_modules
 
 node_modules
 .expo

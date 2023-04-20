@@ -43,7 +43,6 @@ export default StyleSheet.create({
     addAssociation: {
         alignItems: "center",
         alignSelf: "center",
-
     },
     expandFlatlist: {
 
@@ -138,5 +137,10 @@ export default StyleSheet.create({
         paddingRight: 10,
         borderRadius: 10,
         backgroundColor: "#d9d9d9",
+    },
+    addObject: {
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
     }
 });
