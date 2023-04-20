@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import styles from "../../screens/Style";
 
 export default function AssociationInformation() {
 
@@ -19,48 +20,3 @@ export default function AssociationInformation() {
       </View>
       </ScrollView>
       )}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F0F0',
-    padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  settingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  settingLabel: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#53d5d5',
-    borderRadius: 50,
-    padding: 10,
-    width: '60%',
-    alignSelf: 'center',
-    marginTop: '2%'
-  },
-  buttonText:{
-    fontSize: 24,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    color: 'white'
-  },
-  objectName:{
-    width: '100%',
-    backgroundColor: 'white',
-    flex: 1,
-    fontSize: 16,
-  }
-})

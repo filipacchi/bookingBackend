@@ -3,14 +3,47 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
-    },
-    button: {
-        backgroundColor: "grey",
-        alignSelf: "center",
+        backgroundColor: '#F0F0F0',
         padding: 20,
-        margin: 10
     },
+    header: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+    settingContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+      },
+      settingLabel: {
+        fontSize: 16,
+      },
+      button: {
+        backgroundColor: '#53d5d5',
+        borderRadius: 50,
+        padding: 10,
+        width: '60%',
+        alignSelf: 'center',
+        marginTop: '2%'
+      },
+      buttonText:{
+        fontSize: 24,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        color: 'white'
+      },
+      objectName:{
+        width: '100%',
+        backgroundColor: 'white',
+        flex: 1,
+        fontSize: 16,
+      },
     pressable: {
         width: "70%",
         borderRadius: 10,
@@ -84,5 +117,5 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignSelf: 'center',
-    }
+    },
 });

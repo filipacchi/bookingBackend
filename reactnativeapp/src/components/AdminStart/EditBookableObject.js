@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView} from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
+import styles from "../../screens/Style";
 
 export default function EditBookableObject({route}) {
     const {objectId} = route.params
@@ -74,7 +75,7 @@ var slotsBookablePerWeek = '2';
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Association name - {objectId.toString()}</Text>
       <View style={styles.settingContainer}>
-        <TextInput style={styles.objectName}>Object name</TextInput>
+        <TextInput style={styles.objectName} placeholder="Object name"></TextInput>
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Length per booking</Text>
@@ -156,47 +157,3 @@ var slotsBookablePerWeek = '2';
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F0F0F0',
-    padding: 20,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  settingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  },
-  settingLabel: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#53d5d5',
-    borderRadius: 50,
-    padding: 10,
-    width: '60%',
-    alignSelf: 'center',
-    marginTop: '2%'
-  },
-  buttonText:{
-    fontSize: 24,
-    fontWeight: 'bold',
-    alignSelf: 'center',
-    color: 'white'
-  },
-  objectName:{
-    width: '100%',
-    backgroundColor: 'white',
-    flex: 1
-  }
-})
