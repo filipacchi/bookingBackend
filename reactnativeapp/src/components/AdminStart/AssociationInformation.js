@@ -1,16 +1,13 @@
-
 import { StyleSheet, View, Text, Pressable } from "react-native"
 import React from 'react';
 
-
-const dates = []
-export default function Test() {
+export default function AssociationInformation() {
 
 
 
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles.text}>Schedule</Text>
+            <Text style={styles.text}>AssociationInformation</Text>
         </View>
     )
 }

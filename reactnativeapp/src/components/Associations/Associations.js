@@ -159,7 +159,7 @@ export default function Associations() {
                                 <View>
                                     <Text suppressHighlighting={true}
                                         onPress={() => {
-                                            console.log(Object.keys(bookableObjects[1]).map((key)=> bookableObjects[1][key]))
+                                            navigation.navigate("BookableObject")
                                         }}
                                         style={Style.assoText}>
 
@@ -185,7 +185,7 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            <Pressable 
+            {/* <Pressable 
             style={Style.addAssociation}
             onPress={( () => {
                 console.log(
@@ -194,7 +194,7 @@ export default function Associations() {
             : NativeModules.I18nManager.localeIdentifier
             )
             })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
         </View>
     )
 }

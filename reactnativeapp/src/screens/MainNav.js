@@ -15,15 +15,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
 
-
-
 const Tab = createBottomTabNavigator();
 
 export default function MainNav({route}) {
     
     console.log(route.params.stateValue)
     const state = route.params.stateValue
-
 
     return (
         <Tab.Navigator
@@ -34,20 +31,15 @@ export default function MainNav({route}) {
                     padding: 10
                 },
                 headerStyle: {
-                    backgroundColor: "#53d5d5"
+                    backgroundColor: "white"
                 }
 
             }}>
-            {state.isStaff ? (
-                <Tab.Screen name="Admin" component={AdminStart} options={{
+            <Tab.Screen name="Associations" component={AssociationStack} initialParams={{stateValue: state}} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )
-                }} />):( <Tab.Screen name="Associations" component={Associations} options={{
-                    tabBarIcon: ({ focused, color }) => (
-                        <AntDesign focused={focused} name="home" size={25} color={color} />
-                    )
-                }} />)}
+                }} />
             <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />

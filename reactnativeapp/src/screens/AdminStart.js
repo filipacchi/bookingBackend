@@ -1,38 +1,72 @@
 
 import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
-import { useState } from 'react';
+import { useState, useContext } from "react";
+import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
+import { NativeModules, Platform } from 'react-native';
 import React from 'react';
-import axios from "../../axios/axios";
+import axios from "reactnativeapp/axios/axios.js";
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
-import Style from "./Style";
+import Style from "reactnativeapp/src/screens/Style.js";
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+//import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 
 
-export default function AdminStart() {
+export default function Associations() {
+
+    const navigation = useNavigation()
+
+    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
+    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
+
+    
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
+
+
+    /* myAssociations */
     const [AssociationTest, setAssociationTest] = useState([
         {
             name: "BRF Gjuke",
             region: "Uppsala",
             id: 1,
+            bookobjects: [
+                { name: "Grill 1", id: 1 },
+                { name: "Bastu", id: 2 },
+                { name: "Tvättstuga", id: 3 }
+           ],
         },
         {
             name: "BRF Rosen",
             region: "Uppsala",
-            id: 1,
+            id: 2,
+            bookobjects: [
+                { name: "Grill 1", id: 1 },
+                { name: "Bastu", id: 2 },
+                { name: "Tvättstuga", id: 3 }
+           ],
         },
         {
-            name: "BRF Sandstrand",
+            name: "Strandvägen 54",
             region: "Uppsala",
-            id: 2,
+            id: 3,
+            bookobjects: [
+                { name: "Grill 1", id: 1 },
+                { name: "Bastu", id: 2 },
+                { name: "Tvättstuga", id: 3 }
+           ],
         },
         {
-            name: "Triangelgatan 87",
+            name: "Triangelgatan 43",
             region: "Uppsala",
-            id: 2,
+            id: 4,
+            bookobjects: [
+                { name: "Grill 1", id: 1 },
+                { name: "Bastu", id: 2 },
+                { name: "Tvättstuga", id: 3 }
+           ],
         }
 
     ])
@@ -96,22 +130,6 @@ export default function AdminStart() {
         getToken()
     }, [])
 
-    if (AssociationTest.length == 0) {
-        return (
-            <View style={{ flex: 1, justifyContent: "center" }}>
-                <View style={{
-                    borderStyle: "solid",
-                    borderRadius: 10,
-                    borderColor: "#999999",
-                    borderWidth: 3,
-                    margin: 20
-                }}><Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
-                <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
-            </View>
-        )
-    }
-
-
     return (
         <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
             <FlatList
@@ -120,38 +138,54 @@ export default function AdminStart() {
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
-                            <View style={Style.assoView}>
-                                <AntDesign name="home" size={28} color={"#222222"} />
+                            <Pressable onPress={() => {
+                                            navigation.navigate("AssociationInformation")
+                                        }} style={Style.assoView}>
+                                 <AntDesign name="home" size={28} color={"#222222"} />
                                 <View>
                                     <Text suppressHighlighting={true}
-                                        onPress={() => {
-                                            console.log(Object.keys(bookableObjects[1]).map((key)=> bookableObjects[1][key]))
-                                        }}
                                         style={Style.assoText}>
-
                                         {item.name}</Text>
                                     <Text style={{ color: "#767676" }}>{item.region}</Text></View>
-                            </View>
+                            </Pressable>
                             <View style={Style.assoDarkView}>
                                 <FlatList
                                     data={item.bookobjects}
                                     style={{}}
                                     horizontal={true}
+                                    ListFooterComponent={
+                                        <Pressable onPress={() => {
+                                            navigation.navigate("AddBookableObject")
+                                        }} style={Style.addObject}>
+                                            <Ionicons name="ios-add-circle-outline" size={25} color="black" />
+                                            </Pressable>
+                                      }
                                     renderItem={
                                         ({item}) => (
-                                            <View style={Style.bookObject}>
+                                            <Pressable onPress={() => {
+                                                console.log('HÄR HAR VI OBJECT ID:'+item.id)
+                                                navigation.navigate("EditBookableObject",{id: item.id})
+                                            }} style={Style.bookObject}>
                                                 <Text>{item.name}</Text>
-                                            </View>
+                                            </Pressable>
                                         )
                                     }
                                 >
-
                                 </FlatList>
                             </View>
                         </View>}
             >
             </FlatList>
-            <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+            {/* <Pressable 
+            style={Style.addAssociation}
+            onPress={( () => {
+                console.log(
+            Platform.OS === 'ios'
+            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
+            : NativeModules.I18nManager.localeIdentifier
+            )
+            })}>
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
         </View>
     )
 }
