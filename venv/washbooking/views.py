@@ -153,7 +153,22 @@ class GetUserAssociation(APIView):
         serializer = AssociationSerializer(user_associations, many=True)
         return Response(serializer.data)
 
+class GetJoinAssociation(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request, join_key):
+        join_association = Association.objects.get(join_key=join_key)
+        return Response(AssociationSerializer(join_association))
+
+class UserJoinAssociation(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request, join_key):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        join_association = Association.objects.get(join_key=join_key)
+        person.associations.remove(join_association)
+        person.save()
+        return Response()
 
 
 

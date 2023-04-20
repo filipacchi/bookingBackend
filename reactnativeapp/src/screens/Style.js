@@ -80,5 +80,63 @@ export default StyleSheet.create({
         borderWidth: 1,
         padding: 5,
         margin: 5
+    },
+    modalWindow: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.2)', /* en hinna över bakgrunden */
+    },
+    modalOuter: {
+        backgroundColor: 'white',
+        padding: 40,
+        borderRadius: 10,
+    },
+    modalInner: {
+        position: "absolute",
+        height: '100%',
+        width: '95%',
+        left: '5%',
+        bottom: '10%',
+        border: "solid", borderWidth: 2,
+        borderColor: "green",
+        backgroundColor: "white"
+    },
+    modalDescription: {
+        fontSize: 16,
+        marginBottom: 20,
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        /* border: 'solid', borderWidth: '2', */
+    },
+    modalCloseIcon: {
+        height: 20,
+        width: 20,
+        resizeMode: 'contain',
+    },
+    inputAndCheckMark: {
+        
+        flexDirection: "row",
+        gap: 10,
+    },
+    modalTextInput: {
+        position: "absolute",
+        color: "black",
+        width: "85%", height: "100%",
+        border: "solid", borderWidth: 2, borderRadius: 4
+    },
+    modalTextInputButton: {
+        height: "100%",
+        /* width: 20, */
+        resizeMode: 'contain',
+    },
+    modalInput: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        borderRadius: 10,
+        backgroundColor: "#d9d9d9",
     }
 });
