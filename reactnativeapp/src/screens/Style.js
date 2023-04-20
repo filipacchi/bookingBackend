@@ -43,7 +43,6 @@ export default StyleSheet.create({
     addAssociation: {
         alignItems: "center",
         alignSelf: "center",
-
     },
     expandFlatlist: {
 
@@ -80,5 +79,10 @@ export default StyleSheet.create({
         borderWidth: 1,
         padding: 5,
         margin: 5
+    },
+    addObject: {
+        flex: 1,
+        justifyContent: 'center',
+        alignSelf: 'center',
     }
 });
