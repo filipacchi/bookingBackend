@@ -17,8 +17,8 @@ export default function Associations() {
 
     const navigation = useNavigation()
 
-    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
-    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
+    /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
+    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext) */
     const [modalVisible, setModalVisible] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
     const [inputText, setInputText] = useState("")

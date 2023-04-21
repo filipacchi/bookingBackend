@@ -27,7 +27,7 @@ export default function MainNav({route}) {
             screenOptions={{
                 tabBarActiveTintColor: "#2f9d9d",
                 tabBarStyle: {
-                    height: 70,
+                    height: 90,
                     padding: 10
                 },
                 headerStyle: {

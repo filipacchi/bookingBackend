@@ -14,14 +14,19 @@ export default function Login() {
 
     const navigation = useNavigation()
 
-    const { signIn } = React.useContext(AuthContext);
+    const { signIn, t, setLang } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Email");
     const [password, onChangePassword] = useState("Password");
+    const [lang, setLanguage] = useState("")
 
 
     function handleRequest() {
-        console.log("KLICKAR")
-        signIn({ username, password })
+        signIn({ username, password }) 
+    }
+
+    function changeLang(lang) {
+        setLang(lang)
+        setLanguage(lang)
     }
 
     return (
@@ -36,6 +41,7 @@ export default function Login() {
                         width: "100%",
                         gap: 20
                     }}>
+                        <Text style={styles.inputCredentials}>{t("Settings")}</Text>
                         <TextInput
                             style={styles.inputCredentials}
                             onChangeText={onChangeUsername}
@@ -51,7 +57,7 @@ export default function Login() {
                             autoComplete="off"
                             autoCorrect={false}
                         />
-                        <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                        <Pressable style={styles.input} onPress={() => { changeLang("sv") }}><Text style={styles.inputText}>Logga in</Text></Pressable>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

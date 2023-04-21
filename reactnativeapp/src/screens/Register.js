@@ -14,7 +14,7 @@ export default function Register() {
 
     const navigation = useNavigation()
 
-    const { signIn } = React.useContext(AuthContext);
+    const { signIn, t, setLang } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Email");
     const [password, onChangePassword] = useState("Password");
 
@@ -43,7 +43,7 @@ export default function Register() {
                             style={styles.inputCredentials}
                             onChangeText={onChangePassword}
                             placeholder={password}
-                            secureTextEntry = {true}
+                            secureTextEntry={true}
                             autoComplete="off"
                             autoCorrect={false}
                         />

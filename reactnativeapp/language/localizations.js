@@ -1,5 +1,8 @@
+import enLang from "reactnativeapp/language/lang-en.json"
+import seLang from "reactnativeapp/language/lang-sv.json"
+
 const translations = {
-    en: {
+    en: enLang,/* {
         Navigation: "",
         MyAssociations: "My Associations",
         ScheduledTimes: "Booked Times",
@@ -17,28 +20,13 @@ const translations = {
         EndTime: "End Time",
         Notification: "Notification",
         Book: "Book",
-    },
-    sv: {
+    }, */
+    "sv": seLang/* {
         Navigation: "",
         MyAssociations: "Mina föreningar",
         ScheduledTimes: "Bokade tider",
         Settings: "Inställningar",
-
-        CreateAccountPage: "Skapa konto",
-        Username: "Användarnamn",
-        Password: "Lösenord",
-        Email: "Mejladress",
-        CreateAccount: "Skapa konto",
-
-        Booking: "Bokning",
-        Date: "Datum",
-        StartTime: "Starttid",
-        EndTime: "Sluttid",
-        Notification: "Notifikation",
-        Book: "Boka",
-
-    }
-
+    } */
 }
 
 export { translations }

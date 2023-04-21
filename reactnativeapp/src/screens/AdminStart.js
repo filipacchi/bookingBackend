@@ -17,8 +17,7 @@ export default function Associations() {
 
     const navigation = useNavigation()
 
-    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
-    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext)
+  
 
     
 

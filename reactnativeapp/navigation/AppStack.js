@@ -20,6 +20,9 @@ import { useAxios } from "../axios/useAxios";
 import BookableObject from "../src/components/Associations/BookableObject";
 import Auth from "../src/screens/Auth"
 import MainNav from "../src/screens/MainNav";
+import { translations } from "../language/localizations";
+import { I18n } from "i18n-js";
+import { getLocales } from "expo-localization"
 
 
 
@@ -30,6 +33,11 @@ async function save(key, value) {
 }
 
 export default function Stack() {
+  const i18n = new I18n(translations)
+  // i18n.defaultLocale = getLocales()[0].languageCode
+  // i18n.locale = getLocales()[0].languageCode
+  i18n.enableFallback = true
+
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -142,6 +150,12 @@ export default function Stack() {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
+      t: (translate) => {
+        return i18n.t(translate)
+      },
+      setLang: (lang) => {
+        i18n.locale = lang
+      }
     }),
     []
   );

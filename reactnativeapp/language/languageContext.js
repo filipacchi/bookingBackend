@@ -5,8 +5,6 @@ import {NativeModules, Platform} from "react-native"
 export const userLanguageContext = createContext();
 
 const UserLanguageProvider = (props) => {
-        // this state will be shared with all components 
-
     const [userLanguage, setUserLanguage] = useState(
         (Platform.OS === 'ios'
     ? NativeModules.SettingsManager.settings.AppleLocale
