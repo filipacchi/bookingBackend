@@ -23,6 +23,7 @@ export default function Associations() {
     const [isFocused, setIsFocused] = useState(false)
     const [inputText, setInputText] = useState("")
     const [isCheckMarkPressed, setCheckMarkPressed] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState(true)
 
 
 
@@ -125,6 +126,7 @@ export default function Associations() {
                 .then(response => {
                     console.log(response.data)
                     setAssociation(response.data)
+                    setIsRefreshing(false)
                 })
                 .catch(error => {
                     console.log(error);
@@ -155,7 +157,7 @@ export default function Associations() {
         const bodyParameters = {
             key: "value"
         };
-        axios.post('join/association/add/'+inputText,
+        axios.post('join/association/add/' + inputText,
             config
         )
             .then(response => {
@@ -231,6 +233,8 @@ export default function Associations() {
             <FlatList
                 data={Associations}
                 style={Style.expandFlatlist}
+                onRefresh={() => loadData(token)}
+                refreshing={isRefreshing}
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
@@ -248,13 +252,13 @@ export default function Associations() {
                             </View>
                             <View style={Style.assoDarkView}>
                                 <FlatList
-                                    data={item.bookobjects}
+                                    data={item['bookobjects']}
                                     style={{}}
                                     horizontal={true}
                                     renderItem={
                                         ({ item }) => (
                                             <View style={Style.bookObject}>
-                                                <Text>{item.name}</Text>
+                                                <Text>{item['objectName']}</Text>
                                             </View>
                                         )
                                     }
