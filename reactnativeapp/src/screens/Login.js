@@ -39,14 +39,15 @@ export default function Login() {
                         <TextInput
                             style={styles.inputCredentials}
                             onChangeText={onChangeUsername}
-                            value={username}
+                            placeholder={username}
                             autoComplete="off"
                             autoCorrect={false}
                         />
                         <TextInput
                             style={styles.inputCredentials}
                             onChangeText={onChangePassword}
-                            value={password}
+                            placeholder={password}
+                            secureTextEntry = {true}
                             autoComplete="off"
                             autoCorrect={false}
                         />

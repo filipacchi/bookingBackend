@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth import get_user_model;
 
 
+""" serializers översätter från SQL till json och vice versa. nycklarna till json-objekten är attributes i entityn """
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
@@ -26,7 +28,7 @@ class AssociationSerializer(serializers.ModelSerializer):
         model=Association
         fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id')
 
-class BookedTimeSerializer(serializers.ModelSerializer):
+class BookedTimeSerializer(serializers.ModelSerializer): 
     class Meta:
         model=BookedTime
         fields=('start_time','end_time','booking_object','booked_by','date')

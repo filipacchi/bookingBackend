@@ -1,7 +1,15 @@
+import { useContext } from "react"
 import * as engLang from "reactnativeapp/language/lang-en.json"
 import * as sweLang from "reactnativeapp/language/lang-sv.json"
+import { userLanguageContext } from "./languageContext"
 
 export default function AllLanguages () {
+
+
+    const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
+
+    setUserLanguage(userLanguage.slice(0, 2))
+    console.log(userLanguage)
 
 /*     if (lang == "sv") {
         return sweLang
@@ -12,12 +20,12 @@ export default function AllLanguages () {
 
     const allLangs = [
         {
-        lang: "swe",
+        lang: "sv",
         translationPackage: sweLang
         },
 
         {
-        lang: "eng",
+        lang: "en",
         eng: engLang
         }
     ]

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
-
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableWithoutFeedback, PanResponder } from 'react-native';
 import moment from 'moment';
+import { Feather } from '@expo/vector-icons';
 
 const WeekCalendar = () => {
   const today = moment(); // Get the current date
@@ -36,6 +36,27 @@ const WeekCalendar = () => {
     }, 100);
   };
 
+  const SwipeableWeekView = ({ onSwipeLeft, onSwipeRight, children }) => {
+    const panResponder = useRef(
+      PanResponder.create({
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderMove: (_, gestureState) => {
+          if (gestureState.dx > 0 && gestureState.dx > gestureState.dy) {
+            handlePrevWeek();
+          } else if (gestureState.dx < 0 && -gestureState.dx > gestureState.dy) {
+            handleNextWeek();
+          }
+        },
+      })
+    ).current;
+
+    return (
+      <View {...panResponder.panHandlers}>
+        {children}
+      </View>
+    );
+  };
+
   return (
     <View style={{ padding: 10}}>
       {/* Render the week days */}
@@ -55,7 +76,7 @@ const WeekCalendar = () => {
               borderRadius: 50,
             }}
           >
-            <Text>{'<'}</Text>
+            <Feather name="arrow-left-circle" size={24} color="black" />
           </View>
         </TouchableWithoutFeedback >
 
@@ -82,11 +103,11 @@ const WeekCalendar = () => {
               borderRadius: 50,
             }}
           >
-            <Text>{'>'}</Text>
+            <Feather name="arrow-right-circle" size={24} color="black" />
           </View>
         </TouchableWithoutFeedback>
       </View>
-
+      <SwipeableWeekView>
       {/* Render the week days */}
       <View
         style={{
@@ -129,8 +150,10 @@ const WeekCalendar = () => {
           );
         })}
       </View>
+      </SwipeableWeekView>
     </View>
   );
 };
+
 
 export default WeekCalendar;
