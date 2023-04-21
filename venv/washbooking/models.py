@@ -39,6 +39,7 @@ class UserManager(BaseUserManager):
 class Association(models.Model):
     name = models.CharField(max_length=200, blank=False, default="")
     adress = models.CharField(max_length=200, blank=False)
+    region = models.CharField(max_length=200, default="")
     join_key = models.CharField(max_length=6, unique=True, validators=[RegexValidator(r'^\d{1,10}$')])
     # city = models.CharField(max_length=200, blank=False)
     # postalcode =  models.CharField(max_length=200, blank=False)
