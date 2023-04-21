@@ -1,21 +1,17 @@
 import { createContext, useState } from 'react';
-import {NativeModules, Platform} from "react-native"
+import { getLocales } from "expo-localization"
+import React from 'react';
 
 //create a context, with createContext api
 export const userLanguageContext = createContext();
 
 const UserLanguageProvider = (props) => {
-    const [userLanguage, setUserLanguage] = useState(
-        (Platform.OS === 'ios'
-    ? NativeModules.SettingsManager.settings.AppleLocale
-    : NativeModules.I18nManager.localeIdentifier
-   )); /* här lägger vi till mobilens standardspråk */
-    const [languagePackage, setLanguagePackage] = useState();
+    const [userLanguage, setUserLanguage] = useState(getLocales()[0].languageCode); /* här lägger vi till mobilens standardspråk */
 
     return (
                 // this is the provider providing state
         <userLanguageContext.Provider 
-        value={[userLanguage, setUserLanguage, languagePackage, setLanguagePackage]}>
+        value={[userLanguage, setUserLanguage]}>
             {props.children}
         </userLanguageContext.Provider>
     );

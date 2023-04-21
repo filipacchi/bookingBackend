@@ -6,7 +6,6 @@ import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
 import Schedule from "../components/Schedule/Schedule"
 import Info from "..//components/Information/Info"
-import { AuthContext } from "../../App";
 import { TabRouter } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,10 +13,13 @@ import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
+import { AuthContext } from "../../navigation/AppStack";
 
 const Tab = createBottomTabNavigator();
 
 export default function MainNav({route}) {
+
+    const { signOut, t, setLang, getLang } = React.useContext(AuthContext);
     
     console.log(route.params.stateValue)
     const state = route.params.stateValue
@@ -35,7 +37,7 @@ export default function MainNav({route}) {
                 }
 
             }}>
-            <Tab.Screen name="Associations" component={AssociationStack} initialParams={{stateValue: state}} options={{
+            <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} initialParams={{stateValue: state}} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )

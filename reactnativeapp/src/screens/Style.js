@@ -20,30 +20,30 @@ export default StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
-      },
-      settingLabel: {
+    },
+    settingLabel: {
         fontSize: 16,
-      },
-      button: {
+    },
+    button: {
         backgroundColor: '#53d5d5',
         borderRadius: 50,
         padding: 10,
         width: '60%',
         alignSelf: 'center',
         marginTop: '2%'
-      },
-      buttonText:{
+    },
+    buttonText: {
         fontSize: 24,
         fontWeight: 'bold',
         alignSelf: 'center',
         color: 'white'
-      },
-      objectName:{
+    },
+    objectName: {
         width: '100%',
         backgroundColor: 'white',
         flex: 1,
         fontSize: 16,
-      },
+    },
     pressable: {
         width: "70%",
         borderRadius: 10,
@@ -150,7 +150,7 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     inputAndCheckMark: {
-        
+
         flexDirection: "row",
         gap: 10,
     },
@@ -176,4 +176,21 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
     },
+    langSwitchBox: {
+        right: "15%",
+        top: "5%",
+        position: "absolute", 
+        borderRadius: 10, 
+        borderWidth: 2, 
+        borderColor: "white",
+        height: 35,
+        width: 50,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    langText: {
+        color: "white",
+        fontWeight: "400",
+        fontSize: 15
+    }
 });

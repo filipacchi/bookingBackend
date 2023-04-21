@@ -7,6 +7,7 @@ import { useState, setState, useContext } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../navigation/AppStack";
 import Logo from "../components/assets/Logo";
+import Style from "./Style";
 
 
 import { useNavigation } from "@react-navigation/native";
@@ -14,10 +15,24 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function Auth() {
     const navigation = useNavigation()
-    const {t} = useContext(AuthContext)
+    const {t, setLang, getLang} = useContext(AuthContext)
+    const [lang, setLanguage] = useState(getLang())
+
+    function changeLang () {
+        console.log("KlickarBenim")
+        if(lang == "en"){
+            setLang("sv")
+            setLanguage("sv")
+        }else{
+            setLang("en")
+            setLanguage("en")
+        }
+    }
+
     return (
-        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Logo></Logo>
+        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, alignItems: 'center' }}>
+            <Pressable style={Style.langSwitchBox} onPress={() => changeLang()}><Text style={Style.langText}>{lang.toUpperCase()} <AntDesign name="flag" size={15} color="white" /></Text></Pressable>
+            <View style={{marginTop: "50%"}}><Logo></Logo></View>
             <View style={{
                 position: "absolute",
                 bottom: 150,

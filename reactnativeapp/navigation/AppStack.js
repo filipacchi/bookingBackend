@@ -34,9 +34,10 @@ async function save(key, value) {
 
 export default function Stack() {
   const i18n = new I18n(translations)
-  // i18n.defaultLocale = getLocales()[0].languageCode
-  // i18n.locale = getLocales()[0].languageCode
+  i18n.defaultLocale = getLocales()[0].languageCode
+  i18n.locale = getLocales()[0].languageCode
   i18n.enableFallback = true
+  console.log("Språk: "+i18n.locale)
 
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
@@ -155,6 +156,9 @@ export default function Stack() {
       },
       setLang: (lang) => {
         i18n.locale = lang
+      },
+      getLang: () => {
+        return i18n.locale
       }
     }),
     []
