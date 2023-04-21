@@ -79,13 +79,25 @@ class GetUserBookingAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
     def get(self, request):
         user = self.request.user
-        person = Person.objects.get(user=user.id)
-        user_associations = person.associations.all()
+        person = Person.objects.get(user=user.id) # jag
+        user_associations = person.associations.all() # mina associations
         print(user_associations)
-        for association in user_associations:
-            bookable_object = BookableObject.objects.filter(inAssociation=association)
-            for object in bookable_object:
+
+        booked_times = []
+
+        for association in user_associations: 
+            # alla bookable_objects som jag har i mina associations
+            bookable_objects = BookableObject.objects.filter(inAssociation=association)
+            for object in bookable_objects:
+                for match in BookedTime.objects.filter(booking_object=object):
+                    booked_times.extend(
+                    {
+                    "booking_object": object,
+                    "start_time": 1,
+                    
+                    })
                 print(BookedTime.objects.filter(booking_object=object))
+
         return Response("GetUserBooking")
     
 class GetBookingsAPIVIEW(APIView):
@@ -127,7 +139,7 @@ class GetBookableObject(APIView):
         serializer = BookableObjectSerializer(bookable_object)
         return Response(serializer.data)
     
-class CreateBookingAPIVIEW( APIView):
+class CreateBookingAPIVIEW(APIView):
     permission_classes= []
     def post(self,request,object_pk) : 
         request.data["booked_by"] = self.request.user.id
