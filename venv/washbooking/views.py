@@ -15,26 +15,15 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from datetime import datetime
 
-@api_view(['GET'])
-def getBooking(request):
-    booking = Booking.objects.all()
-    serializer = BookingSerializer(booking, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-def postBooking(request):
-    serializer = BookingSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-@api_view(['DELETE'])
-def deleteBooking(request, pk):
-    try:
-        booking = Booking.objects.get(pk=pk)
-        booking.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except Booking.DoesNotExist:
-            raise Http404
+class AddBookableObject(APIView):
+    permission_classes = []
+    def post(self, request):
+        serializer = BookableObjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response("An error occured, please try again later")
 
 class RegisterView(APIView):
     authentication_classes = []
