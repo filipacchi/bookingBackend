@@ -5,9 +5,18 @@ import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 
-export default function AddBookableObject() {
+export default function AddBookableObject({route}) {
+  const {associationId} = route.params
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
+  const [objectName,setObjectName] = useState('');
+  const [objectNameBackgroundColor, setObjectNameBackgroundColor] = useState('white');
+  const [lengthPerBookingBackgroundColor, setLengthPerBookingBackgroundColor] = useState('white');
+  const [earliestBookableTimeBackgroundColor, setEarliestBookableTimeBackgroundColor] = useState('white');
+  const [latestBookableTimeBackgroundColor, setLatestBookableTimeBackgroundColor] = useState('white');
+  const [firstStartTimeBackgroundColor, setFirstStartTimeBackgroundColor] = useState('white');
+  const [slotsBookablePerDayBackgroundColor, setSlotsBookablePerDayBackgroundColor] = useState('white');
+  const [slotsBookablePerWeekBackgroundColor, setSlotsBookablePerWeekBackgroundColor] = useState('white');
 
   const lengthPerBooking = [
     {key:'1', value:'1'},
@@ -63,28 +72,35 @@ const bookableTimes = [
     {key:'24', value:"23:00"},
 ]
 
-var selectedHoursBookable = '1';
-var earliestBookableTime = '00:00';
-var latestBookableTime = '23:00';
-var firstStartTime = '00:00';
-var slotsBookablePerDay = '1';
-var slotsBookablePerWeek = '2';
+var selectedHoursBookable = '';
+var earliestBookableTime = '';
+var latestBookableTime = '';
+var firstStartTime = '';
+var slotsBookablePerDay = '';
+var slotsBookablePerWeek = '';
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Add Bookable Object</Text>
-      <View style={styles.settingContainer}>
-        <TextInput style={styles.objectName} placeholder="Object name"></TextInput>
+      <View style={[styles.settingContainer,{backgroundColor: objectNameBackgroundColor}]}>
+        <TextInput 
+        style={styles.objectName} 
+        placeholder="Object name"
+        onChangeText={(objectName) => setObjectName(objectName)}
+        value={objectName}
+        ></TextInput>
       </View>
+      <View style={[styles.settingContainer,{backgroundColor: lengthPerBookingBackgroundColor}]}>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Length per booking</Text>
         <SelectList 
         setSelected={(val) => {
             setSelected(val)
-            selectedHoursBookable = val
+            this.selectedHoursBookable = lengthPerBooking[val-1].value
         }} 
         data={lengthPerBooking} 
     />
+    </View>
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Bookable all day</Text>
@@ -94,62 +110,161 @@ var slotsBookablePerWeek = '2';
       </View>
       <View>
         {allDayEnabled ? (
+          <View style={[styles.settingContainer,{backgroundColor: firstStartTimeBackgroundColor}]}>
           <View style={styles.settingContainer}>
           <Text style={styles.settingLabel}>First start time</Text>
           <SelectList 
           setSelected={(val) => {
               setSelected(val)
-              firstStartTime= val
+              this.firstStartTime = bookableTimes[val-1].value
+              console.log('Första starttid: ' + this.firstStartTime)
           }} 
           data={bookableTimes} 
       />
       </View>
+      </View>
         ) : (
             <View>
+              <View style={[styles.settingContainer,{backgroundColor: earliestBookableTimeBackgroundColor}]}>
             <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Earliest bookable time</Text>
         <SelectList 
         setSelected={(val) => {
             setSelected(val)
-            earliestBookableTime = val
+            this.earliestBookableTime = bookableTimes[val-1].value
+            console.log('Tidigaste bokningsbara: ' + this.earliestBookableTime)
         }} 
         data={bookableTimes} 
     />
     </View>
+    </View>
+    <View style={[styles.settingContainer,{backgroundColor: latestBookableTimeBackgroundColor}]}>
     <View style={styles.settingContainer}>
     <Text style={styles.settingLabel}>Latest bookable time</Text>
         <SelectList 
         setSelected={(val) => {
             setSelected(val)
-            latestBookableTime = val
+            this.latestBookableTime = bookableTimes[val-1].value
+            console.log('Senaste bokningsbara: ' + this.latestBookableTime)
         }} 
         data={bookableTimes} 
     />
+    </View>
       </View>
       </View>
         )}
       </View>
+      <View style={[styles.settingContainer,{backgroundColor: slotsBookablePerDayBackgroundColor}]}>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per day</Text>
         <SelectList 
         setSelected={(val) => {
             setSelected(val)
-            slotsBookablePerDay = val
+            this.slotsBookablePerDay = lengthPerBooking[val-1].value
         }} 
         data={lengthPerBooking} 
     />
     </View>
+    </View>
+    <View style={[styles.settingContainer,{backgroundColor: slotsBookablePerWeekBackgroundColor}]}>
     <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per week</Text>
         <SelectList 
         setSelected={(val) => {
             setSelected(val)
-            slotsBookablePerWeek = val
+            this.slotsBookablePerWeek = lengthPerBooking[val-1].value
         }} 
         data={lengthPerBooking} 
     />
     </View>
-      <TouchableOpacity style={styles.button}>
+    </View>
+      <TouchableOpacity style={styles.button} onPress= {() => {
+        if (objectName==''){
+          setObjectNameBackgroundColor('#F88379');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(selectedHoursBookable=='') { 
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('#F88379');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(earliestBookableTime==''){
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('#F88379');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(firstStartTime==''){
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('#F88379');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(latestBookableTime==''){
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('#F88379');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(slotsBookablePerDay==''){
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('#F88379');
+          setSlotsBookablePerWeekBackgroundColor('white');
+        } else if(slotsBookablePerWeek==''){
+          setObjectNameBackgroundColor('white');
+          setLengthPerBookingBackgroundColor('white');
+          setEarliestBookableTimeBackgroundColor('white');
+          setFirstStartTimeBackgroundColor('white');
+          setLatestBookableTimeBackgroundColor('white');
+          setSlotsBookablePerDayBackgroundColor('white');
+          setSlotsBookablePerWeekBackgroundColor('#F88379');
+        } else {
+        if (allDayEnabled){
+           console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + this.selectedHoursBookable + ' första start tid: ' + this.firstStartTime + ' gånger per dag: ' + this.slotsBookablePerDay + ' gånger per vecka: ' + this.slotsBookablePerWeek)
+         startTime = this.firstStartTime.substring(0,2)
+         startTimeInt = parseInt(startTime) //THIS WILL BE THE timeSlotStartTime
+         console.log('Start Time:' + startTimeInt)
+
+         amountOfHoursADay = 24 - 24 % this.selectedHoursBookable
+         console.log('Amount of hours:' + amountOfHoursADay)
+
+         endTimeInt = startTimeInt + amountOfHoursADay //THIS WILL BE THE timeSlotEndTime; IF > 24 => GÅR ÖVER NATTEN
+          if(startTimeInt<10){
+         timeSlotStartTime = "0" + startTimeInt.toString() + ":00"
+        } else{
+          timeSlotStartTime = startTimeInt.toString() + ":00"
+        }
+
+        if(endTimeInt<10){
+          timeSlotStartTime = "0" + endTimeInt.toString() + ":00"
+         } else{
+          timeSlotEndTime = endTimeInt.toString() + ":00"
+         }
+         console.log('Actual start time: ' + timeSlotStartTime)
+         console.log('End time: ' + timeSlotEndTime)
+
+         }
+         else{
+           console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + this.selectedHoursBookable + ' tidigaste bokningsbar: ' + this.earliestBookableTime + ' senast bokningsbar: ' + this.latestBookableTime + ' gånger per dag: ' + this.slotsBookablePerDay + ' gånger per vecka: ' + this.slotsBookablePerWeek)
+         }}
+}}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
     </ScrollView>

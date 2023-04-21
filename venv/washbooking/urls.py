@@ -6,7 +6,6 @@ from .views import *
 from django.urls import re_path
 
 urlpatterns = [
-    path('delete/<int:pk>/', views.deleteBooking),
     path('auth/register/',
         RegisterView.as_view(),
         name='auth_user_create'),

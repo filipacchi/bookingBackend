@@ -6,7 +6,7 @@ import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-lis
 import styles from "../../screens/Style";
 
 export default function EditBookableObject({route}) {
-    const {objectId} = route.params
+  const {objectId} = route.params
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
 
