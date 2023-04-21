@@ -14,8 +14,6 @@ const UserLanguageProvider = (props) => {
    )); /* här lägger vi till mobilens standardspråk */
     const [languagePackage, setLanguagePackage] = useState();
 
-     
-
     return (
                 // this is the provider providing state
         <userLanguageContext.Provider 
