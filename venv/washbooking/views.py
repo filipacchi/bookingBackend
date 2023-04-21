@@ -80,25 +80,38 @@ class GetUserBookingAPIVIEW(APIView):
     def get(self, request):
         user = self.request.user
         person = Person.objects.get(user=user.id) # jag
-        user_associations = person.associations.all() # mina associations
-        print(user_associations)
+        my_associations_db = person.associations.all() # mina associations django-format
+        print(my_associations_db)
 
-        booked_times = []
+        associations_serializer = AssociationSerializer(my_associations_db, many=True)
+        my_associations = json.loads(json.dumps(associations_serializer.data))
+        
 
-        for association in user_associations: 
-            # alla bookable_objects som jag har i mina associations
-            bookable_objects = BookableObject.objects.filter(inAssociation=association)
-            for object in bookable_objects:
-                for match in BookedTime.objects.filter(booking_object=object):
-                    booked_times.extend(
+        my_bookings = []
+
+        for association in my_associations: 
+            # alla bookable_objects som finns i mina associations
+            bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
+            bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
+            bookable_objects = json.loads(json.dumps(bookable_objects_serializer))
+
+            for object in bookable_objects: #bookable_objects_db?
+
+                booked_times_db = BookedTime.objects.filter(booking_object=object)
+                booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
+                booked_times = json.loads(json.dumps(booked_times_serializer))
+
+                for match in booked_times:
+                    my_bookings.extend(
                     {
-                    "booking_object": object,
-                    "start_time": 1,
-                    
+                    "booking_object": match.booking_object,
+                    "date": match.date,
+                    "start_time": match.start_time,
+                    "end_time": match.end_time,
                     })
                 print(BookedTime.objects.filter(booking_object=object))
 
-        return Response("GetUserBooking")
+        return Response(my_bookings)
     
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [AllowAny]#[checkGroup]
