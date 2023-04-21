@@ -152,6 +152,28 @@ class GetUserAssociation(APIView):
         user_associations = person.associations.all()
         serializer = AssociationSerializer(user_associations, many=True)
         return Response(serializer.data)
+    
+class GetUserAssociationWithBookableObjects(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        serializer = AssociationSerializer(user_associations, many=True)
+        asso = json.loads(json.dumps(serializer.data))
+        for index in range(len(asso)):
+            print(asso[index]['name'])
+            bookable_objects = BookableObject.objects.filter(inAssociation=asso[index]['id'])
+            ####print(BookableObjectSerializer(bookable_objects, many=True))
+            asso[index]['bookobjects'] = json.loads(json.dumps(BookableObjectSerializer(bookable_objects, many=True).data))
+            
+            #print(bookable_objects)
+        #bookable_objects_serializer = BookableObjectSerializer(bookable_objects, many=True)
+        #asso = json.loads(json.dumps(serializer.data))
+        #asso['bookobjects'] = json.loads(json.dumps(bookable_objects_serializer.data))
+        print(asso)
+        return Response(asso)
 
 class GetJoinAssociation(APIView):
     permission_classes = [IsAuthenticated]
@@ -166,7 +188,7 @@ class UserJoinAssociation(APIView):
         user = self.request.user
         person = Person.objects.get(user=user.id)
         join_association = Association.objects.get(join_key=join_key)
-        person.associations.remove(join_association)
+        person.associations.add(join_association)
         person.save()
         return Response()
 
