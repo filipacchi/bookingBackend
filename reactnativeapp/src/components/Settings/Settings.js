@@ -1,12 +1,13 @@
 
 import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native"
 import React from 'react';
-import { AuthContext } from "../../../navigation/AppStack";
+import { AuthContext } from "../../../auth/UserContextProvider";
 import styles from "../../screens/Style";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 
 export default function Settings() {
-    const { signOut, t, setLang, getLang } = React.useContext(AuthContext);
+    const {authContext} = React.useContext(AuthContext);
+    const { signOut, t, setLang, getLang } = authContext
     const [selected, setSelected] = React.useState("English");
 
 

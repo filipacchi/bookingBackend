@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState, useContext } from "react";
 import { TextInput } from "react-native-paper";
-import { AuthContext } from "../../navigation/AppStack";
+import { AuthContext } from "../../auth/UserContextProvider";
 import Logo from "../components/assets/Logo";
 import Style from "./Style";
 
@@ -15,7 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function Auth() {
     const navigation = useNavigation()
-    const {t, setLang, getLang} = useContext(AuthContext)
+    const {authContext} = useContext(AuthContext)
+    const {t, setLang, getLang} = authContext
     const [lang, setLanguage] = useState(getLang())
 
     function changeLang () {

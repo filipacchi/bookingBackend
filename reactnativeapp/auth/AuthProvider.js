@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as SecureStore from 'expo-secure-store';
 import axios from '../axios/useAxios';
-import Stack from '../navigation/AppStack';
+import Stack from './UserContextProvider';
 
 
 export const AuthContext = React.createContext();

@@ -1,6 +1,6 @@
 
 import { StyleSheet, View, Text, Pressable } from "react-native"
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
@@ -13,16 +13,14 @@ import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
-import { AuthContext } from "../../navigation/AppStack";
+import { AuthContext } from "../../auth/UserContextProvider";
 
 const Tab = createBottomTabNavigator();
 
-export default function MainNav({route}) {
-
-    const { signOut, t, setLang, getLang } = React.useContext(AuthContext);
-    
-    console.log(route.params.stateValue)
-    const state = route.params.stateValue
+export default function MainNav() {
+    const {authContext} = React.useContext(AuthContext)
+    const { signOut, t, setLang, getLang } = authContext
+    const {state}= useContext(AuthContext)
 
     return (
         <Tab.Navigator
@@ -37,7 +35,7 @@ export default function MainNav({route}) {
                 }
 
             }}>
-            <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} initialParams={{stateValue: state}} options={{
+            <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )

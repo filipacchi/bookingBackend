@@ -26,13 +26,13 @@ import { getLocales } from "expo-localization"
 
 
 
-export const AuthContext = React.createContext();
+const AuthContext = React.createContext();
 
 async function save(key, value) {
   await SecureStore.setItemAsync(key, value);
 }
 
-export default function Stack() {
+function UserContextProvider({children}) {
   const i18n = new I18n(translations)
   i18n.defaultLocale = getLocales()[0].languageCode
   i18n.locale = getLocales()[0].languageCode
@@ -144,10 +144,6 @@ export default function Stack() {
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       signUp: async (data) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `SecureStore`
-        // In the example, we'll use a dummy token
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
@@ -159,49 +155,18 @@ export default function Stack() {
       },
       getLang: () => {
         return i18n.locale
-      }
+      },
+
     }),
     []
   );
-  //const Tab = createBottomTabNavigator();
-  const Stack = createNativeStackNavigator();
-
-
-  if (loadingState) {
-    return (
-      // <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
-      //   <ActivityIndicator/>
-      // </View>
-      <Splash setLoadingState={setLoadingState}></Splash>
-    )
-  }
+  const contextValue = {authContext, state}
 
   return (
-    <NavigationContainer>
-      <AuthContext.Provider value={authContext}>
-        <Stack.Navigator screenOptions={{
-          headerShown: false
-        }}>
-          {state.userToken == null /* bytte håll på token temporärt */ ? (
-            <Stack.Group>
-              <Stack.Screen name="Auth" component={Auth} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Register" component={Register} />
-            </Stack.Group>
-
-          ) : (
-            <Stack.Screen name="MainNav" component={MainNav} initialParams={{ stateValue: state }} />
-            //<Stack.Screen name="NavButtons" component={NavButtons} />
-          )}
-
-          {/* <Stack.Screen name="NavButtons" component={NavButtons} /> */}
-          <Stack.Screen name="Nav" component={Nav} />
-          <Stack.Screen name="User" component={User} />
-          <Stack.Screen name="Associations" component={Associations} />
-          <Stack.Screen name="JoinAssociations" component={JoinAssociations} />
-          <Stack.Screen name="BookableObject" component={BookableObject} />
-        </Stack.Navigator>
+      <AuthContext.Provider value={contextValue}>
+        {children}
       </AuthContext.Provider>
-    </NavigationContainer>
   );
 }
+
+export {UserContextProvider, AuthContext}

@@ -1,25 +1,34 @@
 import * as React from "react"
-import { Text, View } from "react-native"
-//import UserLanguageProvider from "./language/languageContext"
-import * as en from "reactnativeapp/language/lang-en.json"
-import * as sv from "reactnativeapp/language/lang-sv.json"
-// ...fortsätter
-import AppStack from "./navigation/AppStack"
-import User from "./src/screens/User"
-import { translations } from "./language/localizations"
-import { useState } from "react"
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AuthContext } from "./auth/UserContextProvider";
+import { UserContextProvider } from "./auth/UserContextProvider";
+import Auth from "./src/screens/Auth";
+import Login from "./src/screens/Login";
+import Register from "./src/screens/Register";
+import MainNav from "./src/screens/MainNav";
+import Nav from "./src/screens/Nav";
+import AppStack from "./navigation/Stack";
 
-import {getLocales} from "expo-localization"
+
+import * as SecureStore from 'expo-secure-store';
+
+import { useContext } from "react";
+import { userLanguageContext } from "./language/languageContext";
+
 
 export default function App() {
-  
-//const [isLoading, setIsLoading] = React.useState(true);
-//return isLoading ? <Splash setIsLoading={setIsLoading}/> : <Home/> 
 
+  //const [isLoading, setIsLoading] = React.useState(true);
+  //return isLoading ? <Splash setIsLoading={setIsLoading}/> : <Home/> 
+  const Stack = createNativeStackNavigator();
+  //const { getLang } = useContext(AuthContext)
+  const state = true
   return (
-
+    <UserContextProvider>
+        <AppStack/>
+      </UserContextProvider>
     //<UserLanguageProvider>
-      <AppStack />
     //</UserLanguageProvider>
     //<Booking></Booking>
     // <Login></Login>
