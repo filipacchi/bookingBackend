@@ -1,29 +1,9 @@
-// NB nb
-
-import Login from "../src/screens/Login";
-import Nav from "../src/screens/Nav";
-import Splash from "../src/screens/Splash";
-import NavButtons from "../src/screens/NavButtons";
-import JoinAssociations from "../src/components/Associations/JoinAssociations";
-import User from "../src/screens/User";
-import Associations from "../src/components/Associations/Associations";
 import * as React from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createContext } from 'react';
 import axios from "../axios/axios";
-import { NavigationContainer } from "@react-navigation/native";
-import { ActivityIndicator } from "react-native-paper";
-import { View } from "react-native/Libraries/Components/View/View";
-import Register from "../src/screens/Register";
-import { useAxios } from "../axios/useAxios";
-import BookableObject from "../src/components/Associations/BookableObject";
-import Auth from "../src/screens/Auth"
-import MainNav from "../src/screens/MainNav";
 import { translations } from "../language/localizations";
 import { I18n } from "i18n-js";
 import { getLocales } from "expo-localization"
-
 
 
 const AuthContext = React.createContext();
