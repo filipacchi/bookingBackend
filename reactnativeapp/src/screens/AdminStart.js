@@ -154,7 +154,8 @@ export default function Associations() {
                                     horizontal={true}
                                     ListFooterComponent={
                                         <Pressable onPress={() => {
-                                            navigation.navigate("AddBookableObject")
+                                            navigation.navigate("AddBookableObject", {associationId: item.id})
+                                            console.log(item.id)
                                         }} style={Style.addObject}>
                                             <Ionicons name="ios-add-circle-outline" size={25} color="black" />
                                             </Pressable>

@@ -15,26 +15,15 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from datetime import datetime
 
-@api_view(['GET'])
-def getBooking(request):
-    booking = Booking.objects.all()
-    serializer = BookingSerializer(booking, many=True)
-    return Response(serializer.data)
-
-@api_view(['POST'])
-def postBooking(request):
-    serializer = BookingSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-@api_view(['DELETE'])
-def deleteBooking(request, pk):
-    try:
-        booking = Booking.objects.get(pk=pk)
-        booking.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    except Booking.DoesNotExist:
-            raise Http404
+class AddBookableObject(APIView):
+    permission_classes = []
+    def post(self, request):
+        serializer = BookableObjectSerializer(data=request.data)
+        if serializer.is_valid():
+            #serializer.save()
+            return Response('Added object!')
+        else:
+            return Response("An error occured, please try again later")
 
 class RegisterView(APIView):
     authentication_classes = []
@@ -93,13 +82,15 @@ class GetUserBookingAPIVIEW(APIView):
             # alla bookable_objects som finns i mina associations
             bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
-            bookable_objects = json.loads(json.dumps(bookable_objects_serializer))
+            bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
+
+            """ vi vill ha tillhörande association också """
 
             for object in bookable_objects: #bookable_objects_db?
 
                 booked_times_db = BookedTime.objects.filter(booking_object=object)
                 booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
-                booked_times = json.loads(json.dumps(booked_times_serializer))
+                booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
                 for match in booked_times:
                     my_bookings.extend(

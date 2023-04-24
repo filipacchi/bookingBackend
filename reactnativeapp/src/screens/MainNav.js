@@ -44,7 +44,7 @@ export default function MainNav() {
                     <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />
                 )
             }} />
-            <Tab.Screen name="Schedule" component={Schedule} options={{
+            <Tab.Screen name="Booked Times" component={Schedule} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="calendar" size={28} color={color} />
                 )

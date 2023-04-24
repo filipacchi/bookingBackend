@@ -19,9 +19,10 @@ export default StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 5,
         padding: 10,
-        marginBottom: 10,
-    },
-    settingLabel: {
+        marginBottom: 5,
+        marginTop: 5
+      },
+      settingLabel: {
         fontSize: 16,
     },
     button: {

@@ -17,7 +17,7 @@ function AssociationStack() {
     const {state} = React.useContext(AuthContext)
     return (
     <Stack.Navigator screenOptions={{
-        headerShown: false
+        headerShown: false,
       }}>
         {state.isStaff ? (
         <Stack.Group>
