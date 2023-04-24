@@ -1,12 +1,11 @@
 
 import { StyleSheet, View, Text, Pressable } from "react-native"
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
 import Schedule from "../components/Schedule/Schedule"
 import Info from "..//components/Information/Info"
-import { AuthContext } from "../../App";
 import { TabRouter } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,20 +13,21 @@ import NavButtons from "../screens/NavButtons"
 import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
+import { AuthContext } from "../../auth/UserContextProvider";
 
 const Tab = createBottomTabNavigator();
 
-export default function MainNav({route}) {
-    
-    console.log(route.params.stateValue)
-    const state = route.params.stateValue
+export default function MainNav() {
+    const {authContext} = React.useContext(AuthContext)
+    const { signOut, t, setLang, getLang } = authContext
+    const {state}= useContext(AuthContext)
 
     return (
         <Tab.Navigator
             screenOptions={{
                 tabBarActiveTintColor: "#2f9d9d",
                 tabBarStyle: {
-                    height: 70,
+                    height: 90,
                     padding: 10
                 },
                 headerStyle: {
@@ -35,7 +35,7 @@ export default function MainNav({route}) {
                 }
 
             }}>
-            <Tab.Screen name="Associations" component={AssociationStack} initialParams={{stateValue: state}} options={{
+            <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )

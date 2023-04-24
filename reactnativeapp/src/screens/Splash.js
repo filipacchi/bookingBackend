@@ -9,7 +9,7 @@ import { StyleSheet, Animated } from "react-native"
 import { useEffect, useRef } from "react"
 export default function Splash({ setLoadingState }) {
     const opacityAnimation = useRef(new Animated.Value(0)).current;
-    const opacityStyle = { opacity: opacityAnimation };
+    const opacityStyle = { opacity: opacityAnimation, marginTop: "50%" };
     const animateElement = () => {
 
         Animated.timing(opacityAnimation, {
@@ -31,7 +31,7 @@ export default function Splash({ setLoadingState }) {
         animateElement()
     }, [])
     return (
-        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, alignItems: 'center' }}>
             <Animated.View style={opacityStyle}>
             <Logo/>
             </Animated.View>

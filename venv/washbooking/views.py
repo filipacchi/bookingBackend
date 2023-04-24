@@ -68,14 +68,39 @@ class GetUserBookingAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
     def get(self, request):
         user = self.request.user
-        person = Person.objects.get(user=user.id)
-        user_associations = person.associations.all()
-        print(user_associations)
-        for association in user_associations:
-            bookable_object = BookableObject.objects.filter(inAssociation=association)
-            for object in bookable_object:
+        person = Person.objects.get(user=user.id) # jag
+        my_associations_db = person.associations.all() # mina associations django-format
+        print(my_associations_db)
+
+        associations_serializer = AssociationSerializer(my_associations_db, many=True)
+        my_associations = json.loads(json.dumps(associations_serializer.data))
+        
+
+        my_bookings = []
+
+        for association in my_associations: 
+            # alla bookable_objects som finns i mina associations
+            bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
+            bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
+            bookable_objects = json.loads(json.dumps(bookable_objects_serializer))
+
+            for object in bookable_objects: #bookable_objects_db?
+
+                booked_times_db = BookedTime.objects.filter(booking_object=object)
+                booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
+                booked_times = json.loads(json.dumps(booked_times_serializer))
+
+                for match in booked_times:
+                    my_bookings.extend(
+                    {
+                    "booking_object": match.booking_object,
+                    "date": match.date,
+                    "start_time": match.start_time,
+                    "end_time": match.end_time,
+                    })
                 print(BookedTime.objects.filter(booking_object=object))
-        return Response("GetUserBooking")
+
+        return Response(my_bookings)
     
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [AllowAny]#[checkGroup]
@@ -116,7 +141,7 @@ class GetBookableObject(APIView):
         serializer = BookableObjectSerializer(bookable_object)
         return Response(serializer.data)
     
-class CreateBookingAPIVIEW( APIView):
+class CreateBookingAPIVIEW(APIView):
     permission_classes= []
     def post(self,request,object_pk) : 
         request.data["booked_by"] = self.request.user.id
@@ -141,6 +166,28 @@ class GetUserAssociation(APIView):
         user_associations = person.associations.all()
         serializer = AssociationSerializer(user_associations, many=True)
         return Response(serializer.data)
+    
+class GetUserAssociationWithBookableObjects(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id)
+        user_associations = person.associations.all()
+        serializer = AssociationSerializer(user_associations, many=True)
+        asso = json.loads(json.dumps(serializer.data))
+        for index in range(len(asso)):
+            print(asso[index]['name'])
+            bookable_objects = BookableObject.objects.filter(inAssociation=asso[index]['id'])
+            ####print(BookableObjectSerializer(bookable_objects, many=True))
+            asso[index]['bookobjects'] = json.loads(json.dumps(BookableObjectSerializer(bookable_objects, many=True).data))
+            
+            #print(bookable_objects)
+        #bookable_objects_serializer = BookableObjectSerializer(bookable_objects, many=True)
+        #asso = json.loads(json.dumps(serializer.data))
+        #asso['bookobjects'] = json.loads(json.dumps(bookable_objects_serializer.data))
+        print(asso)
+        return Response(asso)
 
 class GetJoinAssociation(APIView):
     permission_classes = [IsAuthenticated]
@@ -155,7 +202,7 @@ class UserJoinAssociation(APIView):
         user = self.request.user
         person = Person.objects.get(user=user.id)
         join_association = Association.objects.get(join_key=join_key)
-        person.associations.remove(join_association)
+        person.associations.add(join_association)
         person.save()
         return Response()
 

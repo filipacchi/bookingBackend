@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
-import { AuthContext } from "../../navigation/AppStack";
+import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,7 +14,7 @@ export default function Register() {
 
     const navigation = useNavigation()
 
-    const { signIn } = React.useContext(AuthContext);
+    const { signIn, t, setLang } = React.useContext(AuthContext);
     const [username, onChangeUsername] = useState("Email");
     const [password, onChangePassword] = useState("Password");
 
@@ -43,7 +43,7 @@ export default function Register() {
                             style={styles.inputCredentials}
                             onChangeText={onChangePassword}
                             placeholder={password}
-                            secureTextEntry = {true}
+                            secureTextEntry={true}
                             autoComplete="off"
                             autoCorrect={false}
                         />

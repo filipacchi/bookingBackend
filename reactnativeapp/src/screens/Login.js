@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
 import { TextInput } from "react-native-paper";
-import { AuthContext } from "../../navigation/AppStack";
+import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -14,14 +14,20 @@ export default function Login() {
 
     const navigation = useNavigation()
 
-    const { signIn } = React.useContext(AuthContext);
+    const {authContext} = React.useContext(AuthContext);
+    const { signIn, t, setLang } = authContext
     const [username, onChangeUsername] = useState("Email");
     const [password, onChangePassword] = useState("Password");
+    const [lang, setLanguage] = useState("")
 
 
     function handleRequest() {
-        console.log("KLICKAR")
-        signIn({ username, password })
+        signIn({ username, password }) 
+    }
+
+    function changeLang(lang) {
+        setLang(lang)
+        setLanguage(lang)
     }
 
     return (
@@ -36,6 +42,7 @@ export default function Login() {
                         width: "100%",
                         gap: 20
                     }}>
+                        <Text style={styles.inputCredentials}>{t("Settings")}</Text>
                         <TextInput
                             style={styles.inputCredentials}
                             onChangeText={onChangeUsername}

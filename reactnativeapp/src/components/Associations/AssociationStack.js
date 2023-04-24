@@ -9,11 +9,12 @@ import AdminStart from 'reactnativeapp/src/screens/AdminStart.js';
 import AssociationInformation from 'reactnativeapp/src/components/AdminStart/AssociationInformation.js';
 import AddBookableObject from 'reactnativeapp/src/components/AdminStart/AddBookableObject.js';
 import EditBookableObject from 'reactnativeapp/src/components/AdminStart/EditBookableObject.js';
+import { AuthContext } from '../../../auth/UserContextProvider.js';
 
 const Stack = createNativeStackNavigator()
 
-function AssociationStack({ route }) {
-    const state = route.params.stateValue
+function AssociationStack() {
+    const state = React.useContext(AuthContext)
     return (
     <Stack.Navigator screenOptions={{
         headerShown: false

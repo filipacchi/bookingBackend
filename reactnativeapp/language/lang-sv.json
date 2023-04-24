@@ -9,6 +9,7 @@
     "Password": "Lösenord",
     "Email": "Mejladress",
     "CreateAccount": "Skapa konto",
+    "Login": "Logga in",
 
     "Booking": "Bokning",
     "Date": "Datum",
@@ -37,6 +38,7 @@
     "ChangeLanguage": "Byt språk",
     "ChangeEmail": "Byt e-postadress",
     "LogOut": "Logga ut",
+    "Language": "Språk",
 
     "AssociationsPage": "Mina föreningar",
     "EnterKey": "Skriv in din nyckel",
