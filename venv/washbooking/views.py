@@ -20,8 +20,8 @@ class AddBookableObject(APIView):
     def post(self, request):
         serializer = BookableObjectSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            #serializer.save()
+            return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
 
