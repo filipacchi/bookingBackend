@@ -88,6 +88,7 @@ function UserContextProvider({children}) {
             console.log("isSTAFF? : " + response.data.isStaff)
             save("userToken", response.data.access)
             save("userRefreshToken", response.data.refresh)
+            axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.access}`}
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
 
           })
@@ -111,10 +112,11 @@ function UserContextProvider({children}) {
         })
           .then(response => {
             //console.log(response.data.access);
+            axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.access}`}
+            save("userRefreshToken", response.data.refresh)
             save("userToken", response.data.access).then(() => {
               dispatch({ type: 'SIGN_IN', token: response.data });
             })
-            save("userRefreshToken", response.data.refresh)
 
           })
           .catch(error => {

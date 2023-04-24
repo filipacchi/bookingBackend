@@ -91,7 +91,7 @@ const WeekCalendar = () => {
             //marginVertical: 16,
           }}
         >
-          <Text>{selectedDay.format('MMMM YYYY')}</Text>
+          <Text style={{fontFamily: "Open"}}>{selectedDay.format('MMMM YYYY')}</Text>
         </View>
 
         {/* Render the next week arrow */}

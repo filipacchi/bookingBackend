@@ -10,22 +10,26 @@ import { Ionicons } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../../auth/UserContextProvider";
+import { ActivityIndicator } from "react-native-paper";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 
 
 export default function Associations() {
 
     const navigation = useNavigation()
-
+    const { state } = useContext(AuthContext)
     /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
     const [languagePackage, setLanguagePackage] = useContext(userLanguageContext) */
-    const [modalVisible, setModalVisible] = useState(false)
+
+    const [EnterModalVisible, setEnterModalVisible] = useState(false)
+    const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
     const [inputText, setInputText] = useState("")
     const [isCheckMarkPressed, setCheckMarkPressed] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(true)
-
-
+    const [joinAssociationName, setJoinAssociationName] = useState("No Association")
+    const [isLoading, setIsLoading] = useState(true)
 
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
@@ -120,17 +124,15 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('user/association/get',
-                config
+            axios.get('user/association/get'
             )
                 .then(response => {
                     console.log(response.data)
                     setAssociation(response.data)
-                    setIsRefreshing(false)
                 })
                 .catch(error => {
                     console.log(error);
-                });
+                }).finally(() => setIsLoading(false), setIsRefreshing(false))
         }
         getUserAssociation(token)
     }
@@ -149,52 +151,86 @@ export default function Associations() {
     }, [])
 
     async function JoinAssociation() {
-        console.log("Inuti getUser: " + token)
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
+        console.log("Inuti getUser: " + state.userToken)
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         };
 
         const bodyParameters = {
             key: "value"
         };
-        axios.post('join/association/add/' + inputText,
-            config
+        axios.post('join/association/add/' + inputText
         )
             .then(response => {
-                console.log(response.data)
-                loadData()
+                console.log("" + response.data)
+                loadData(token)
             })
             .catch(error => {
                 console.log(error);
-            });
+            }).finally(() => setConfirmModalVisible(false))
     }
 
-    const checkKeyMatch = () => {
-        JoinAssociation()
+    async function GetAssociation(tI) {
+        console.log("Inuti getUser: " + state.userToken)
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+
+        const bodyParameters = {
+            key: "value"
+        };
+        axios.get('join/association/get/' + tI
+        )
+            .then(response => {
+                console.log("" + response.data)
+                setJoinAssociationName(response.data.name)
+                setConfirmModalVisible(true)
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                setIsLoading(false)
+
+            })
     }
 
-    const PopUpModal = () => {
+
+    const checkKeyMatch = (tI) => {
+        setInputText(tI)
+        GetAssociation(tI)
+        setEnterModalVisible(false)
+
+    }
+    let tempInput = ""
+    const handleChangeText = ((newText) => {
+        tempInput = newText
+        console.log(tempInput)
+    })
+    const PopUpModalEnterKey = () => {
         return (
             <Modal
                 animationType="fade"
                 transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}>
+                visible={EnterModalVisible}
+                onRequestClose={() => setEnterModalVisible(false)}>
 
                 <View style={Style.modalWindow}>
                     <View style={Style.modalOuter}>
                         < View style={Style.inputAndCheckMark}>
                             <TextInput
                                 style={Style.modalInput}
-                                value={inputText}
+                                //value={tempInput}
                                 /* style={styles.modalTextInput} */
-                                onPress={() => setIsFocused(true)}
-                                placeholder={"Enter Association Key"}
-                                onChangeText={setInputText}>
+                                //onPress={() => setIsFocused(true)}
+                                onChangeText={handleChangeText}
+                                placeholder={"Enter Association Key"}>
                             </TextInput>
                             <Pressable style={{ justifyContent: "center" }} onPress={() => {
-                                console.log("Value: " + inputText)
-                                checkKeyMatch(inputText)
+                                console.log("Value: " + tempInput)
+                                checkKeyMatch(tempInput)
                             }}>
                                 <AntDesign name="check" size={20} color="black" />
                             </Pressable>
@@ -203,12 +239,43 @@ export default function Associations() {
 
                         <Pressable
                             style={Style.modalCloseButton}
-                            onPress={() => setModalVisible(false)}>
+                            onPress={() => setEnterModalVisible(false)}>
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>
                     </View>
                 </View>
             </Modal >
+        )
+    }
+
+    const PopUpModalConfirm = () => {
+        return (
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={ConfirmModalVisible}
+                onRequestClose={() => setConfirmModalVisible(false)}>
+                <View style={Style.modalWindow}>
+
+                    <View style={Style.modalOuter}>
+                        <View style={{ gap: 10 }}>
+                            <Text style={{ textAlign: "center" }}>Vill du gå med i föreningen: </Text>
+                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{joinAssociationName}</Text>
+                            <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
+                                <Pressable onPress={() => JoinAssociation()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>Ja</Text></Pressable>
+                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>Avbryt</Text></Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal >
+        )
+    }
+
+    if(isLoading) {
+        return(
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
+            
         )
     }
 
@@ -221,7 +288,8 @@ export default function Associations() {
                     borderColor: "#999999",
                     borderWidth: 3,
                     margin: 20
-                }}><Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
+                }}>
+                    <Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
                 <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
             </View>
         )
@@ -237,7 +305,7 @@ export default function Associations() {
                 refreshing={isRefreshing}
                 renderItem={
                     ({ item }) =>
-                        <View style={Style.assoFlatView}>
+                        <View style={[Style.assoFlatView, Style.shadowProp]}>
                             <View style={Style.assoView}>
                                 <AntDesign name="home" size={28} color={"#222222"} />
                                 <View>
@@ -269,7 +337,8 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            <PopUpModal />
+            <PopUpModalEnterKey />
+            <PopUpModalConfirm />
 
             {/* <Pressable 
             style={Style.addAssociation}
@@ -281,7 +350,7 @@ export default function Associations() {
             )
             })}>
                 <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
-            <Pressable onPress={() => setModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+            <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }

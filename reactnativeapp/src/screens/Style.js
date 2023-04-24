@@ -121,8 +121,11 @@ export default StyleSheet.create({
     },
     modalOuter: {
         backgroundColor: 'white',
-        padding: 40,
+        width: "70%",
+        height: 120,
         borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     modalInner: {
         position: "absolute",
@@ -165,6 +168,13 @@ export default StyleSheet.create({
         /* width: 20, */
         resizeMode: 'contain',
     },
+    modalButton: {
+        width: 50,
+        height: 30,
+        borderRadius: 3,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     modalInput: {
         paddingLeft: 10,
         paddingRight: 10,
@@ -192,5 +202,11 @@ export default StyleSheet.create({
         color: "white",
         fontWeight: "400",
         fontSize: 15
-    }
+    },
+    shadowProp: {
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+      },
 });

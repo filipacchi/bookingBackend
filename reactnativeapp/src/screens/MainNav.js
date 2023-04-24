@@ -20,7 +20,6 @@ const Tab = createBottomTabNavigator();
 export default function MainNav() {
     const {authContext} = React.useContext(AuthContext)
     const { signOut, t, setLang, getLang } = authContext
-    const {state}= useContext(AuthContext)
 
     return (
         <Tab.Navigator

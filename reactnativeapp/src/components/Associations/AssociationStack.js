@@ -14,7 +14,7 @@ import { AuthContext } from '../../../auth/UserContextProvider.js';
 const Stack = createNativeStackNavigator()
 
 function AssociationStack() {
-    const state = React.useContext(AuthContext)
+    const {state} = React.useContext(AuthContext)
     return (
     <Stack.Navigator screenOptions={{
         headerShown: false
