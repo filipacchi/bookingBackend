@@ -82,13 +82,15 @@ class GetUserBookingAPIVIEW(APIView):
             # alla bookable_objects som finns i mina associations
             bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
-            bookable_objects = json.loads(json.dumps(bookable_objects_serializer))
+            bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
+
+            """ vi vill ha tillhörande association också """
 
             for object in bookable_objects: #bookable_objects_db?
 
                 booked_times_db = BookedTime.objects.filter(booking_object=object)
                 booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
-                booked_times = json.loads(json.dumps(booked_times_serializer))
+                booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
                 for match in booked_times:
                     my_bookings.extend(
