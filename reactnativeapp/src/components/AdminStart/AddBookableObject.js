@@ -6,9 +6,11 @@ import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-lis
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AddBookableObject({ route }) {
   const { associationId } = route.params
+  const navigation = useNavigation()
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
   const [objectName, setObjectName] = useState('');
@@ -316,6 +318,7 @@ export default function AddBookableObject({ route }) {
 
             console.log('HÄR HAR VI ALL INFO OM OBJEKTET 2: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
             addBookableObject()
+            navigation.goBack()
           }
         }
         else {
@@ -337,6 +340,7 @@ export default function AddBookableObject({ route }) {
 
             console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
             addBookableObject()
+            navigation.goBack()
           }
         }
       }}>
