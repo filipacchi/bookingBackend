@@ -3,9 +3,8 @@ import { View, Text, TouchableWithoutFeedback, PanResponder } from 'react-native
 import moment from 'moment';
 import { Feather } from '@expo/vector-icons';
 
-const WeekCalendar = () => {
-  const today = moment(); // Get the current date
-  const [selectedDay, setSelectedDay] = useState(today); // State to keep track of the selected day
+const WeekCalendar = ({selectedDay, setSelectedDay}) => {
+  const today = moment()
   const [weekDates, setWeekDates] = useState([]); // State to store the week dates
   const [prevArrowPressed, setPrevArrowPressed] = useState(false); // State to track if the previous arrow is pressed
   const [nextArrowPressed, setNextArrowPressed] = useState(false); // State to track if the next arrow is pressed
