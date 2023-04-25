@@ -6,7 +6,9 @@ import axios from "../../../axios/axios";
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import WeekCalendar from "./WeekCalendar";
 import BookablesView from "./BookablesView";
-
+import Swiper from 'react-native-swiper'
+import BookObjectComponent from "./BookObjectComponent";
+import moment from 'moment';
 
 
 const createTimeSlots = (response) => {
@@ -22,7 +24,7 @@ const createTimeSlots = (response) => {
         let next_index = index + slot_length
         if (next_index <= end_time) {
 
-            let titleTemp = prettyDate(index,next_index)
+            let titleTemp = prettyDate(index, next_index)
 
             timeSlotArray.push({ id: index, title: titleTemp, booked: false })
         }
@@ -30,7 +32,7 @@ const createTimeSlots = (response) => {
     return [data, populateTimeSlots(timeSlotArray, bookingsArray)]
 }
 
-const prettyDate = (i1,i2) => {
+const prettyDate = (i1, i2) => {
     if (i1.toString().length == 1) {
         t1 = String("0" + i1 + ":00")
     } else {
@@ -59,6 +61,7 @@ const populateTimeSlots = (timeA, bookA) => {
 }
 
 
+
 export default function BookableObject() {
 
     const [bookObject, setBookObject] = useState([])
@@ -81,8 +84,21 @@ export default function BookableObject() {
             })
     }
 
+    const loadWeek = () => {
+        let week = 7
+        startDate = moment()
+        const updatedWeekDates = Array.from({ length: 7 }).map((_, i) =>
+            startDate.clone().startOf('isoWeek').add(i, 'days')
+        );
+        for (let index = 0; index < updatedWeekDates.length; index++) {
+            returnValue = loadData(objectid, updatedWeekDates[index].format().slice(0,10))
+            
+        }
+    }
+
     React.useEffect(() => {
-        loadData(2, selectedDate)
+        loadData(1, selectedDate)
+        loadWeek()
     }, [selectedDate])
 
     const markDate = (dateString) => {
@@ -90,58 +106,17 @@ export default function BookableObject() {
         setSelectedDate(dateString)
     }
 
-    const bookTime = () =>{
-        if(selectedTime !=""){
-            console.log("Boka tid: "+prettyDate(selectedTime, selectedTime+parseInt(bookObject.timeSlotLength))+" ?")
+    const bookTime = () => {
+        if (selectedTime != "") {
+            console.log("Boka tid: " + prettyDate(selectedTime, selectedTime + parseInt(bookObject.timeSlotLength)) + " ?")
         }
     }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.calendarStyle}>
-                <WeekCalendar/>
-                <BookablesView></BookablesView>
-            {/* <CalendarStrip
-            isEnglish
-            showWeekNumber
-            showEnglishLunar
-  selectedDate = {selectedDate}
-  onPressDate={(date) => {
-    this.setState({ selectedDate: date });
-  }}
-  onPressGoToday={(today) => {
-    this.setState({ selectedDate: today });
-  }}
-  markedDate={[]}
-  weekStartsOn={1} // 0,1,2,3,4,5,6 for S M T W T F S
-/>
-<DatePicker locale={'es-mx'} selected={(date) => console.log(date)}></DatePicker>
-                <Calendar
-                    onDayPress={({ dateString }) => markDate(dateString)}
-                    markedDates={{
-                        [selectedDate]: { selected: true, disableTouchEvent: true }
-                    }}
-                ></Calendar> */}
-                {/* <View style={{ flex: 1 }}>
-                    <FlatList
-                        data={timeSlots}
-                        style={{}}
-                        renderItem={
-                            ({ item }) =>
-                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
-                                    <Text suppressHighlighting={true}
-                                        onPress={() => {
-                                            if (!item.booked) {
-                                                setSelectedTime(item.id)
-                                            }
-                                        }}
-                                        style={{ fontSize: 28, padding: 20, backgroundColor: selectedTime == item.id ? "grey" : item.booked ? "red" : "#27a5a5", color: "white" }}>{item.title}</Text></View>}
-
-                    >
-
-                    </FlatList>
-                    <Pressable style={styles.input} onPress={() => {bookTime()}}><Text style={styles.inputText}>Boka tid</Text></Pressable>
-                </View> */}
+            <View style={{ flex: 1 }}>
+                <WeekCalendar />
+                <BookObjectComponent timeSlots={timeSlots} />
             </View>
         </SafeAreaView>
     )

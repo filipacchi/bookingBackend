@@ -31,7 +31,7 @@ export default function Splash({ setLoadingState }) {
         animateElement()
     }, [])
     return (
-        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, alignItems: 'center' }}>
+        <LinearGradient /* colors={["#53d5d5", "#2f9d9d"]} */ /* colors={["#6ea1ff", "#4d70b3"]} */   /* colors={["#FE4384", "#FFE681" ]} */      colors={["#8AAAE5", "#bad2ff"]} start={{ x: 0, y: 0.7 }} style={{ flex: 1, alignItems: 'center' }}>
             <Animated.View style={opacityStyle}>
             <Logo/>
             </Animated.View>

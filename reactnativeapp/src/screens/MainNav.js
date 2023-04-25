@@ -24,14 +24,18 @@ export default function MainNav() {
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: "#2f9d9d",
+                
+                tabBarActiveTintColor: "#577ac2",
                 tabBarStyle: {
                     height: 90,
                     padding: 10
                 },
                 headerStyle: {
-                    backgroundColor: "white"
-                }
+                    backgroundColor: "#8AAAE5"
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                  }
 
             }}>
             <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{

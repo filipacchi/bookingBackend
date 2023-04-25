@@ -109,9 +109,9 @@ export default StyleSheet.create({
     bookObject: {
         backgroundColor: "white",
         borderRadius: 10,
-        borderColor: "#999999",
+        borderColor: "white",
         borderWidth: 1,
-        padding: 5,
+        padding: 8,
         margin: 5
     },
     modalWindow: {
