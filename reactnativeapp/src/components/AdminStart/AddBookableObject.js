@@ -48,7 +48,7 @@ export default function AddBookableObject({ route }) {
 
   const addBookableObject = async () => {
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${state.userToken}` }
     };
 
     const bodyParameters = {
@@ -61,7 +61,7 @@ export default function AddBookableObject({ route }) {
       slotsPerWeek: slotsBookablePerWeek
     }
     axios.post('association/bookableobject/add',
-      config, bodyParameters
+      bodyParameters
     )
       .then(response => {
         console.log(response.data)
@@ -315,7 +315,7 @@ export default function AddBookableObject({ route }) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')
 
             console.log('HÄR HAR VI ALL INFO OM OBJEKTET 2: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
-            //addBookableObject()
+            addBookableObject()
           }
         }
         else {
@@ -336,7 +336,7 @@ export default function AddBookableObject({ route }) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')
 
             console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
-            //addBookableObject()
+            addBookableObject()
           }
         }
       }}>

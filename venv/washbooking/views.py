@@ -18,9 +18,9 @@ from datetime import datetime
 class AddBookableObject(APIView):
     permission_classes = []
     def post(self, request):
-        serializer = BookableObjectSerializer(data=request.data)
+        serializer = AddBookableObjectSerializer(data=request.data)
         if serializer.is_valid():
-            #serializer.save()
+            serializer.save()
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
