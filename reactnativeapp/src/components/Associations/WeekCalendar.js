@@ -139,7 +139,7 @@ const WeekCalendar = ({selectedDay, setSelectedDay}) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 60,
-                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "red": "#53d5d5" : 'transparent',
+                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "#8AAAE5": "#8AAAE5": 'transparent',
                   }}
                 >
                   <Text style={{color: currentDate.isSame(selectedDay, 'day') ? "white" : currentDate.isSame(today, 'day') ? 'red' : 'black', }}>{currentDate.format('D')}</Text>

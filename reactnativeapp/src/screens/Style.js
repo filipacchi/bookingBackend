@@ -48,7 +48,7 @@ export default StyleSheet.create({
     pressable: {
         width: "70%",
         borderRadius: 10,
-        borderColor: "white",
+        borderColor: "transparent",
         borderStyle: "solid",
         justifyContent: "center",
         borderWidth: 2,
@@ -210,4 +210,18 @@ export default StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 3,
       },
+      pressableBook: {
+        width: "70%",
+        borderRadius: 10,
+        borderColor: "transparent",
+        borderStyle: "solid",
+        justifyContent: "center",
+        borderWidth: 2,
+        alignItems: "center",
+        alignSelf: "center",
+        padding: 15,
+        flexDirection: "row",
+        gap: 10,
+        backgroundColor: "#22992e"
+    },
 });

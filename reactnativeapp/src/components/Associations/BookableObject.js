@@ -83,6 +83,7 @@ export default function BookableObject({ route }) {
     const [loading, setLoading] = useState(true)
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
+    const [noSwipe, setNoSwipe] = useState(false)
 
     const loadData = async (objectid, date) => {
         console.log(date)
@@ -125,12 +126,20 @@ export default function BookableObject({ route }) {
 
     }, [selectedDate])
 
+    async function setSwipe(){
+        setTimeout(()=>{
+            console.log("Sätter till false")
+            setNoSwipe(false)
+        }, 500)
+    }
     useEffect(() => {
-        if(selectedDayCalendar.diff(selectedDay, 'days') != 0){
+        if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
+            setNoSwipe(true)
             let diff = selectedDayCalendar.diff(selectedDay, 'days')
             console.log(diff)
             swiper.current.scrollBy(diff)
-            /* setSelectedDay(selectedDayCalendar) */
+            setSelectedDay(selectedDayCalendar)
+            setSwipe()
         }
     }, [selectedDayCalendar])
 
@@ -156,18 +165,20 @@ export default function BookableObject({ route }) {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
                 <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDayCalendar} />
-                <Swiper ref={swiper} index={0} loop={false}  onIndexChanged={(i) => {
-                    if(i > swiperIndex){
-                        setSelectedDay(moment(selectedDay).add(1, 'days'))
-                        setSelectedDayCalendar(moment(selectedDay).add(1, 'days'))
-                    }else{
-                        setSelectedDay(moment(selectedDay).subtract(1, 'days')) 
-                        setSelectedDayCalendar(moment(selectedDay).subtract(1, 'days')) 
-                        
+                <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
+                    console.log(noSwipe)
+                    if (!noSwipe) {
+                        if (i > swiperIndex) {
+                            setSelectedDay(moment(selectedDay).add(1, 'days'))
+                            setSelectedDayCalendar(moment(selectedDay).add(1, 'days'))
+                        } else {
+                            setSelectedDay(moment(selectedDay).subtract(1, 'days'))
+                            setSelectedDayCalendar(moment(selectedDay).subtract(1, 'days'))
+                        }
                     }
                     setSwiperIndex(i)
-                    console.log("Indexet är: "+i)
-                    
+                    console.log("Indexet är: " + i)
+
 
                 }
                 }>
@@ -179,7 +190,9 @@ export default function BookableObject({ route }) {
 
 
                 </Swiper>
-                <Pressable onPress={()=> console.log("Boka") } style={Style.pressable}><Text>Boka</Text></Pressable>
+                <View style={{padding: 20}}>
+                <Pressable onPress={() => console.log("Boka")} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
+                </View>
             </View>
         </SafeAreaView>
     )

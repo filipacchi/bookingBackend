@@ -27,7 +27,7 @@ export default function BookObjectComponent({timeSlots}) {
                                         setSelectedTime(item.id)
                                     }
                                 }}
-                                style={{ fontSize: 28, padding: 20, backgroundColor: selectedTime == item.id ? "grey" : item.booked ? "red" : "#27a5a5", color: "white" }}>{item.title}</Text></View>}
+                                style={{ fontSize: 28, padding: 20, backgroundColor: selectedTime == item.id ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>}
             >
             </FlatList>
         </View>
