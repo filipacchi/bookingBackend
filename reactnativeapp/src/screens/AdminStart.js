@@ -11,88 +11,22 @@ import Style from "reactnativeapp/src/screens/Style.js";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
-
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Associations() {
-
     const navigation = useNavigation()
-
-  
-
-    
-
+    const [isLoading, setIsLoading] = useState(true)
+    const [isRefreshing, setIsRefreshing] = useState(true)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
 
+    //  this.focusListener = navigation.addListener('focus', () => {
+    //      let access_token = SecureStore.getItemAsync('userToken')
+    //      loadData(access_token)
+    // });
+    // DETTA REFRECHAR NÄR DU GÅR TBX TILL SIDAN MEN VERKAR SKAPA EN LOOP... INTE BRA!
 
-    /* myAssociations */
-    const [AssociationTest, setAssociationTest] = useState([
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 1,
-            bookobjects: [
-                { name: "Grill 1", id: 1 },
-                { name: "Bastu", id: 2 },
-                { name: "Tvättstuga", id: 3 }
-           ],
-        },
-        {
-            name: "BRF Rosen",
-            region: "Uppsala",
-            id: 2,
-            bookobjects: [
-                { name: "Grill 1", id: 1 },
-                { name: "Bastu", id: 2 },
-                { name: "Tvättstuga", id: 3 }
-           ],
-        },
-        {
-            name: "Strandvägen 54",
-            region: "Uppsala",
-            id: 3,
-            bookobjects: [
-                { name: "Grill 1", id: 1 },
-                { name: "Bastu", id: 2 },
-                { name: "Tvättstuga", id: 3 }
-           ],
-        },
-        {
-            name: "Triangelgatan 43",
-            region: "Uppsala",
-            id: 4,
-            bookobjects: [
-                { name: "Grill 1", id: 1 },
-                { name: "Bastu", id: 2 },
-                { name: "Tvättstuga", id: 3 }
-           ],
-        }
-
-    ])
-
-    const [bookableObjects, setBookObjects] = useState(
-        {
-            1: [
-                 { name: "Grill 1" },
-                 { name: "Bastu" },
-                 { name: "Tvättstuga" }
-            ],
-            2: [
-                { name: "Pingis" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-
-        }
-    )
-
-    const bo = [
-        {"name": "Grill 1"},
-        {"name": "Bastu"},
-        {"name": "Tvättstuga"}
-      ];
-
-    const loadData = (token) => {
+      const loadData = (token) => {
         async function getUserAssociation(token) {
             console.log("Inuti getUser: " + token)
             const config = {
@@ -102,8 +36,7 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('user/associations',
-                config
+            axios.get('user/association/get'
             )
                 .then(response => {
                     console.log(response.data)
@@ -111,7 +44,7 @@ export default function Associations() {
                 })
                 .catch(error => {
                     console.log(error);
-                });
+                }).finally(() => setIsLoading(false), setIsRefreshing(false))
         }
         getUserAssociation(token)
     }
@@ -122,18 +55,39 @@ export default function Associations() {
             console.log("ASSO: " + access_token)
             setToken(access_token)
             loadData(access_token)
-
-
-
         }
         getToken()
     }, [])
 
+    if(isLoading) {
+        return(
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
+            
+        )
+    }
+
+    if (Associations.length == 0) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={{
+                    borderStyle: "solid",
+                    borderRadius: 10,
+                    borderColor: "#999999",
+                    borderWidth: 3,
+                    margin: 20
+                }}>
+                    <Text style={[Style.assoText, Style.noAssoText]}>You are not admin for any associations, if this is incorrect contact the bookease team</Text></View>
+                </View>
+        )
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
             <FlatList
-                data={AssociationTest}
+                data={Associations}
                 style={Style.expandFlatlist}
+                onRefresh={() => loadData(token)}
+                refreshing={isRefreshing}
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
@@ -149,12 +103,12 @@ export default function Associations() {
                             </Pressable>
                             <View style={Style.assoDarkView}>
                                 <FlatList
-                                    data={item.bookobjects}
+                                    data={item['bookobjects']}
                                     style={{}}
                                     horizontal={true}
                                     ListFooterComponent={
                                         <Pressable onPress={() => {
-                                            navigation.navigate("AddBookableObject", {associationId: item.id})
+                                            navigation.navigate("AddBookableObject", {associationId: item['id']})
                                             console.log(item.id)
                                         }} style={Style.addObject}>
                                             <Ionicons name="ios-add-circle-outline" size={25} color="black" />
@@ -163,10 +117,10 @@ export default function Associations() {
                                     renderItem={
                                         ({item}) => (
                                             <Pressable onPress={() => {
-                                                console.log('HÄR HAR VI OBJECT ID:'+item.id)
-                                                navigation.navigate("EditBookableObject",{objectId: item.id})
+                                                console.log('HÄR HAR VI OBJECT ID:'+item['objectId'])
+                                                navigation.navigate("EditBookableObject",{objectId: item['objectId'],})
                                             }} style={Style.bookObject}>
-                                                <Text>{item.name}</Text>
+                                                <Text>{item['objectName']}</Text>
                                             </Pressable>
                                         )
                                     }
