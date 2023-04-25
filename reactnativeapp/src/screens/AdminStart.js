@@ -11,16 +11,13 @@ import Style from "reactnativeapp/src/screens/Style.js";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
-
+import { ActivityIndicator } from "react-native-paper";
 
 export default function Associations() {
 
     const navigation = useNavigation()
-
-  
-
-    
-
+    const [isLoading, setIsLoading] = useState(true)
+    const [isRefreshing, setIsRefreshing] = useState(true)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
 
@@ -92,7 +89,7 @@ export default function Associations() {
         {"name": "Tvättstuga"}
       ];
 
-    const loadData = (token) => {
+      const loadData = (token) => {
         async function getUserAssociation(token) {
             console.log("Inuti getUser: " + token)
             const config = {
@@ -102,8 +99,7 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('user/associations',
-                config
+            axios.get('user/association/get'
             )
                 .then(response => {
                     console.log(response.data)
@@ -111,7 +107,7 @@ export default function Associations() {
                 })
                 .catch(error => {
                     console.log(error);
-                });
+                }).finally(() => setIsLoading(false), setIsRefreshing(false))
         }
         getUserAssociation(token)
     }
@@ -129,11 +125,35 @@ export default function Associations() {
         getToken()
     }, [])
 
+    if(isLoading) {
+        return(
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
+            
+        )
+    }
+
+    if (Associations.length == 0) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+                <View style={{
+                    borderStyle: "solid",
+                    borderRadius: 10,
+                    borderColor: "#999999",
+                    borderWidth: 3,
+                    margin: 20
+                }}>
+                    <Text style={[Style.assoText, Style.noAssoText]}>You are not admin for any associations, if this is incorrect contact the bookease team</Text></View>
+                </View>
+        )
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
             <FlatList
-                data={AssociationTest}
+                data={Associations}
                 style={Style.expandFlatlist}
+                onRefresh={() => loadData(token)}
+                refreshing={isRefreshing}
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
@@ -149,7 +169,7 @@ export default function Associations() {
                             </Pressable>
                             <View style={Style.assoDarkView}>
                                 <FlatList
-                                    data={item.bookobjects}
+                                    data={item['bookobjects']}
                                     style={{}}
                                     horizontal={true}
                                     ListFooterComponent={
@@ -163,10 +183,10 @@ export default function Associations() {
                                     renderItem={
                                         ({item}) => (
                                             <Pressable onPress={() => {
-                                                console.log('HÄR HAR VI OBJECT ID:'+item.id)
-                                                navigation.navigate("EditBookableObject",{objectId: item.id})
+                                                console.log('HÄR HAR VI OBJECT ID:'+item['id'])
+                                                navigation.navigate("EditBookableObject",{objectId: item['id']})
                                             }} style={Style.bookObject}>
-                                                <Text>{item.name}</Text>
+                                                <Text>{item['objectName']}</Text>
                                             </Pressable>
                                         )
                                     }
