@@ -1,14 +1,15 @@
 import Style from "../../screens/Style";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable } from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { ActivityIndicator } from "react-native-paper";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function EditBookableObject({ route }) {
-  const { objectId } = route.params
+  const { objectId, associationName } = route.params
   const [isLoading, setIsLoading] = useState(true)
   const [objectData, setObjectData] = useState();
   const [allDayEnabled, setAllDayEnabled] = useState(false);
@@ -136,8 +137,8 @@ export default function EditBookableObject({ route }) {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Association name - {objectId.toString()}</Text>
+    <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
+      <Text style={styles.header}> {associationName} Association name - {objectId.toString()}</Text>
       <View style={styles.settingContainer}>
         <TextInput style={styles.objectName}>{objectData.objectName}</TextInput>
       </View>
@@ -251,6 +252,9 @@ export default function EditBookableObject({ route }) {
       </View>
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Save</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={{color:'#bb0a1e', alignSelf:'center', margin: '4%'}}>Remove this object</Text>
       </TouchableOpacity>
     </ScrollView>
   );
