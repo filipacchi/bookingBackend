@@ -24,6 +24,7 @@ export default function Associations() {
 
     const [EnterModalVisible, setEnterModalVisible] = useState(false)
     const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
+    const [ErrorModalVisible, setErrorModalVisible] = useState(false)
     const [isFocused, setIsFocused] = useState(false)
     const [inputText, setInputText] = useState("")
     const [isCheckMarkPressed, setCheckMarkPressed] = useState(false)
@@ -143,9 +144,6 @@ export default function Associations() {
             console.log("ASSO: " + access_token)
             setToken(access_token)
             loadData(access_token)
-
-
-
         }
         getToken()
     }, [])
@@ -190,6 +188,7 @@ export default function Associations() {
             })
             .catch(error => {
                 console.log(error);
+                setErrorModalVisible(true)
             })
             .finally(() => {
                 setIsLoading(false)
@@ -272,10 +271,39 @@ export default function Associations() {
         )
     }
 
-    if(isLoading) {
-        return(
-            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
-            
+    const tryAgain = () => {
+
+        setErrorModalVisible(false)
+        setEnterModalVisible(true)
+    }
+
+    const PopUpModalError = () => {
+        return (
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={ErrorModalVisible}
+                onRequestClose={() => setErrorModalVisible(false)}>
+                <View style={Style.modalWindow}>
+
+                    <View style={Style.modalOuter}>
+                        <View style={{ gap: 10 }}>
+                            <Text style={{ textAlign: "center" }}>Nåt gick fel, vill du prova igen? </Text>
+                            <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
+                                <Pressable onPress={() => tryAgain()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>Ja</Text></Pressable>
+                                <Pressable onPress={() => setErrorModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>Nej</Text></Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal >
+        )
+    }
+
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}><ActivityIndicator /></View>
+
         )
     }
 
@@ -325,9 +353,12 @@ export default function Associations() {
                                     horizontal={true}
                                     renderItem={
                                         ({ item }) => (
-                                            <View style={Style.bookObject}>
+                                            <Pressable onPress={() => {
+                                                console.log(item['objectId'])
+                                                navigation.navigate("BookableObject", {id: item['objectId']})
+                                            }} style={Style.bookObject}>
                                                 <Text>{item['objectName']}</Text>
-                                            </View>
+                                            </Pressable>
                                         )
                                     }
                                 >
@@ -339,6 +370,7 @@ export default function Associations() {
             </FlatList>
             <PopUpModalEnterKey />
             <PopUpModalConfirm />
+            <PopUpModalError />
 
             {/* <Pressable 
             style={Style.addAssociation}

@@ -10,6 +10,7 @@ import AssociationInformation from 'reactnativeapp/src/components/AdminStart/Ass
 import AddBookableObject from 'reactnativeapp/src/components/AdminStart/AddBookableObject.js';
 import EditBookableObject from 'reactnativeapp/src/components/AdminStart/EditBookableObject.js';
 import { AuthContext } from '../../../auth/UserContextProvider.js';
+import BookedObjectSwiper from './BookedObjectSwiper.js';
 
 const Stack = createNativeStackNavigator()
 
@@ -32,6 +33,7 @@ function AssociationStack() {
         <Stack.Screen name="Associations" component={Associations}/>
         <Stack.Screen name="BookablesView" component={BookablesView} />
         <Stack.Screen name="BookableObject" component={BookableObject} />
+        <Stack.Screen name="BookedObjectSwiper" component={BookedObjectSwiper} />
         </Stack.Group>
         )}
     </Stack.Navigator>

@@ -3,9 +3,8 @@ import { View, Text, TouchableWithoutFeedback, PanResponder } from 'react-native
 import moment from 'moment';
 import { Feather } from '@expo/vector-icons';
 
-const WeekCalendar = () => {
-  const today = moment(); // Get the current date
-  const [selectedDay, setSelectedDay] = useState(today); // State to keep track of the selected day
+const WeekCalendar = ({selectedDay, setSelectedDay}) => {
+  const today = moment()
   const [weekDates, setWeekDates] = useState([]); // State to store the week dates
   const [prevArrowPressed, setPrevArrowPressed] = useState(false); // State to track if the previous arrow is pressed
   const [nextArrowPressed, setNextArrowPressed] = useState(false); // State to track if the next arrow is pressed
@@ -58,7 +57,7 @@ const WeekCalendar = () => {
   };
 
   return (
-    <View style={{ padding: 10}}>
+    <View style={{ padding: 10, backgroundColor: "white"}}>
       {/* Render the week days */}
       <View
         style={{
@@ -91,7 +90,7 @@ const WeekCalendar = () => {
             //marginVertical: 16,
           }}
         >
-          <Text style={{fontFamily: "Open"}}>{selectedDay.format('MMMM YYYY')}</Text>
+          <Text >{selectedDay.format('MMMM YYYY')}</Text>
         </View>
 
         {/* Render the next week arrow */}
@@ -140,7 +139,7 @@ const WeekCalendar = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 60,
-                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "red": "#53d5d5" : 'transparent',
+                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "#8AAAE5": "#8AAAE5": 'transparent',
                   }}
                 >
                   <Text style={{color: currentDate.isSame(selectedDay, 'day') ? "white" : currentDate.isSame(today, 'day') ? 'red' : 'black', }}>{currentDate.format('D')}</Text>

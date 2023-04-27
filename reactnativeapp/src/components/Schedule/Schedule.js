@@ -86,7 +86,7 @@ export default function Schedule() {
             ({ item }) =>
                 <View style={Style.assoFlatView}>
                     <View style={Style.assoView}>
-                        <AntDesign name="home" size={28} color={"#222222"} />
+                        <AntDesign name="pushpino" size={28} color={"#222222"} />
                         <View>
                             <Text suppressHighlighting={true}
                                 onPress={() => {
