@@ -7,6 +7,8 @@ import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { ActivityIndicator } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../../auth/UserContextProvider";
 
 export default function EditBookableObject({ route }) {
   const { objectId, associationName } = route.params
@@ -20,6 +22,22 @@ export default function EditBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
+  const navigation = useNavigation()
+  const { state } = React.useContext(AuthContext)
+
+ const removeBookableObject = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${state.userToken}` }
+    };
+  
+    axios.delete(`association/bookableobject/${objectId}/delete`, config)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      }); 
+ }
 
   async function GetObjectData(objectId) {
     axios.get('object/get/' + objectId)
@@ -253,7 +271,11 @@ export default function EditBookableObject({ route }) {
       <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity
+      onPress={()=>{
+        removeBookableObject()
+        navigation.goBack()
+      }}>
         <Text style={{color:'#bb0a1e', alignSelf:'center', margin: '4%'}}>Remove this object</Text>
       </TouchableOpacity>
     </ScrollView>
