@@ -56,6 +56,11 @@ export default function Schedule() {
         getToken()
     }, [])
 
+    const sortObjectsByDate = ((objects) => {
+        return objects.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+        
+    })
+
     const loadData = ((token) => {
         console.log("---- Inuti loadData (Schedule.js), token = " + token)
         
@@ -70,7 +75,7 @@ export default function Schedule() {
                 .then(response => {
                     console.log("response: ")
                     console.log(response.data)
-                    setBookedTimes(response.data)
+                    setBookedTimes(sortObjectsByDate(response.data))
                     setIsRefreshing(false)
                 })
                 .catch(error => {
@@ -80,7 +85,6 @@ export default function Schedule() {
         getUserBookings(token)
         console.log(bookedTimes)
         setIsRefreshing(false)
-        
     })
     
     return (
