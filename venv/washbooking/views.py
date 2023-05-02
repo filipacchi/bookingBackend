@@ -87,8 +87,6 @@ class GetUserBookingAPIVIEW(APIView):
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
             bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
 
-            """ vi vill ha tillhörande association också """
-
             for object in bookable_objects: #bookable_objects_db?
                 print("--- Försöker printa object --- ")
                 print(object)
@@ -103,18 +101,17 @@ class GetUserBookingAPIVIEW(APIView):
                 print("booked times: ")
                 print(booked_times)
 
-                for match in booked_times:
-                    print(match)
+                for booked_time in booked_times:
+                    print(booked_time)
                     my_bookings.append(
                     {
-                    "booking_object": match["booking_object"],
-                    "date": match["date"],
-                    "start_time": match["start_time"],
-                    "end_time": match["end_time"],
+                    "bookingObjectKey": booked_time["booking_object"],
+                    "bookingObject": object["objectName"],
+                    "date": booked_time["date"],
+                    "startTime": booked_time["start_time"],
+                    "endTime": booked_time["end_time"],
+                    "association": association["name"],
                     })
-
-        
-        print(my_bookings)
 
         return Response(my_bookings)
     
