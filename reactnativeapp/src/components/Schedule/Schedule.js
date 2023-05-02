@@ -146,8 +146,9 @@ export default function Schedule() {
 
                                 {item.bookingObject}
                             </Text>
-                            <Text style={{ color: "#767676" }}>{item.association}</Text>
-                            <Text style={{ color: "#767676" }}>{item.date}</Text>
+                            <Text style={{ color: "#767676" }}> {item.association + ", "} 
+                                <Text style={{ fontWeight: '500', color: "black" }}> {item.date} </Text>
+                            </Text>
                         </View>
                     </View>
                     <View style={Style.assoDarkView}>
