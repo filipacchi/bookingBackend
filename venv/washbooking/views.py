@@ -14,6 +14,7 @@ from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 
 class AddBookableObject(APIView):
     permission_classes = []
@@ -24,6 +25,30 @@ class AddBookableObject(APIView):
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
+        
+class UpdateBookableObject(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        bookable_object = get_object_or_404(BookableObject, pk=pk)
+        serializer = AddBookableObjectSerializer(bookable_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class DeleteBookableObject(APIView):
+    permission_classes = []
+
+    def delete(self, request, pk):
+        try:
+            bookable_object = BookableObject.objects.get(pk=pk)
+            bookable_object.delete()
+            return Response('Deleted object!')
+        except BookableObject.DoesNotExist:
+            return Response("Object does not exist", status=status.HTTP_404_NOT_FOUND)
+
 
 class RegisterView(APIView):
     authentication_classes = []
@@ -66,6 +91,7 @@ class LogoutUserAPIView(APIView):
 
 class GetUserBookingAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
+
     def get(self, request):
         user = self.request.user
         person = Person.objects.get(user=user.id) # jag
@@ -75,32 +101,43 @@ class GetUserBookingAPIVIEW(APIView):
         associations_serializer = AssociationSerializer(my_associations_db, many=True)
         my_associations = json.loads(json.dumps(associations_serializer.data))
         
+        for association in my_associations:
+            print("association in my_associations: " + association["name"])
 
         my_bookings = []
 
         for association in my_associations: 
             # alla bookable_objects som finns i mina associations
-            bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
+            bookable_objects_db = BookableObject.objects.filter(inAssociation=association["id"])
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
             bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
 
-            """ vi vill ha tillhörande association också """
-
             for object in bookable_objects: #bookable_objects_db?
-
-                booked_times_db = BookedTime.objects.filter(booking_object=object)
+                print("--- Försöker printa object --- ")
+                print(object)
+                booked_times_db = BookedTime.objects.filter(booking_object=object["objectId"], booked_by=person)
+                print("booked_times_db: ")
+                print(booked_times_db)
                 booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
+                print("booked_times_serializer: ")
+                print(booked_times_serializer)
                 booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
-                for match in booked_times:
-                    my_bookings.extend(
+                print("booked times: ")
+                print(booked_times)
+
+                for booked_time in booked_times:
+                    print(booked_time)
+                    my_bookings.append(
                     {
-                    "booking_object": match.booking_object,
-                    "date": match.date,
-                    "start_time": match.start_time,
-                    "end_time": match.end_time,
+                        """ behöver troligen inte skicka key """
+                    "bookingObjectKey": booked_time["booking_object"],
+                    "bookingObject": object["objectName"],
+                    "date": booked_time["date"],
+                    "startTime": booked_time["start_time"][:-3],
+                    "endTime": booked_time["end_time"][:-3],
+                    "association": association["name"],
                     })
-                print(BookedTime.objects.filter(booking_object=object))
 
         return Response(my_bookings)
     

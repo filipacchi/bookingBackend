@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 export default function Schedule() {
@@ -41,7 +42,9 @@ export default function Schedule() {
     ])
 
     React.useEffect(() => {
-        const getToken = async () => {
+        console.log("Inuti React.useEffect")
+        const getToken = async() => {
+            console.log("--- inuti getToken i React.useEffect ---")
             let access_token = await SecureStore.getItemAsync('userToken')
             console.log("ASSO: " + access_token)
             setToken(access_token)
@@ -53,31 +56,38 @@ export default function Schedule() {
     const loadData = ((token) => {
         console.log("---- Inuti loadData (Schedule.js), token = " + token)
         
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
+        async function getUserBookings(token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
 
-        axios.get('user/bookedtimes/get',
-                config
-            )
+            axios.get('user/bookedtimes/get',
+                    config
+                )
                 .then(response => {
-                    console.log("response: " + response.data)
+                    console.log("response: ")
+                    console.log(response.data)
                     setBookedTimes(response.data)
                     setIsRefreshing(false)
                 })
                 .catch(error => {
                     console.log(error);
                 });
+        }
+        getUserBookings(token)
+        console.log(bookedTimes)
+        setIsRefreshing(false)
+        
     })
     
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles1.text}></Text>
 
-        <FlatList
+        {/* <FlatList
         data={hardcodeBookedTime}
         style={Style.expandFlatlist}
-        onRefresh={()=>loadData(token)}
+        onRefresh={() => {console.log("från onRefresh i FlatList"); loadData(token)}}
         refreshing={isRefreshing}
         renderItem={
             ({ item }) =>
@@ -96,7 +106,7 @@ export default function Schedule() {
                     </View>
                     <View style={Style.assoDarkView}>
                         <FlatList
-                            data={[{startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}]} /* data = item ---- om vi har flera bokningar på samma bokningsobjekt */
+                            data={[{startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}]}
                             style={{}}
                             horizontal={true}
                             renderItem={
@@ -112,14 +122,49 @@ export default function Schedule() {
                     </View>
                 </View>
         }
-        >
-            <Pressable 
-            style={{height: 200, width: 200, backgroundColor: "red"}} 
-            onPress={loadData}>
-                <Text>test</Text>
-            </Pressable>
-        </FlatList>
+        ></FlatList> */}
 
+        <FlatList
+        data={bookedTimes}
+        style={Style.expandFlatlist}
+        onRefresh={() => {console.log("från onRefresh i FlatList"); loadData(token)}}
+        refreshing={isRefreshing}
+        renderItem={
+            ({ item }) =>
+                <View style={Style.assoFlatView}>
+                    <View style={Style.assoView}>
+                        <AntDesign name="pushpino" size={28} color={"#222222"} />
+                        <View>
+                            <Text suppressHighlighting={true}
+                                onPress={() => {
+                                    navigation.navigate("BookableObject")
+                                }}
+                                style={Style.assoText}>
+
+                                {item.bookingObject}
+                            </Text>
+                            <Text style={{ color: "#767676" }}>{item.association}</Text>
+                            <Text style={{ color: "#767676" }}>{item.date}</Text>
+                        </View>
+                    </View>
+                    <View style={Style.assoDarkView}>
+                        <View style={Style.bookObject}>
+                            <Text>
+                                {item.startTime + " - " + item.endTime}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+        }
+        ></FlatList>
+
+        <Pressable 
+        onPress={() => {
+            loadData(token)
+            console.log("Anrop av plusknapp")
+        }} 
+        style={Style.addAssociation}>
+            <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }

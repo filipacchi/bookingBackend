@@ -26,12 +26,15 @@ export default StyleSheet.create({
         fontSize: 16,
     },
     button: {
+        flex: 1,
         backgroundColor: '#53d5d5',
         borderRadius: 50,
         padding: 10,
         width: '60%',
         alignSelf: 'center',
-        marginTop: '2%'
+        marginTop: '2%',
+        marginLeft: '2%',
+        marginRight: '2%'
     },
     buttonText: {
         fontSize: 24,
@@ -127,6 +130,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: '7%',
     },
     modalInner: {
         position: "absolute",
