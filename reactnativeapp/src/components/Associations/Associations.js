@@ -18,8 +18,9 @@ import { ActivityIndicator } from "react-native-paper";
 export default function Associations() {
 
     const navigation = useNavigation()
-    const { state } = useContext(AuthContext)
-    const { colorTheme } = useContext(AuthContext)
+    const { state, colorTheme, authContext  } = useContext(AuthContext)
+    const {t} = authContext
+
     /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
     const [languagePackage, setLanguagePackage] = useContext(userLanguageContext) */
 
@@ -219,7 +220,7 @@ export default function Associations() {
 
                 <View style={Style.modalWindow}>
                     <View style={Style.modalOuter}>
-                        <Text>Enter Association Key</Text>
+                        <Text>{t("EnterAssociationKey")/* Enter Association Key */}</Text>
                         < View style={Style.inputAndCheckMark}>
                             <TextInput
                                 style={Style.modalInput}
@@ -261,11 +262,11 @@ export default function Associations() {
 
                     <View style={Style.modalOuter}>
                         <View style={{ gap: 10 }}>
-                            <Text style={{ textAlign: "center" }}>Vill du gå med i föreningen: </Text>
+                            <Text style={{ textAlign: "center" }}>{t("DoYouWantToJoin")} </Text>
                             <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{joinAssociationName}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => JoinAssociation()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>Ja</Text></Pressable>
-                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>Avbryt</Text></Pressable>
+                                <Pressable onPress={() => JoinAssociation()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
+                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("Cancel")}</Text></Pressable>
                             </View>
                         </View>
                     </View>
@@ -291,10 +292,10 @@ export default function Associations() {
 
                     <View style={Style.modalOuter}>
                         <View style={{ gap: 10 }}>
-                            <Text style={{ textAlign: "center" }}>Nåt gick fel, vill du prova igen? </Text>
+                            <Text style={{ textAlign: "center" }}>{t("TryAgain")} </Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => tryAgain()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>Ja</Text></Pressable>
-                                <Pressable onPress={() => setErrorModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>Nej</Text></Pressable>
+                                <Pressable onPress={() => tryAgain()} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
+                                <Pressable onPress={() => setErrorModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
                             </View>
                         </View>
                     </View>
@@ -323,7 +324,7 @@ export default function Associations() {
                         borderWidth: 3,
                         margin: 20
                     }}>
-                        <Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
+                        <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
                     <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
                 </View> :
                 <FlatList
