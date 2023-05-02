@@ -4,6 +4,7 @@ import axios from "../axios/axios";
 import { translations } from "../language/localizations";
 import { I18n } from "i18n-js";
 import { getLocales } from "expo-localization"
+import { useState } from 'react';
 
 
 const AuthContext = React.createContext();
@@ -18,6 +19,9 @@ function UserContextProvider({children}) {
   i18n.locale = getLocales()[0].languageCode
   i18n.enableFallback = true
   console.log("Språk: "+i18n.locale)
+
+
+  const [colorTheme, setColorTheme] = useState({name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff"})
 
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
@@ -66,6 +70,17 @@ function UserContextProvider({children}) {
       let userRefreshToken;
 
       try {
+        selectedColor = await SecureStore.getItemAsync('selectedColor')
+        console.log(selectedColor)
+        if(selectedColor != null){
+          setColorTheme(JSON.parse(selectedColor))
+        }
+        //setColorTheme(selectedColor)
+      } catch (e){
+
+      }
+
+      try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
         //console.log("LOGGAR " + userRefreshToken),
         validateToken(userRefreshToken)
@@ -73,6 +88,7 @@ function UserContextProvider({children}) {
       } catch (e) {
         // Restoring token failed
       }
+
 
       async function validateToken(token) {
 
@@ -90,14 +106,12 @@ function UserContextProvider({children}) {
             save("userRefreshToken", response.data.refresh)
             axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.access}`}
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
-
           })
           .catch(error => {
             console.log(error);
             console.log("TOKEN NOT OKAY")
           });
       }
-
     };
 
     bootstrapAsync();
@@ -124,7 +138,11 @@ function UserContextProvider({children}) {
           });
 
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => {
+        SecureStore.deleteItemAsync('userRefreshToken')
+        SecureStore.deleteItemAsync('userToken')
+        dispatch({ type: 'SIGN_OUT' })
+      },
       signUp: async (data) => {
 
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
@@ -142,7 +160,7 @@ function UserContextProvider({children}) {
     }),
     []
   );
-  const contextValue = {authContext, state}
+  const contextValue = {authContext, state, colorTheme, setColorTheme}
 
   return (
       <AuthContext.Provider value={contextValue}>

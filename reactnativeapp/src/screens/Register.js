@@ -25,7 +25,7 @@ export default function Register() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1 }}>
+                <LinearGradient colors={["#4d70b3", "#6ea1ff"]} style={{ flex: 1 }}>
                     <View style={{
                         position: "absolute",
                         bottom: 150,

@@ -31,8 +31,8 @@ export default function Auth() {
     }
 
     return (
-        <LinearGradient colors={["#53d5d5", "#2f9d9d"]} style={{ flex: 1, alignItems: 'center' }}>
-            <Pressable style={Style.langSwitchBox} onPress={() => changeLang()}><Text style={Style.langText}>{lang.toUpperCase()} <AntDesign name="flag" size={15} color="white" /></Text></Pressable>
+        <LinearGradient colors={["#4d70b3", "#6ea1ff"]} style={{ flex: 1, alignItems: 'center' }}>
+            <Pressable style={Style.langSwitchBox} onPress={() => changeLang()}><Text style={Style.langText}>{lang.toUpperCase()}</Text></Pressable>
             <View style={{marginTop: "50%"}}><Logo></Logo></View>
             <View style={{
                 position: "absolute",

@@ -19,24 +19,25 @@ const Tab = createBottomTabNavigator();
 
 export default function MainNav() {
     const {authContext} = React.useContext(AuthContext)
-    const { signOut, t, setLang, getLang } = authContext
+    const {colorTheme} = React.useContext(AuthContext)
+    const {signOut, t, setLang, getLang} = authContext
+
 
     return (
         <Tab.Navigator
             screenOptions={{
                 
-                tabBarActiveTintColor: "#577ac2",
+                tabBarActiveTintColor: colorTheme.firstColor,//"#577ac2",
                 tabBarStyle: {
                     height: 90,
                     padding: 10
                 },
                 headerStyle: {
-                    backgroundColor: "#8AAAE5"
+                    backgroundColor: colorTheme.firstColor//"#8AAAE5"
                 },
                 headerTitleStyle: {
                     color: 'white'
                   }
-
             }}>
             <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{
                     tabBarIcon: ({ focused, color }) => (

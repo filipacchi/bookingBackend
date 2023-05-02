@@ -46,9 +46,6 @@ export default function Schedule() {
             console.log("ASSO: " + access_token)
             setToken(access_token)
             loadData(access_token)
-
-
-
         }
         getToken()
     }, [])
@@ -80,7 +77,7 @@ export default function Schedule() {
         <FlatList
         data={hardcodeBookedTime}
         style={Style.expandFlatlist}
-        onRefresh={loadData(token)}
+        onRefresh={()=>loadData(token)}
         refreshing={isRefreshing}
         renderItem={
             ({ item }) =>

@@ -19,6 +19,7 @@ export default function Associations() {
 
     const navigation = useNavigation()
     const { state } = useContext(AuthContext)
+    const { colorTheme } = useContext(AuthContext)
     /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
     const [languagePackage, setLanguagePackage] = useContext(userLanguageContext) */
 
@@ -218,14 +219,16 @@ export default function Associations() {
 
                 <View style={Style.modalWindow}>
                     <View style={Style.modalOuter}>
+                        <Text>Enter Association Key</Text>
                         < View style={Style.inputAndCheckMark}>
                             <TextInput
                                 style={Style.modalInput}
                                 //value={tempInput}
                                 /* style={styles.modalTextInput} */
                                 //onPress={() => setIsFocused(true)}
+                                placeholderTextColor="#6e6e6e"
                                 onChangeText={handleChangeText}
-                                placeholder={"Enter Association Key"}>
+                                placeholder={"Ex: 123456"}>
                             </TextInput>
                             <Pressable style={{ justifyContent: "center" }} onPress={() => {
                                 console.log("Value: " + tempInput)
@@ -307,67 +310,69 @@ export default function Associations() {
         )
     }
 
-    if (Associations.length == 0) {
-        return (
-            <View style={{ flex: 1, justifyContent: "center" }}>
-                <View style={{
-                    borderStyle: "solid",
-                    borderRadius: 10,
-                    borderColor: "#999999",
-                    borderWidth: 3,
-                    margin: 20
-                }}>
-                    <Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
-                <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
-            </View>
-        )
-    }
 
 
     return (
         <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
-            <FlatList
-                data={Associations}
-                style={Style.expandFlatlist}
-                onRefresh={() => loadData(token)}
-                refreshing={isRefreshing}
-                renderItem={
-                    ({ item }) =>
-                        <View style={[Style.assoFlatView, Style.shadowProp]}>
-                            <View style={Style.assoView}>
-                                <AntDesign name="home" size={28} color={"#222222"} />
-                                <View>
-                                    <Text suppressHighlighting={true}
-                                        onPress={() => {
-                                            navigation.navigate("BookableObject")
-                                        }}
-                                        style={Style.assoText}>
+            {Associations.length == 0 ?
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                    <View style={{
+                        borderStyle: "solid",
+                        borderRadius: 10,
+                        borderColor: "#999999",
+                        borderWidth: 3,
+                        margin: 20
+                    }}>
+                        <Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
+                    <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                </View> :
+                <FlatList
+                    data={Associations}
+                    style={Style.expandFlatlist}
+                    onRefresh={() => loadData(token)}
+                    refreshing={isRefreshing}
+                    ListFooterComponent={
+                        <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                    }
+                    renderItem={
+                        ({ item }) =>
+                            <View style={[Style.assoFlatView, Style.shadowProp]}>
+                                <View style={Style.assoView}>
+                                    <AntDesign name="home" size={28} color={"#222222"} />
+                                    <View>
+                                        <Text suppressHighlighting={true}
+                                            onPress={() => {
+                                                navigation.navigate("BookableObject")
+                                            }}
+                                            style={Style.assoText}>
 
-                                        {item.name}</Text>
-                                    <Text style={{ color: "#767676" }}>{item.region}</Text></View>
-                            </View>
-                            <View style={Style.assoDarkView}>
-                                <FlatList
-                                    data={item['bookobjects']}
-                                    style={{}}
-                                    horizontal={true}
-                                    renderItem={
-                                        ({ item }) => (
-                                            <Pressable onPress={() => {
-                                                console.log(item['objectId'])
-                                                navigation.navigate("BookableObject", {id: item['objectId']})
-                                            }} style={Style.bookObject}>
-                                                <Text>{item['objectName']}</Text>
-                                            </Pressable>
-                                        )
-                                    }
-                                >
+                                            {item.name}</Text>
+                                        <Text style={{ color: "#767676" }}>{item.region}</Text></View>
+                                </View>
+                                <View style={Style.assoDarkView}>
+                                    <FlatList
+                                        data={item['bookobjects']}
+                                        style={{}}
+                                        horizontal={true}
+                                        renderItem={
+                                            ({ item }) => (
+                                                <Pressable onPress={() => {
+                                                    console.log(item['objectId'])
+                                                    navigation.navigate("BookableObject", { id: item['objectId'] })
+                                                }} style={Style.bookObject}>
+                                                    <Text>{item['objectName']}</Text>
+                                                </Pressable>
+                                            )
+                                        }
+                                        
+                                    >
 
-                                </FlatList>
-                            </View>
-                        </View>}
-            >
-            </FlatList>
+                                    </FlatList>
+                                </View>
+                            </View>}
+                >
+                </FlatList>
+            }
             <PopUpModalEnterKey />
             <PopUpModalConfirm />
             <PopUpModalError />
@@ -382,7 +387,8 @@ export default function Associations() {
             )
             })}>
                 <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
-            <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+                {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
+            
         </View>
     )
 }
