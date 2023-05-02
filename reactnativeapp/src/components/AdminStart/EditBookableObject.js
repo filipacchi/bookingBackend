@@ -1,6 +1,6 @@
 import Style from "../../screens/Style";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable, Modal } from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
@@ -9,6 +9,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import { AntDesign } from '@expo/vector-icons';
 
 export default function EditBookableObject({ route }) {
   const { objectId, associationName, associationId } = route.params
@@ -23,10 +24,51 @@ export default function EditBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
+  const [EnterModalVisible, setEnterModalVisible] = useState(false)
   const navigation = useNavigation()
   const { state } = React.useContext(AuthContext)
 
+  const PopUpModalDeleteObject = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={EnterModalVisible}
+        onRequestClose={() => setEnterModalVisible(false)}>
+
+        <View style={Style.modalWindow}>
+          <View style={Style.modalOuter}>
+            < View style={Style.inputAndCheckMark}>
+              <Text style={{ textAlign: 'center' }}>Are you sure you want to permanently remove this object?</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]}
+                onPress={() => {
+                  removeBookableObject()
+                  navigation.goBack()
+                }}>
+                <Text style={[styles.buttonText, { marginBottom: '3%' }]}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}
+              onPress={() => setEnterModalVisible(false)}>
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+
+            <Pressable
+              style={Style.modalCloseButton}
+              onPress={() => setEnterModalVisible(false)}>
+              <AntDesign name="close" size={24} color="black" />
+            </Pressable>
+          </View>
+        </View>
+      </Modal >
+    )
+  }
+
   const editBookableObject = async () => {
+    console.log('Assosiation name?: ' + associationName + 'Association id: ' + associationId + 'object id: ' + objectId)
     const config = {
       headers: { Authorization: `Bearer ${state.userToken}` }
     };
@@ -185,7 +227,7 @@ export default function EditBookableObject({ route }) {
 
   return (
     <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
-      <Text style={styles.header}> {associationName} Association name - {objectId.toString()}</Text>
+      <Text style={styles.header}> {associationName} Edit Bookable Object</Text>
       <View style={styles.settingContainer}>
         <TextInput style={styles.objectName}
           placeholder={objectName}
@@ -308,12 +350,11 @@ export default function EditBookableObject({ route }) {
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => {
-          removeBookableObject()
-          navigation.goBack()
-        }}>
+        onPress={() => setEnterModalVisible(true)}
+      >
         <Text style={{ color: '#bb0a1e', alignSelf: 'center', margin: '4%' }}>Remove this object</Text>
       </TouchableOpacity>
+      <PopUpModalDeleteObject />
     </ScrollView>
   );
 }
