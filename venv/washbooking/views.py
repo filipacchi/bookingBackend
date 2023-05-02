@@ -66,6 +66,7 @@ class LogoutUserAPIView(APIView):
 
 class GetUserBookingAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
+
     def get(self, request):
         user = self.request.user
         person = Person.objects.get(user=user.id) # jag
@@ -75,32 +76,45 @@ class GetUserBookingAPIVIEW(APIView):
         associations_serializer = AssociationSerializer(my_associations_db, many=True)
         my_associations = json.loads(json.dumps(associations_serializer.data))
         
+        for association in my_associations:
+            print("association in my_associations: " + association["name"])
 
         my_bookings = []
 
         for association in my_associations: 
             # alla bookable_objects som finns i mina associations
-            bookable_objects_db = BookableObject.objects.filter(inAssociation=association.id)
+            bookable_objects_db = BookableObject.objects.filter(inAssociation=association["id"])
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
             bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
 
             """ vi vill ha tillhörande association också """
 
             for object in bookable_objects: #bookable_objects_db?
-
-                booked_times_db = BookedTime.objects.filter(booking_object=object)
+                print("--- Försöker printa object --- ")
+                print(object)
+                booked_times_db = BookedTime.objects.filter(booking_object=object["objectId"], booked_by=person)
+                print("booked_times_db: ")
+                print(booked_times_db)
                 booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
+                print("booked_times_serializer: ")
+                print(booked_times_serializer)
                 booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
+                print("booked times: ")
+                print(booked_times)
+
                 for match in booked_times:
-                    my_bookings.extend(
+                    print(match)
+                    my_bookings.append(
                     {
-                    "booking_object": match.booking_object,
-                    "date": match.date,
-                    "start_time": match.start_time,
-                    "end_time": match.end_time,
+                    "booking_object": match["booking_object"],
+                    "date": match["date"],
+                    "start_time": match["start_time"],
+                    "end_time": match["end_time"],
                     })
-                print(BookedTime.objects.filter(booking_object=object))
+
+        
+        print(my_bookings)
 
         return Response(my_bookings)
     

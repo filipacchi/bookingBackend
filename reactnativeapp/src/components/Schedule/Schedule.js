@@ -7,6 +7,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaFrame } from "react-native-safe-area-context";
 
 export default function Schedule() {
@@ -41,7 +42,9 @@ export default function Schedule() {
     ])
 
     React.useEffect(() => {
-        const getToken = async () => {
+        console.log("Inuti React.useEffect")
+        const getToken = async() => {
+            console.log("--- inuti getToken i React.useEffect ---")
             let access_token = await SecureStore.getItemAsync('userToken')
             console.log("ASSO: " + access_token)
             setToken(access_token)
@@ -56,13 +59,14 @@ export default function Schedule() {
     const loadData = ((token) => {
         console.log("---- Inuti loadData (Schedule.js), token = " + token)
         
-        const config = {
-            headers: { Authorization: `Bearer ${token}` }
-        }
+        async function getUserBookings(token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
 
-        axios.get('user/bookedtimes/get',
-                config
-            )
+            axios.get('user/bookedtimes/get',
+                    config
+                )
                 .then(response => {
                     console.log("response: " + response.data)
                     setBookedTimes(response.data)
@@ -71,6 +75,11 @@ export default function Schedule() {
                 .catch(error => {
                     console.log(error);
                 });
+        }
+        getUserBookings(token)
+        console.log(bookedTimes)
+        setIsRefreshing(false)
+        
     })
     
     return (
@@ -80,7 +89,7 @@ export default function Schedule() {
         <FlatList
         data={hardcodeBookedTime}
         style={Style.expandFlatlist}
-        onRefresh={loadData(token)}
+        onRefresh={() => {console.log("från onRefresh i FlatList"); loadData(token)}}
         refreshing={isRefreshing}
         renderItem={
             ({ item }) =>
@@ -115,14 +124,15 @@ export default function Schedule() {
                     </View>
                 </View>
         }
-        >
-            <Pressable 
-            style={{height: 200, width: 200, backgroundColor: "red"}} 
-            onPress={loadData}>
-                <Text>test</Text>
-            </Pressable>
-        </FlatList>
+        ></FlatList>
 
+        <Pressable 
+        onPress={() => {
+            loadData(token)
+            console.log("Anrop av plusknapp")
+        }} 
+        style={Style.addAssociation}>
+            <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
         </View>
     )
 }
