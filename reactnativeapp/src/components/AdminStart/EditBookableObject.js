@@ -11,9 +11,10 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
 
 export default function EditBookableObject({ route }) {
-  const { objectId, associationName } = route.params
+  const { objectId, associationName, associationId } = route.params
   const [isLoading, setIsLoading] = useState(true)
   const [objectData, setObjectData] = useState();
+  const [objectName, setObjectName] = useState();
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
   const [selectedHoursBookable, setSelectedHoursBookable] = useState();
@@ -25,25 +26,53 @@ export default function EditBookableObject({ route }) {
   const navigation = useNavigation()
   const { state } = React.useContext(AuthContext)
 
- const removeBookableObject = async () => {
+  const editBookableObject = async () => {
     const config = {
       headers: { Authorization: `Bearer ${state.userToken}` }
     };
-  
+
+    const bodyParameters = {
+      inAssociation: associationId,
+      objectName: objectName,
+      timeSlotLength: selectedHoursBookable,
+      timeSlotStartTime: earliestBookableTime,
+      timeSlotEndTime: latestBookableTime,
+      slotsPerDay: slotsBookablePerDay,
+      slotsPerWeek: slotsBookablePerWeek
+    }
+    axios.put(`association/bookableobject/${objectId}/update`,
+      bodyParameters,
+      config
+    )
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+
+  const removeBookableObject = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${state.userToken}` }
+    };
+
     axios.delete(`association/bookableobject/${objectId}/delete`, config)
       .then(response => {
         console.log(response.data)
       })
       .catch(error => {
         console.log(error);
-      }); 
- }
+      });
+  }
 
   async function GetObjectData(objectId) {
     axios.get('object/get/' + objectId)
       .then(response => {
         console.log("OBJECT DATAN HÄR: " + response.data)
         setObjectData(response.data)
+        setObjectName(response.data.objectName)
         setSelectedHoursBookable(response.data.timeSlotLength)
         setEarliestBookableTime(response.data.timeSlotStartTime)
         setLatestBookableTime(response.data.timeSlotEndTime)
@@ -158,7 +187,11 @@ export default function EditBookableObject({ route }) {
     <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
       <Text style={styles.header}> {associationName} Association name - {objectId.toString()}</Text>
       <View style={styles.settingContainer}>
-        <TextInput style={styles.objectName}>{objectData.objectName}</TextInput>
+        <TextInput style={styles.objectName}
+          placeholder={objectName}
+          onChangeText={(objectName) => setObjectName(objectName)}
+          value={objectName}
+        ></TextInput>
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Length per booking</Text>
@@ -247,7 +280,7 @@ export default function EditBookableObject({ route }) {
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per day</Text>
         <SelectList
-        placeholder={slotsBookablePerDay}
+          placeholder={slotsBookablePerDay}
           setSelected={(val) => {
             setSelected(val)
             // this.slotsBookablePerDay = lengthPerBooking[val - 1].value
@@ -259,7 +292,7 @@ export default function EditBookableObject({ route }) {
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per week</Text>
         <SelectList
-        placeholder={slotsBookablePerWeek}
+          placeholder={slotsBookablePerWeek}
           setSelected={(val) => {
             setSelected(val)
             //this.slotsBookablePerWeek = lengthPerBooking[val - 1].value
@@ -268,15 +301,18 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+        onPress={() => {
+          editBookableObject()
+        }}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
       <TouchableOpacity
-      onPress={()=>{
-        removeBookableObject()
-        navigation.goBack()
-      }}>
-        <Text style={{color:'#bb0a1e', alignSelf:'center', margin: '4%'}}>Remove this object</Text>
+        onPress={() => {
+          removeBookableObject()
+          navigation.goBack()
+        }}>
+        <Text style={{ color: '#bb0a1e', alignSelf: 'center', margin: '4%' }}>Remove this object</Text>
       </TouchableOpacity>
     </ScrollView>
   );

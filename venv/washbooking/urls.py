@@ -22,5 +22,6 @@ urlpatterns = [
     path('user/bookedtimes/get', GetUserBookingAPIVIEW.as_view(), name='get_user_booked_times'),
     path('association/bookableobject/add', AddBookableObject.as_view(), name='add_bookableobject'),
     path('association/bookableobject/<int:pk>/delete', DeleteBookableObject.as_view(), name='delete_bookable_object'),
+    path('association/bookableobject/<int:pk>/update', UpdateBookableObject.as_view(), name='update_bookable_object'),
     
 ]

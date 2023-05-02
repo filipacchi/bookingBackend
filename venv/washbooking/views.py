@@ -14,6 +14,7 @@ from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 
 class AddBookableObject(APIView):
     permission_classes = []
@@ -24,6 +25,18 @@ class AddBookableObject(APIView):
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
+        
+class UpdateBookableObject(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        bookable_object = get_object_or_404(BookableObject, pk=pk)
+        serializer = AddBookableObjectSerializer(bookable_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class DeleteBookableObject(APIView):
     permission_classes = []
