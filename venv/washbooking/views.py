@@ -105,11 +105,12 @@ class GetUserBookingAPIVIEW(APIView):
                     print(booked_time)
                     my_bookings.append(
                     {
+                        """ behöver troligen inte skicka key """
                     "bookingObjectKey": booked_time["booking_object"],
                     "bookingObject": object["objectName"],
                     "date": booked_time["date"],
-                    "startTime": booked_time["start_time"],
-                    "endTime": booked_time["end_time"],
+                    "startTime": booked_time["start_time"][:-3],
+                    "endTime": booked_time["end_time"][:-3],
                     "association": association["name"],
                     })
 
