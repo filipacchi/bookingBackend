@@ -8,6 +8,7 @@ import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Style from "./Style";
 
 
 export default function Login() {
@@ -43,14 +44,14 @@ export default function Login() {
                         gap: 20
                     }}>
                         <TextInput
-                            style={styles.inputCredentials}
+                            style={Style.inputCredentials}
                             onChangeText={onChangeUsername}
                             placeholder={username}
                             autoComplete="off"
                             autoCorrect={false}
                         />
                         <TextInput
-                            style={styles.inputCredentials}
+                            style={Style.inputCredentials}
                             onChangeText={onChangePassword}
                             placeholder={password}
                             secureTextEntry = {true}
