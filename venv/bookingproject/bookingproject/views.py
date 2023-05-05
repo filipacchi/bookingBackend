@@ -12,15 +12,12 @@ class MyTokenRefreshPairSerializer(TokenRefreshSerializer):
     def validate(self, attrs):
         refresh = self.token_class(attrs["refresh"])
 
-
-        
-
         data = {"access": str(refresh.access_token)}
         
         decoded_token = jwt.decode(str(refresh.access_token), SECRET_KEY, algorithms=['HS256'])
         user_id = decoded_token.get('user_id')
         user = UserData.objects.get(id=user_id)
-        data['isStaff'] = user.is_staff
+        data['isAssociation'] = user.is_association
         
         if api_settings.ROTATE_REFRESH_TOKENS:
             if api_settings.BLACKLIST_AFTER_ROTATION:
@@ -52,8 +49,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['name'] = self.user.name
-        data['isStaff'] = self.user.is_staff
+        data['firstname'] = self.user.first_name
+        data['lastname'] = self.user.last_name
+        data['isAssociation'] = self.user.is_association
         return data
 
 class MyTokenObtainPairView(TokenObtainPairView):

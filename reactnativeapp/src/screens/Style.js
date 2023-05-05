@@ -231,4 +231,11 @@ export default StyleSheet.create({
         gap: 10,
         backgroundColor: "#22992e"
     },
+    inputCredentials: {
+        overflow: "hidden",
+        width: "70%",
+        height: 50,
+        borderRadius: 10,
+        justifyContent: "center",
+    }
 });

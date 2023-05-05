@@ -8,46 +8,92 @@ import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Style from "./Style";
 
 
 export default function Register() {
 
     const navigation = useNavigation()
 
-    const { signIn, t, setLang } = React.useContext(AuthContext);
-    const [username, onChangeUsername] = useState("Email");
-    const [password, onChangePassword] = useState("Password");
+    const {colorTheme, authContext } = React.useContext(AuthContext);
+    const { signUp, t, setLang } = authContext
+    const [username, onChangeUsername] = useState("");
+    const [password, onChangePassword] = useState("");
+    const [passwordCheck, onChangePasswordCheck] = useState("");
+    const [firstname, onChangeFirstname] = useState("");
+    const [lastname, onChangeLastname] = useState("");
 
 
+    function handleSignUp() {
+        if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "") {
+            console.log("Nåt är tomt")
+        } else if (password === passwordCheck) {
+            let data = { email: username, firstname: firstname, lastname: lastname, password: password }
+            signUp(data)
+            console.log("Lösenord ok också")
+
+        } else {
+            console.log("Lösenord stämmer ej överens")
+        }
+    }
 
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={-200}
             style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <LinearGradient colors={["#4d70b3", "#6ea1ff"]} style={{ flex: 1 }}>
+                <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
                     <View style={{
                         position: "absolute",
                         bottom: 150,
                         width: "100%",
-                        gap: 20
+                        gap: 20,
+                        alignItems: "center"
                     }}>
-                        <TextInput
-                            style={styles.inputCredentials}
-                            onChangeText={onChangeUsername}
-                            placeholder={username}
-                            autoComplete="off"
-                            autoCorrect={false}
-                        />
-                        <TextInput
-                            style={styles.inputCredentials}
-                            onChangeText={onChangePassword}
-                            placeholder={password}
-                            secureTextEntry={true}
-                            autoComplete="off"
-                            autoCorrect={false}
-                        />
-                        <Pressable style={styles.input} onPress={() => { console.log("Klickish") }}><Text style={styles.inputText}>Register</Text></Pressable>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                onChangeText={onChangeUsername}
+                                placeholder={t("Email")}
+                                autoComplete="off"
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                onChangeText={onChangeFirstname}
+                                placeholder={t("Firstname")}
+                                autoComplete="off"
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                onChangeText={onChangeLastname}
+                                placeholder={t("Lastname")}
+                                autoComplete="off"
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                onChangeText={onChangePassword}
+                                placeholder={t("Password")}
+                                secureTextEntry={true}
+                                autoComplete="off"
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                onChangeText={onChangePasswordCheck}
+                                placeholder={t("PasswordRepeat")}
+                                secureTextEntry={true}
+                                autoComplete="off"
+                                autoCorrect={false}
+                            />
+                        </View>
+                        <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>Register</Text></Pressable>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

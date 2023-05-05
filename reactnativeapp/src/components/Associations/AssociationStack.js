@@ -20,7 +20,7 @@ function AssociationStack() {
     <Stack.Navigator screenOptions={{
         headerShown: false,
       }}>
-        {state.isStaff ? (
+        {state.isAssociation ? (
         <Stack.Group>
         <Stack.Screen name="Admin" component={AdminStart}/>
         <Stack.Screen name="AssociationInformation" component={AssociationInformation}/>

@@ -11,9 +11,13 @@
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",
     "Password": "Lösenord",
+    "PasswordRepeat": "Upprepa lösenord",
     "Email": "Mejladress",
     "CreateAccount": "Skapa konto",
     "Login": "Logga in",
+    "Firstname": "Förnamn",
+    "Lastname": "Efternamn",
+    "Return": "Tillbaka", 
 
     "Booking": "Bokning",
     "Date": "Datum",

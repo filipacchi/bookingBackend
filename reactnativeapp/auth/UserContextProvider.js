@@ -33,7 +33,7 @@ function UserContextProvider({children}) {
             isSignout: false,
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
-            isStaff: action.token.isStaff,
+            isAssociation: action.token.isAssociation,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -42,7 +42,7 @@ function UserContextProvider({children}) {
             isSignout: false,
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
-            isStaff: action.token.isStaff,
+            isAssociation: action.token.isAssociation,
             isLoading: false,
           };
         case 'SIGN_OUT':
@@ -52,7 +52,7 @@ function UserContextProvider({children}) {
             isSignout: true,
             userToken: null,
             userRefreshToken: null,
-            isStaff: null,
+            isAssociation: null,
           };
       }
     },
@@ -61,7 +61,7 @@ function UserContextProvider({children}) {
       isSignout: false,
       userToken: null,
       userRefreshToken: null,
-      isStaff: null,
+      isAssociation: null,
     }
   );
 
@@ -144,8 +144,30 @@ function UserContextProvider({children}) {
         dispatch({ type: 'SIGN_OUT' })
       },
       signUp: async (data) => {
+        console.log("SIGNAR UPP!")
+        axios.post('auth/register/', {
+          email: data.email,
+          first_name: data.firstname,
+          last_name: data.lastname,
+          password: data.password,
+          is_association: false
+        })
+          .then(response => {
+            console.log("KOlla "+Object.keys(response.data.info))
+            data = {"access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association}
+            console.log(data) 
+            axios.defaults.headers.common = {'Authorization': `Bearer ${data.access}`}
+            save("userRefreshToken", data.refresh)
+            save("userToken", data.access).then(() => {
+            dispatch({ type: 'SIGN_IN', token: data });
+            })
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
+        //dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       t: (translate) => {
         return i18n.t(translate)
