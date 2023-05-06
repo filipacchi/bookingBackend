@@ -8,6 +8,10 @@ from django.dispatch import receiver
 from django.core.validators import RegexValidator
 import uuid 
 
+# lets us explicitly set upload path and filename
+def upload_to(instance, filename):
+    return 'static/{filename}'.format(filename=filename)
+
 def randomHex():
     randomHex = uuid.uuid4().hex[:1]
     return randomHex
@@ -45,6 +49,7 @@ class Association(models.Model):
     # postalcode =  models.CharField(max_length=200, blank=False)
     coordinateX = models.FloatField(max_length=200, blank=False)
     coordinateY = models.FloatField(max_length=200, blank=False)
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
 
     def __str__(self):
         return self.name

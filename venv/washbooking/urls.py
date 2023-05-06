@@ -4,6 +4,7 @@ from django.conf import settings
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import *
 from django.urls import re_path
+from django.conf.urls.static import static 
 
 urlpatterns = [
     path('auth/register/',
@@ -23,5 +24,7 @@ urlpatterns = [
     path('association/bookableobject/add', AddBookableObject.as_view(), name='add_bookableobject'),
     path('association/bookableobject/<int:pk>/delete', DeleteBookableObject.as_view(), name='delete_bookable_object'),
     path('association/bookableobject/<int:pk>/update', UpdateBookableObject.as_view(), name='update_bookable_object'),
-    
-]
+    path('association/image/<int:pk>/update', UpdateAssociationImage.as_view(), name='update_association_image'),
+    path('association/image/<int:pk>/get', GetAssociationImage.as_view(), name='get_association_image'),
+    path('images/Logo.png', GetImage.as_view(), name='get_image'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_URL)
