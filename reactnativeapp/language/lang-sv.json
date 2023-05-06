@@ -3,13 +3,21 @@
     "MyAssociations": "Mina föreningar",
     "ScheduledTimes": "Bokade tider",
     "Settings": "Inställningar",
+    "EnterAssociationKey": "Skriv in föreningsnyckel",
+    "DoYouWantToJoin": "Vill du gå med i föreningen:",
+    "TryAgain": "Nåt gick fel, vill du prova igen?",
+    "YouHaveNotJoined": "Du har inte gått med i någon förening ännu, klicka på knappen nedan för att gå med",
     
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",
     "Password": "Lösenord",
+    "PasswordRepeat": "Upprepa lösenord",
     "Email": "Mejladress",
     "CreateAccount": "Skapa konto",
     "Login": "Logga in",
+    "Firstname": "Förnamn",
+    "Lastname": "Efternamn",
+    "Return": "Tillbaka", 
 
     "Booking": "Bokning",
     "Date": "Datum",
@@ -42,6 +50,9 @@
 
     "AssociationsPage": "Mina föreningar",
     "EnterKey": "Skriv in din nyckel",
-    "AssociationsQMark": "Skriv in nyckeln som du har fått av din förening. Den består av 10 tecken på formen XXXX-XXXXXX."
-
+    "AssociationsQMark": "Skriv in nyckeln som du har fått av din förening. Den består av 10 tecken på formen XXXX-XXXXXX.",
+    "Yes": "Ja",
+    "No": "Nej",
+    "Cancel": "Avbryt"
+    
 }

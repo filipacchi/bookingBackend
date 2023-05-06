@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.contrib.auth import get_user_model;
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 """ serializers översätter från SQL till json och vice versa. nycklarna till json-objekten är attributes i entityn """
@@ -8,11 +9,12 @@ from django.contrib.auth import get_user_model;
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
-        fields = ["id", "email", "name", "password", "is_staff"]
+        fields = ["id", "email", "first_name","last_name", "password", "is_association"]
 
     def create(self, validated_data):
         user = UserData.objects.create(email=validated_data['email'],
-                                       name=validated_data['name']
+                                       first_name=validated_data['first_name'],
+                                       last_name=validated_data['last_name']
                                          )
         user.set_password(validated_data['password'])
         user.save()
@@ -26,7 +28,7 @@ class BookingSerializer(serializers.ModelSerializer):
 class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Association
-        fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id', 'region')
+        fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id', 'region', 'profile_image')
 
 class BookedTimeSerializer(serializers.ModelSerializer): 
     class Meta:

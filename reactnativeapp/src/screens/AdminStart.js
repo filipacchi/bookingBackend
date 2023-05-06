@@ -108,6 +108,7 @@ export default function Associations() {
                                     horizontal={true}
                                     ListFooterComponent={
                                         <Pressable onPress={() => {
+                                            console.log('HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
                                             navigation.navigate("AddBookableObject", {associationId: item['id']})
                                             console.log(item.id)
                                         }} style={Style.addObject}>
@@ -117,8 +118,8 @@ export default function Associations() {
                                     renderItem={
                                         ({item}) => (
                                             <Pressable onPress={() => {
-                                                console.log('HÄR HAR VI OBJECT ID:'+item['objectId'])
-                                                navigation.navigate("EditBookableObject",{objectId: item['objectId'], associationName: item['name']})
+                                                console.log('HÄR HAR VI OBJECT ID: ' + item['objectId'] + ' HÄR HAR VI ASSOCIATIONS NAMNET: ' + item['name'] + ' HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
+                                                navigation.navigate("EditBookableObject",{objectId: item['objectId'], associationName: item['name'], associationId: item['id']})
                                             }} style={Style.bookObject}>
                                                 <Text>{item['objectName']}</Text>
                                             </Pressable>

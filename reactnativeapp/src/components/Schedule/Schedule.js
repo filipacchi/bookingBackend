@@ -52,9 +52,6 @@ export default function Schedule() {
             console.log("ASSO: " + access_token)
             setToken(access_token)
             loadData(access_token)
-
-
-
         }
         getToken()
     }, [])

@@ -4,6 +4,7 @@ import axios from "../axios/axios";
 import { translations } from "../language/localizations";
 import { I18n } from "i18n-js";
 import { getLocales } from "expo-localization"
+import { useState } from 'react';
 
 
 const AuthContext = React.createContext();
@@ -19,6 +20,9 @@ function UserContextProvider({children}) {
   i18n.enableFallback = true
   console.log("Språk: "+i18n.locale)
 
+
+  const [colorTheme, setColorTheme] = useState({name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff"})
+
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -29,7 +33,7 @@ function UserContextProvider({children}) {
             isSignout: false,
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
-            isStaff: action.token.isStaff,
+            isAssociation: action.token.isAssociation,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -38,7 +42,7 @@ function UserContextProvider({children}) {
             isSignout: false,
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
-            isStaff: action.token.isStaff,
+            isAssociation: action.token.isAssociation,
             isLoading: false,
           };
         case 'SIGN_OUT':
@@ -48,7 +52,7 @@ function UserContextProvider({children}) {
             isSignout: true,
             userToken: null,
             userRefreshToken: null,
-            isStaff: null,
+            isAssociation: null,
           };
       }
     },
@@ -57,13 +61,24 @@ function UserContextProvider({children}) {
       isSignout: false,
       userToken: null,
       userRefreshToken: null,
-      isStaff: null,
+      isAssociation: null,
     }
   );
 
   React.useEffect(() => {
     const bootstrapAsync = async () => {
       let userRefreshToken;
+
+      try {
+        selectedColor = await SecureStore.getItemAsync('selectedColor')
+        console.log(selectedColor)
+        if(selectedColor != null){
+          setColorTheme(JSON.parse(selectedColor))
+        }
+        //setColorTheme(selectedColor)
+      } catch (e){
+
+      }
 
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
@@ -73,6 +88,7 @@ function UserContextProvider({children}) {
       } catch (e) {
         // Restoring token failed
       }
+
 
       async function validateToken(token) {
 
@@ -90,14 +106,12 @@ function UserContextProvider({children}) {
             save("userRefreshToken", response.data.refresh)
             axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.access}`}
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
-
           })
           .catch(error => {
             console.log(error);
             console.log("TOKEN NOT OKAY")
           });
       }
-
     };
 
     bootstrapAsync();
@@ -124,10 +138,36 @@ function UserContextProvider({children}) {
           });
 
       },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      signOut: () => {
+        SecureStore.deleteItemAsync('userRefreshToken')
+        SecureStore.deleteItemAsync('userToken')
+        dispatch({ type: 'SIGN_OUT' })
+      },
       signUp: async (data) => {
+        console.log("SIGNAR UPP!")
+        axios.post('auth/register/', {
+          email: data.email,
+          first_name: data.firstname,
+          last_name: data.lastname,
+          password: data.password,
+          is_association: false
+        })
+          .then(response => {
+            console.log("KOlla "+Object.keys(response.data.info))
+            data = {"access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association}
+            console.log(data) 
+            axios.defaults.headers.common = {'Authorization': `Bearer ${data.access}`}
+            save("userRefreshToken", data.refresh)
+            save("userToken", data.access).then(() => {
+            dispatch({ type: 'SIGN_IN', token: data });
+            })
 
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+          })
+          .catch(error => {
+            console.log(error);
+          });
+
+        //dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       t: (translate) => {
         return i18n.t(translate)
@@ -142,7 +182,7 @@ function UserContextProvider({children}) {
     }),
     []
   );
-  const contextValue = {authContext, state}
+  const contextValue = {authContext, state, colorTheme, setColorTheme}
 
   return (
       <AuthContext.Provider value={contextValue}>

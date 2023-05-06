@@ -14,6 +14,10 @@ from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from datetime import datetime
+from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import HttpResponse
+import base64
 
 class AddBookableObject(APIView):
     permission_classes = []
@@ -24,6 +28,18 @@ class AddBookableObject(APIView):
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
+        
+class UpdateBookableObject(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        bookable_object = get_object_or_404(BookableObject, pk=pk)
+        serializer = AddBookableObjectSerializer(bookable_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class DeleteBookableObject(APIView):
     permission_classes = []
@@ -43,8 +59,11 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
-
+        user = UserData.objects.get(id=serializer.data["id"])
+        refresh = RefreshToken.for_user(user)
+        data = {"info": serializer.data, "access_token": str(refresh.access_token), "refresh_token": str(refresh) }
+        return Response(data)
+    
 
 #####
 #Inte min egna kod, ett exempel som vi kan jobba utifrån
@@ -135,6 +154,20 @@ class GetBookingsAPIVIEW(APIView):
         bookings = BookedTime.objects.all()
         serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
+
+class GetBookingsFromDateRange(APIView):
+    authentication_classes = []
+    def get(self, request):
+        bookid = request.data["bookable_id"]
+        startdate = request.data["startdate"]
+        enddate = request.data["enddate"]
+        bookable_object = BookableObject.objects.get(objectId=bookid)
+        bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
+        serializer = BookedTimeSerializer(bookings, many=True)
+
+        print(bookable_object)
+        return Response(serializer.data)
+
     
 class GetBookingsFromObject(APIView):
     permission_classes=[]
@@ -232,6 +265,15 @@ class UserJoinAssociation(APIView):
         person.associations.add(join_association)
         person.save()
         return Response(join_key)
+
+class GetImage(APIView):
+    permission_classes = []
+    def get(self, request, pk):
+        image = Association.objects.get(join_key=pk).profile_image
+        
+        return HttpResponse(image, content_type="image/png")
+
+
 
 
 
