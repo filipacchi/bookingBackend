@@ -19,6 +19,19 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
 import base64
 
+    
+class UpdateAssociationImage(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        association = get_object_or_404(Association, pk=pk)
+        serializer = AssociationSerializer(association, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class AddBookableObject(APIView):
     permission_classes = []
     def post(self, request):

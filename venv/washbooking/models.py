@@ -8,6 +8,10 @@ from django.dispatch import receiver
 from django.core.validators import RegexValidator
 import uuid 
 
+# lets us explicitly set upload path and filename
+def upload_to(instance, filename):
+    return 'static/{filename}'.format(filename=filename)
+
 def randomHex():
     randomHex = uuid.uuid4().hex[:1]
     return randomHex

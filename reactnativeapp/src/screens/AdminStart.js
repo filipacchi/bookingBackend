@@ -92,7 +92,8 @@ export default function Associations() {
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
                             <Pressable onPress={() => {
-                                            navigation.navigate("AssociationInformation")
+                                            navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name']})
+                                            console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
                                  <AntDesign name="home" size={28} color={"#222222"} />
                                 <View>

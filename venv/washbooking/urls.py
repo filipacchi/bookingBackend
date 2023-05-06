@@ -4,6 +4,7 @@ from django.conf import settings
 from rest_framework.authtoken.views import obtain_auth_token
 from .views import *
 from django.urls import re_path
+from django.conf.urls.static import static 
 
 urlpatterns = [
     path('auth/register/',
