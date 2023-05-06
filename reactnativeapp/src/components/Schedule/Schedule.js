@@ -18,6 +18,9 @@ export default function Schedule() {
     const [token, setToken] = useState("")
     const [isRefreshing, setIsRefreshing] = useState(true)
 
+
+
+
     const [bookedTimes, setBookedTimes] = useState([])
     const [hardcodeBookedTime, setHardcodeBookedTime] = useState([
         {startTime: "02:00:00",

@@ -24,6 +24,18 @@ class AddBookableObject(APIView):
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
+        
+class DeleteBookableObject(APIView):
+    permission_classes = []
+
+    def delete(self, request, pk):
+        try:
+            bookable_object = BookableObject.objects.get(pk=pk)
+            bookable_object.delete()
+            return Response('Deleted object!')
+        except BookableObject.DoesNotExist:
+            return Response("Object does not exist", status=status.HTTP_404_NOT_FOUND)
+
 
 class RegisterView(APIView):
     authentication_classes = []
