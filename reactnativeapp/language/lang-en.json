@@ -11,9 +11,13 @@
     "CreateAccountPage": "Create Account",
     "Username": "Username",
     "Password": "Password",
+    "PasswordRepeat": "Repeat Password",
     "Email": "E-mail",
     "CreateAccount": "Create Account",
     "Login": "Login",
+    "Firstname": "First Name",
+    "Lastname": "Last Name",
+    "Return": "Return", 
 
     "BookingPage": "Booking",
     "Date": "Date",
