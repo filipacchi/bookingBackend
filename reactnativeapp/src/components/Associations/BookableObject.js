@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal } from "react-native";
 import LottieView from "lottie-react-native";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import WeekCalendar from "./WeekCalendar";
@@ -11,88 +11,56 @@ import BookObjectComponent from "./BookObjectComponent";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
 import Style from "../../screens/Style";
-
-const createTimeSlots = (response) => {
-
-    let data = response[0]
-    let bookingsArray = response[1]
-    let start_time = parseInt(data.timeSlotStartTime.replace(/:/g, "").slice(0, 2))
-    let end_time = parseInt(data.timeSlotEndTime.replace(/:/g, "").slice(0, 2))
-    let slot_length = parseInt(data.timeSlotLength)
-    let timeSlotArray = []
-    for (let index = start_time; index < end_time; index = index + slot_length) {
-
-        let next_index = index + slot_length
-        if (next_index <= end_time) {
-
-            let titleTemp = prettyDate(index, next_index)
-
-            timeSlotArray.push({ id: index, title: titleTemp, booked: false })
-        }
-    }
-    if (bookingsArray.length == 0) {
-        console.log("Inga bokningar")
-        return [data, timeSlotArray]
-    }
-    console.log("BOKNINGAR,")
-    return [data, populateTimeSlots(timeSlotArray, bookingsArray)]
-}
-
-const prettyDate = (i1, i2) => {
-    let t1, t2
-    if (i1.toString().length == 1) {
-        t1 = String("0" + i1 + ":00")
-    } else {
-        t1 = String(i1 + ":00")
-    }
-    if (i2.toString().length == 1) {
-        t2 = String("0" + i2 + ":00")
-    } else {
-        t2 = String(i2 + ":00")
-    }
-    return t1 + " - " + t2
-}
-
-
-const populateTimeSlots = (timeA, bookA) => {
-
-    for (let index = 0; index < bookA.length; index++) {
-        let start_time = parseInt(bookA[index].start_time.replace(/:/g, "").slice(0, 2))
-        for (let index = 0; index < timeA.length; index++) {
-            if (timeA[index].id == start_time) {
-                timeA[index].booked = true
-            }
-        }
-    }
-    return timeA
-}
-
+import { Animated } from "react-native"
+import jwt_decode from "jwt-decode";
+import { AuthContext } from "../../../auth/UserContextProvider";
 
 
 export default function BookableObject({ route }) {
 
-    const [bookObject, setBookObject] = useState([])
     const [timeSlots, setTimeSlots] = useState([])
     const [selectedDate, setSelectedDate] = useState(moment());
-    let today = moment()
     const [selectedDay, setSelectedDay] = useState(moment())
-    const [selectedDayCalendar, setSelectedDayCalendar] = useState(moment())
-    const [selectedTime, setSelectedTime] = useState("")
-    const [timeSlotsWeekArray, setTimeSlotsWeekArray] = useState([])
-    const [bookObjectsArray, setBookObjectsArray] = useState([])
+    const [selectedTime, setSelectedTime] = useState()
     const [loading, setLoading] = useState(true)
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
     const [noSwipe, setNoSwipe] = useState(false)
+    const opacityAnimation = useRef(new Animated.Value(0)).current;
+    const opacityStyle = { opacity: opacityAnimation };
+    const [user, setUser] = useState()
+    const [bookedSlot, setBookedSlot] = useState([])
+    const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
+    const { authContext  } = useContext(AuthContext)
+    const {t} = authContext
 
-    const loadData = async (objectid, date) => {
-        console.log(date)
+    const animateElement = () => {
+
+        Animated.timing(opacityAnimation, {
+            toValue: 1,
+            duration: 500,
+            useNativeDriver: true
+        }).start(() => {
+            Animated.timing(opacityAnimation, {
+                toValue: 0,
+                duration: 300,
+                useNativeDriver: true
+            })
+        })
+    };
+
+    useEffect(() => {
+        setSelectedTime(null)
+        opacityAnimation.setValue(0)
+        animateElement()
+    }, [selectedDate])
+
+
+
+    const loadData = async (objectId, sdate, edate) => {
         try {
-            const { data: response } = await axios.get('book/get/object/' + String(objectid) + "/" + String(date)) //use data destructuring to get data from the promise object
-
-            const returnValue = await createTimeSlots(response)
-
-            return returnValue
+            const { data: response } = await axios.get('book/get/object/daterange/' + objectId + "/" + sdate + "/" + edate)
+            return response
         }
 
         catch (error) {
@@ -101,20 +69,19 @@ export default function BookableObject({ route }) {
     }
 
     const loadWeek = async (objectid, startDate) => {
-        console.log(startDate)
-        const tempBookArray = []
-        const tempTimeSlotArray = []
-        const updatedWeekDates = Array.from({ length: 7 }).map((_, i) =>
-            startDate.clone().add(i, 'days')
-        );
-        for (let index = 0; index < updatedWeekDates.length; index++) {
+
+        let sdate = startDate.format().slice(0, 10)
+        let edate = startDate.add(1, "months").format().slice(0, 10)
+        let returnValue = await loadData(objectid, sdate, edate)
+        setTimeSlots(returnValue)
+        /* for (let index = 0; index < updatedWeekDates.length; index++) {
 
             let returnValue = await loadData(objectid, updatedWeekDates[index].format().slice(0, 10))
 
             tempBookArray.push(returnValue[0])
             tempTimeSlotArray.push(returnValue[1])
-        }
-        setTimeSlotsWeekArray(tempTimeSlotArray)
+        } */
+        /* setTimeSlotsWeekArray(tempTimeSlotArray) */
         setLoading(false)
     }
 
@@ -123,34 +90,88 @@ export default function BookableObject({ route }) {
         if (route.params.id) {
             loadWeek(route.params.id, selectedDate)
         }
-
-    }, [selectedDate])
-
-    async function setSwipe(){
-        setTimeout(()=>{
-            console.log("Sätter till false")
-            setNoSwipe(false)
-        }, 500)
-    }
-    useEffect(() => {
-        if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
-            setNoSwipe(true)
-            let diff = selectedDayCalendar.diff(selectedDay, 'days')
-            console.log(diff)
-            swiper.current.scrollBy(diff)
-            setSelectedDay(selectedDayCalendar)
-            setSwipe()
+        if(route.params.token){
+            let decoded = jwt_decode(route.params.token)
+            setUser(decoded["user_id"])
         }
-    }, [selectedDayCalendar])
+
+    }, [])
+
+
+    /*  useEffect(() => {
+         if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
+             setNoSwipe(true)
+             let diff = selectedDayCalendar.diff(selectedDay, 'days')
+             console.log(diff)
+             //swiper.current.scrollBy(diff)
+             setSelectedDay(selectedDayCalendar)
+             setSwipe()
+         }
+     }, [selectedDayCalendar]) */
 
     /* const markDate = () => {
         console.log(selectedDay.diff(selectedDayCalendar, 'days'))
     }
  */
+
+    useEffect(() => {
+        console.log(selectedDay.format().slice(0, 10))
+        setSelectedDate(selectedDay.format().slice(0, 10))
+    }, [selectedDay])
+
+    const addBookableObject = async (bodyParameters) => {
+        axios.post('book/add/',
+            bodyParameters
+        )
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
     const bookTime = () => {
-        if (selectedTime != "") {
-            console.log("Boka tid: " + prettyDate(selectedTime, selectedTime + parseInt(bookObject.timeSlotLength)) + " ?")
+        if (selectedTime != null) {
+            let startTime = selectedTime.slice(0,5)
+            let endTime = selectedTime.slice(8,13)
+            let bookDate = selectedDay.format().slice(0, 10)
+            let bookingObject = route.params.id
+            setBookedSlot([selectedTime, bookDate])
+            let bodyParameters = {
+                start_time: startTime,
+                end_time: endTime,
+                date: bookDate,
+                booking_object: bookingObject
+            }
+
+            addBookableObject(bodyParameters)
+            
         }
+    }
+    const PopUpModalConfirm = () => {
+        return (
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={ConfirmModalVisible}
+                onRequestClose={() => setConfirmModalVisible(false)}
+                >
+                <View style={Style.modalWindow}>
+
+                    <View style={Style.modalOuter}>
+                        <View style={{ gap: 10 }}>
+                            <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
+                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
+                            <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
+                                <Pressable onPress={() => {bookTime(), setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
+                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal >
+        )
     }
 
     if (loading) {
@@ -164,8 +185,11 @@ export default function BookableObject({ route }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-                <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDayCalendar} />
-                <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
+                <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+                <Animated.View style={[opacityStyle, { flex: 1 }]}>
+                    <BookObjectComponent booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                </Animated.View>
+                {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
                     if (!noSwipe) {
                         if (i > swiperIndex) {
@@ -179,7 +203,6 @@ export default function BookableObject({ route }) {
                     setSwiperIndex(i)
                     console.log("Indexet är: " + i)
 
-
                 }
                 }>
                     {
@@ -189,10 +212,11 @@ export default function BookableObject({ route }) {
                     }
 
 
-                </Swiper>
-                <View style={{padding: 20}}>
-                <Pressable onPress={() => console.log("Boka")} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
+                </Swiper> */}
+                <View style={{ padding: 20 }}>
+                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
                 </View>
+                <PopUpModalConfirm />
             </View>
         </SafeAreaView>
     )

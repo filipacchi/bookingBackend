@@ -3,31 +3,62 @@ import { View, Text, TouchableWithoutFeedback, PanResponder } from 'react-native
 import moment from 'moment';
 import { Feather } from '@expo/vector-icons';
 
-const WeekCalendar = ({selectedDay, setSelectedDay}) => {
+const WeekCalendar = ({ selectedDay, setSelectedDay }) => {
   const today = moment()
+  const startDay = today.clone().isoWeekday()
+  const endDay = today.clone().add(6, "days").isoWeekday()
   const [weekDates, setWeekDates] = useState([]); // State to store the week dates
   const [prevArrowPressed, setPrevArrowPressed] = useState(false); // State to track if the previous arrow is pressed
   const [nextArrowPressed, setNextArrowPressed] = useState(false); // State to track if the next arrow is pressed
 
+  const updateWeekArray = () => {
+
+    console.log(selectedDay.isoWeekday())
+    let weekDay = selectedDay.isoWeekday()
+    if (weekDay >= startDay) {
+      sDay = selectedDay
+    } else {
+      let diff = 7 - Math.abs(weekDay - startDay)
+      sDay = selectedDay.clone().subtract(diff, "days")
+      console.log("DIFFERANSEN ÄR: "+diff)
+    }
+    const updatedWeekDates = Array.from({ length: 7 }).map((_, i) =>
+        sDay.clone().isoWeekday(startDay).add(i, 'days')
+      );
+      setWeekDates(updatedWeekDates);
+
+  }
+
   useEffect(() => {
     // Update the weekDates array whenever the selectedDay changes
-    const updatedWeekDates = Array.from({ length: 7 }).map((_, i) =>
-      selectedDay.clone().startOf('isoWeek').add(i, 'days')
-    );
-    setWeekDates(updatedWeekDates);
+    updateWeekArray()
   }, [selectedDay]);
 
   const handlePrevWeek = () => {
-    setSelectedDay((prev) => prev.clone().subtract(7, 'days')); // Decrement the selected day by 1 week
-    setPrevArrowPressed(true); // Set the previous arrow pressed state to true
-    // Revert the previous arrow pressed state back to false after x milliseconds
-    setTimeout(() => {
-      setPrevArrowPressed(false);
-    }, 100);
+    let prevWeek = selectedDay.clone().subtract(7, 'days')
+    if (prevWeek.format().slice(0, 10) < today.format().slice(0, 10)) {
+      console.log("UTANFÖR")
+      //console.log(prevWeek)
+    }
+    else {
+      updateWeekArray()
+      setSelectedDay((prev) => prev.clone().subtract(7, 'days')); // Decrement the selected day by 1 week
+      //console.log(selectedDay)
+      //updateWeekArray()
+      setPrevArrowPressed(true); // Set the previous arrow pressed state to true
+      // Revert the previous arrow pressed state back to false after x milliseconds
+      setTimeout(() => {
+        setPrevArrowPressed(false);
+      }, 100);
+    }
+
   };
 
   const handleNextWeek = () => {
+    updateWeekArray()
     setSelectedDay((prev) => prev.clone().add(7, 'days')); // Increment the selected day by 1 week
+    //console.log(selectedDay)
+    //updateWeekArray()
     setNextArrowPressed(true); // Set the next arrow pressed state to true
     // Revert the next arrow pressed state back to false after x milliseconds
     setTimeout(() => {
@@ -57,7 +88,7 @@ const WeekCalendar = ({selectedDay, setSelectedDay}) => {
   };
 
   return (
-    <View style={{ padding: 10, backgroundColor: "white"}}>
+    <View style={{ padding: 10, backgroundColor: "white" }}>
       {/* Render the week days */}
       <View
         style={{
@@ -86,7 +117,7 @@ const WeekCalendar = ({selectedDay, setSelectedDay}) => {
             alignItems: 'center',
             fontSize: 20,
             fontWeight: 'bold',
-            
+
             //marginVertical: 16,
           }}
         >
@@ -107,48 +138,50 @@ const WeekCalendar = ({selectedDay, setSelectedDay}) => {
         </TouchableWithoutFeedback>
       </View>
       <SwipeableWeekView>
-      {/* Render the week days */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingHorizontal: 16,
-        }}
-      >
-        {/* Render the individual days */}
-        {weekDates.map((currentDate) => {
-          return (
-            <TouchableWithoutFeedback
-              key={currentDate.toString()}
-              onPress={() => setSelectedDay(currentDate)}
-            >
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  borderRadius: 50,
-                  overflow: 'hidden',
+        {/* Render the week days */}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 16,
+          }}
+        >
+          {/* Render the individual days */}
+          {weekDates.map((currentDate) => {
+            return (
+              <TouchableWithoutFeedback
+                key={currentDate.toString()}
+                onPress={() => {
+                  setSelectedDay(currentDate)
                 }}
               >
-                <Text style={{}}>{currentDate.format('dddd').slice(0, 1)}</Text>
                 <View
                   style={{
-                    marginTop: 10,
-                    height: 30,
-                    width: 30,
+                    flex: 1,
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 60,
-                    backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "#8AAAE5": "#8AAAE5": 'transparent',
+                    borderRadius: 50,
+                    overflow: 'hidden',
                   }}
                 >
-                  <Text style={{color: currentDate.isSame(selectedDay, 'day') ? "white" : currentDate.isSame(today, 'day') ? 'red' : 'black', }}>{currentDate.format('D')}</Text>
+                  <Text style={{}}>{currentDate.format('dddd').slice(0, 1)}</Text>
+                  <View
+                    style={{
+                      marginTop: 10,
+                      height: 30,
+                      width: 30,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: 60,
+                      backgroundColor: currentDate.isSame(selectedDay, 'day') ? currentDate.isSame(today, 'day') ? "#8AAAE5" : "#8AAAE5" : 'transparent',
+                    }}
+                  >
+                    <Text style={{ color: currentDate.isSame(selectedDay, 'day') ? "white" : currentDate.isSame(today, 'day') ? 'red' : 'black', }}>{currentDate.format('D')}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableWithoutFeedback>
-          );
-        })}
-      </View>
+              </TouchableWithoutFeedback>
+            );
+          })}
+        </View>
       </SwipeableWeekView>
     </View>
   );

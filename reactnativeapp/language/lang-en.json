@@ -18,6 +18,7 @@
     "Firstname": "First Name",
     "Lastname": "Last Name",
     "Return": "Return", 
+    "BookTime": "Do you want to book: ",
 
     "BookingPage": "Booking",
     "Date": "Date",
