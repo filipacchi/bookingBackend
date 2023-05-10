@@ -103,13 +103,16 @@ WSGI_APPLICATION = 'bookingproject.wsgi.application'
     }
 } """
 
+print(os.environ.get("password"))
+print(os.environ.get("host"))
+
 DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'book_booking',  
         'USER': 'book_django',  
-        'PASSWORD': os.environ.get("BPASSWORD"),  
-        'HOST': os.environ.get("BHOST"),  
+        'PASSWORD': '',  
+        'HOST': '',  
         'PORT': '3306',  
     }  
 }  

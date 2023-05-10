@@ -1,8 +1,9 @@
 steps:
-  - name: DB Action
-    with: 
-      password: ${{ secrets.BPASSWORD }}
-      host: ${{ secrets.BHOST }}
-    env: 
-      password: ${{ secrets.BPASSWORD }}
-      host: ${{ secrets.BHOST }}
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+        env:
+          password: ${{ secrets.BPASSWORD }}
+          host: ${{ secrets.BHOST }} 
+
+
