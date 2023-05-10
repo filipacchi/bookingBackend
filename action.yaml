@@ -1,0 +1,8 @@
+steps:
+  - name: DB Action
+    with: 
+      password: ${{ secrets.BPASSWORD }}
+      host: ${{ secrets.BHOST }}
+    env: 
+      password: ${{ secrets.BPASSWORD }}
+      host: ${{ secrets.BHOST }}
