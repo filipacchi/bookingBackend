@@ -124,11 +124,14 @@ def update_profile_signal(sender, instance, created, **kwargs):
 
 class BookedTime(models.Model):
 
-    booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, null=True)
-    booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
-    date = models.DateField(help_text="YYYY-MM-DD", null=True)
-    start_time = models.TimeField(help_text="HH:MM:SS", null=True)
-    end_time = models.TimeField(help_text="HH:MM:SS", null=True)
+    booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, blank=False)
+    booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, blank=False)
+    date = models.DateField(help_text="YYYY-MM-DD", blank=False)
+    start_time = models.TimeField(help_text="HH:MM:SS", blank=False)
+    end_time = models.TimeField(help_text="HH:MM:SS", blank=False)
+
+    class Meta:
+        unique_together = ('date', 'start_time', 'end_time')
 
     def __str__(self):
         return str(self.booking_object.objectName + " "+ str(self.start_time)+ " - " +str(self.end_time))

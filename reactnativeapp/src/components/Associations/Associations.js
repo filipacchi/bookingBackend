@@ -359,7 +359,7 @@ export default function Associations() {
                                             ({ item }) => (
                                                 <Pressable onPress={() => {
                                                     console.log(item['objectId'])
-                                                    navigation.navigate("BookableObject", { id: item['objectId'] })
+                                                    navigation.navigate("BookableObject", { id: item['objectId'], token: state.userToken })
                                                 }} style={Style.bookObject}>
                                                     <Text>{item['objectName']}</Text>
                                                 </Pressable>

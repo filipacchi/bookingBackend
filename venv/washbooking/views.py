@@ -13,11 +13,15 @@ from rest_framework.views import APIView
 from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
-from datetime import datetime
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
 import base64
+import math
+import pprint
+from datetime import datetime, timedelta
+import pandas
+
 
     
 class UpdateAssociationImage(APIView):
@@ -150,6 +154,7 @@ class GetUserBookingAPIVIEW(APIView):
                     """ behöver troligen inte skicka key """
                     my_bookings.append(
                     {
+                        """ behöver troligen inte skicka key """
                     "bookingObjectKey": booked_time["booking_object"],
                     "bookingObject": object["objectName"],
                     "date": booked_time["date"],
@@ -170,16 +175,21 @@ class GetBookingsAPIVIEW(APIView):
 
 class GetBookingsFromDateRange(APIView):
     authentication_classes = []
-    def get(self, request):
+    def get(self, request, bookid, startdate, enddate):
+        """ pprint.pprint(request.data)
         bookid = request.data["bookable_id"]
         startdate = request.data["startdate"]
-        enddate = request.data["enddate"]
+        enddate = request.data["enddate"] """
         bookable_object = BookableObject.objects.get(objectId=bookid)
         bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
         serializer = BookedTimeSerializer(bookings, many=True)
-
+        format = "%Y-%m-%d"
+        print(startdate)
+        sdate = datetime.strptime(startdate, format)
+        edate = datetime.strptime(enddate, format)
         print(bookable_object)
-        return Response(serializer.data)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object),sdate, edate)
+        return Response(time_slot_array)
 
     
 class GetBookingsFromObject(APIView):
@@ -214,14 +224,14 @@ class GetBookableObject(APIView):
         return Response(serializer.data)
     
 class CreateBookingAPIVIEW(APIView):
-    permission_classes= []
-    def post(self,request,object_pk) : 
+    permission_classes= [IsAuthenticated]
+    def post(self,request) : 
         request.data["booked_by"] = self.request.user.id
-        request.data["booking_object"] = object_pk
         serializer = BookedTimeSerializer(data=request.data)
         if serializer.is_valid():
-            return checkBooking(serializer, object_pk)
-            #serializer.save()
+            #return checkBooking(serializer, object_pk)
+            serializer.save()
+            return Response("Bokar")
         return Response("An error occured, this time might not be available")
 
 class checkValidationAPIVIEW(APIView):
@@ -283,26 +293,9 @@ class GetImage(APIView):
     permission_classes = []
     def get(self, request, pk):
         image = Association.objects.get(join_key=pk).profile_image
-        
         return HttpResponse(image, content_type="image/png")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -338,3 +331,73 @@ def calculateTimeDifference(t1, t2):
     
     print("CALCULATE: "+t1)
     return int(t2[0:2]) - int(t1[0:2])
+
+def populateTimeSlots(booked_times, bookable_object, sdate, edate):
+    time_slot_dict = {}
+    format = "%Y-%m-%d"
+    #print(sdate)
+    date_array = pandas.date_range(sdate,edate,freq='d')
+    for date in date_array:
+    
+        currentdate = datetime.strftime(date, format)
+        time_slot_dict[currentdate] = createTimeSlots(bookable_object)
+    
+    #pprint.pprint(time_slot_dict)
+    #pprint.pprint(booked_times)
+    for booking in booked_times:
+        for slot in time_slot_dict[booking["date"]]:
+            if int(booking["start_time"][0:2]) == slot["id"]:
+                slot["booked"] = True
+                slot["booked_by"] = booking["booked_by"]
+    return time_slot_dict
+
+
+def createTimeSlots(bookable_object):
+    #print(bookable_object["timeSlotEndTime"].value)
+    start_time = int(bookable_object["timeSlotStartTime"].value[0:2])
+    end_time = int(bookable_object["timeSlotEndTime"].value[0:2])
+    #print(startTime)
+    slot_length = int(bookable_object["timeSlotLength"].value)
+    loop_range = int((24-slot_length)/slot_length)
+    #print("SlotLength: "+str(slot_length))
+    #print("loopRange "+ str(loop_range))
+    time_slot_array = []
+
+    if(start_time == end_time):
+        index = start_time % slot_length
+        end_range = index+24
+
+    elif end_time < start_time:
+        index = start_time
+        end_range = end_time + 24
+
+    else: 
+        index = start_time
+        end_range = end_time
+
+    while index < end_range:
+        next_index = (index+slot_length) % 24
+        
+        if (index+slot_length) <= end_range:
+            title_temp = prettyDate(index % 24, next_index)
+            time_slot_array.append({ "id": index % 24, "title": title_temp, "booked": False, "booked_by": "" })
+            #print(title_temp)
+        """  timeSlotArray.append({"id": index, "title": titleTemp, "booked": False}) """
+        index = index + slot_length
+    return time_slot_array
+
+    
+def prettyDate(i1, i2):
+    if(i1 == 24):
+        i1 = 0
+    if(i2 == 24):
+        i2 = 0
+    if len(str(i1)) == 1:
+        t1 = "0" + str(i1) + ":00"
+    else:
+        t1 = str(i1) + ":00"
+    if len(str(i2)) == 1:
+        t2 = "0" + str(i2) + ":00"
+    else:
+        t2 = str(i2) + ":00"
+    return t1 + " - " + t2
