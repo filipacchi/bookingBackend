@@ -20,20 +20,33 @@ import base64
 import math
 import pprint
 from datetime import datetime, timedelta
+from .forms import UpdateAssociationImageForm
+import os
+from django.conf import settings
+
+def save_image(file):
+    filename = file.name
+    path = os.path.join(settings.MEDIA_ROOT, 'images', filename)
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
 
 
 class UpdateAssociationImage(APIView):
     permission_classes = []
 
     def put(self, request, pk):
-        print(request.data)
         association = get_object_or_404(Association, pk=pk)
-        serializer = AssociationSerializer(association, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+        form = UpdateAssociationImageForm(request.data, instance=association)
+        if form.is_valid():
+            save_image(request.FILES['profile_image'])
+            form.save(commit=False)
+            association.profile_image = request.FILES['profile_image']
+            association.save()
+            return Response(status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AddBookableObject(APIView):
     permission_classes = []
@@ -291,7 +304,7 @@ class UserJoinAssociation(APIView):
 class GetImage(APIView):
     permission_classes = []
     def get(self, request, pk):
-        image = Association.objects.get(join_key=pk).profile_image
+        image = Association.objects.get(pk=pk).profile_image
         return HttpResponse(image, content_type="image/png")
 
 
