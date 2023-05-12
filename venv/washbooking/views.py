@@ -20,14 +20,13 @@ import base64
 import math
 import pprint
 from datetime import datetime, timedelta
-import pandas
 
 
-    
 class UpdateAssociationImage(APIView):
     permission_classes = []
 
     def put(self, request, pk):
+        print(request.data)
         association = get_object_or_404(Association, pk=pk)
         serializer = AssociationSerializer(association, data=request.data)
         if serializer.is_valid():
