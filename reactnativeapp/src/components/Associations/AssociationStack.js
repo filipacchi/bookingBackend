@@ -22,18 +22,18 @@ function AssociationStack() {
       }}>
         {state.isAssociation ? (
         <Stack.Group>
-        <Stack.Screen name="Admin" component={AdminStart}/>
-        <Stack.Screen name="AssociationInformation" component={AssociationInformation}/>
-        <Stack.Screen name="AddBookableObject" component={AddBookableObject}/>
-        <Stack.Screen name="EditBookableObject" component={EditBookableObject}/>
+          <Stack.Screen name="Admin" component={AdminStart}/>
+          <Stack.Screen name="AssociationInformation" component={AssociationInformation}/>
+          <Stack.Screen name="AddBookableObject" component={AddBookableObject}/>
+          <Stack.Screen name="EditBookableObject" component={EditBookableObject}/>
         </Stack.Group>
         ):
         ( 
         <Stack.Group>
-        <Stack.Screen name="Associations" component={Associations}/>
-        <Stack.Screen name="BookablesView" component={BookablesView} />
-        <Stack.Screen name="BookableObject" component={BookableObject} />
-        <Stack.Screen name="BookedObjectSwiper" component={BookedObjectSwiper} />
+          <Stack.Screen name="Associations" component={Associations}/>
+          <Stack.Screen name="BookablesView" component={BookablesView} />
+          <Stack.Screen name="BookableObject" component={BookableObject} />
+          <Stack.Screen name="BookedObjectSwiper" component={BookedObjectSwiper} />
         </Stack.Group>
         )}
     </Stack.Navigator>
