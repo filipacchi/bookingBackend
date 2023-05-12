@@ -96,26 +96,23 @@ WSGI_APPLICATION = 'bookingproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-""" DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-} """
+}
 
-print(os.environ.get("password"))
-print(os.environ.get("host"))
-
-DATABASES = {  
+""" DATABASES = {  
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
         'NAME': 'book_booking',  
         'USER': 'book_django',  
-        'PASSWORD': '',  
-        'HOST': '',  
+        'PASSWORD': 'klm12345',  
+        'HOST': 'bookease.se',  
         'PORT': '3306',  
     }  
-}  
+}   """
 
 
 # Password validation
