@@ -28,4 +28,4 @@ urlpatterns = [
     path('association/get/<int:pk>', GetImage.as_view(), name="get_image"),
     path('association/image/<int:pk>/update', UpdateAssociationImage.as_view(), name="update_image")
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

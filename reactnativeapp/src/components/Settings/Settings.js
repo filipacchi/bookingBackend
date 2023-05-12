@@ -54,7 +54,7 @@ export default function Settings() {
 
     React.useEffect(() => {
         const getImage = async () => {
-            axios.get('association/get/111111', { responseType: "arraybuffer" }
+            axios.get('association/get/1', { responseType: "arraybuffer" }
             )
                 .then(response => {
                     base64string = base64.encode(String.fromCharCode(...new Uint8Array(response.data)))
