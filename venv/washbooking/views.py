@@ -166,13 +166,13 @@ class GetUserBookingAPIVIEW(APIView):
                     """ behöver troligen inte skicka key """
                     my_bookings.append(
                     {
-                        """ behöver troligen inte skicka key """
                     "bookingObjectKey": booked_time["booking_object"],
                     "bookingObject": object["objectName"],
                     "date": booked_time["date"],
                     "startTime": booked_time["start_time"][:-3],
                     "endTime": booked_time["end_time"][:-3],
                     "association": association["name"],
+                    "opened": False
                     })
 
         return Response(my_bookings)
@@ -245,6 +245,14 @@ class CreateBookingAPIVIEW(APIView):
             serializer.save()
             return Response("Bokar")
         return Response("An error occured, this time might not be available")
+    
+class DeleteBookingAPIVIEW(APIView):
+    permission_classes= [IsAuthenticated]
+    def delete(self,request) : 
+        pprint.pprint(request.data)
+        booking = BookedTime.objects.filter(start_time=request.data["start_time"], end_time=request.data["end_time"], date=request.data["date"], booking_object=request.data["booking_object"])
+        booking.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class checkValidationAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]
