@@ -90,47 +90,7 @@ export default function Schedule() {
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles1.text}></Text>
-
-        {/* <FlatList
-        data={hardcodeBookedTime}
-        style={Style.expandFlatlist}
-        onRefresh={() => {console.log("från onRefresh i FlatList"); loadData(token)}}
-        refreshing={isRefreshing}
-        renderItem={
-            ({ item }) =>
-                <View style={Style.assoFlatView}>
-                    <View style={Style.assoView}>
-                        <AntDesign name="pushpino" size={28} color={"#222222"} />
-                        <View>
-                            <Text suppressHighlighting={true}
-                                onPress={() => {
-                                    navigation.navigate("BookableObject")
-                                }}
-                                style={Style.assoText}>
-
-                                {item.bookingObject}</Text>
-                            <Text style={{ color: "#767676" }}>{item.association}</Text></View>
-                    </View>
-                    <View style={Style.assoDarkView}>
-                        <FlatList
-                            data={[{startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}, {startTime: "blabla", endTime: "bloblo"}]}
-                            style={{}}
-                            horizontal={true}
-                            renderItem={
-                                ({ item }) => (
-                                    <View style={Style.bookObject}>
-                                        <Text>{item['startTime'] + " - " + item['endTime']}</Text>
-                                    </View>
-                                )
-                            }
-                        >
-
-                        </FlatList>
-                    </View>
-                </View>
-        }
-        ></FlatList> */}
-
+            
         <FlatList
         data={bookedTimes}
         style={Style.expandFlatlist}

@@ -101,21 +101,21 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} 
 
-print(os.environ.get("password"))
-print(os.environ.get("host"))
+# print(os.environ.get("password"))
+# print(os.environ.get("host"))
 
-""" DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'book_booking',  
-        'USER': 'book_django',  
-        'PASSWORD': '',  
-        'HOST': '',  
-        'PORT': '3306',  
-    }  
-}   """
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'book_booking',  
+#         'USER': 'book_django',  
+#         'PASSWORD': '',  
+#         'HOST': '',  
+#         'PORT': '3306',  
+#     }  
+# }  
 
 
 # Password validation

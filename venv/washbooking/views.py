@@ -165,6 +165,13 @@ class GetUserBookingAPIVIEW(APIView):
 
         return Response(my_bookings)
     
+
+class AdminGetBookedTimes(APIView):
+    authentication_classes = [IsAssociation]
+
+    
+
+
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [AllowAny]#[checkGroup]
     def get(self,request):
