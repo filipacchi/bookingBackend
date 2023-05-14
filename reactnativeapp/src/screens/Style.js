@@ -97,9 +97,10 @@ export default StyleSheet.create({
     assoFlatView: {
         backgroundColor: "white",
         borderRadius: 10,
-        borderColor: "#999999",
+        //borderColor: "#999999",
         overflow: 'hidden',
         margin: 10,
+        //borderWidth: 1
     },
     noAssoText: {
         textAlign: "center",
@@ -237,5 +238,31 @@ export default StyleSheet.create({
         height: 50,
         borderRadius: 10,
         justifyContent: "center",
+    },
+    swipeToDelView: {
+        backgroundColor: "red",
+        width: "20%",
+        marginBottom: 10,
+        //marginTop: 10,
+        marginRight: 10,
+        borderRadius: 10,
+    },
+    toSwipe: {
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+    },
+    assoViewInner: {
+        flex: 1,
+        gap: 5
+    },
+    bookedTimesView: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        //borderColor: "#999999",
+        //borderWidth: 1
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10
     }
 });

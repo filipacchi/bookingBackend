@@ -16,53 +16,61 @@ export default function AssociationInformation({ route }) {
   const { state } = React.useContext(AuthContext)
   const [isLoaded, setIsLoaded] = React.useState(false)
 
-  const postPhotoToServer = (img)=>{
-    console.log('Img: ' + img)
+
+  const postPhotoToServer = (formData) => {
+    console.log(state.userToken)
     const config = {
-      headers: { Authorization: `Bearer ${state.userToken}`,
-      'Content-Type': `multipart/form-data`, }
+      headers: {
+        Authorization: `Bearer ${state.userToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
     };
-    
-            const bodyParameters = {
-              profile_image: img
-               }
-        
-               axios.put(`association/image/${associationId}/update`,
-               config,
-               bodyParameters,
-           )
-               .then(response => {
-                 console.log(response.data)
-               })
-               .catch(error => {
-                 console.log(error);
-              });
-    }
+  
+    axios
+      .put(`association/image/${associationId}/update`, formData, config)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
 
 
-   const pickImage = async () => {
-     // No permissions request is necessary for launching the image library
-     let result = await ImagePicker.launchImageLibraryAsync({
-       mediaTypes: ImagePicker.MediaTypeOptions.All,
-       allowsEditing: true,
-       aspect: [4, 3],
-       quality: 1,
-       base64: true
-     });
-     console.log('RESULT: ' + result.assets[0].uri);
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+    console.log('RESULT: ' + result.assets[0].uri);
 
-     if (!result.canceled) {
-       setImage(result.assets[0].uri);
-       console.log('NÅGOT: '+result.assets[0].uri)
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      console.log('NÅGOT: ' + result.assets[0].uri)
 
-       postPhotoToServer(result.base64)
+      const uri = result.uri;
+      const filename = uri.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const type = match ? `image/${match[1]}` : `image`;
+
+      const formData = new FormData();
+      formData.append('profile_image', {
+        uri,
+        name: filename,
+        type: type,
+      });
+
+      postPhotoToServer(formData);
     }
   };
 
   React.useEffect(() => {
     const getImage = async () => {
-        axios.get('association/get/111111', { responseType: "arraybuffer" }
+        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
         )
             .then(response => {
                 base64string = base64.encode(String.fromCharCode(...new Uint8Array(response.data)))
@@ -78,25 +86,27 @@ export default function AssociationInformation({ route }) {
     }
     getImage()
 }, [])
+  
+
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={[styles.header, {alignSelf: 'center'}]}>{ associationName }</Text>
+      <Text style={[styles.header, { alignSelf: 'center' }]}>{associationName}</Text>
       <View style={{ alignSelf: 'center' }}>
-        <TouchableOpacity 
-        style={{ width: 150, height: 150, borderRadius: 75, backgroundColor: '#ccc' }}
-         onPress={pickImage}>
-        {isLoaded && <Image
+        <TouchableOpacity
+          style={{ width: 150, height: 150, borderRadius: 75, backgroundColor: '#ccc' }}
+          onPress={pickImage}>
+          {isLoaded && <Image
             style={{
-              width: '100%', 
-              height: '100%', 
+              width: '100%',
+              height: '100%',
               borderRadius: 75,
               alignSelf: 'center'
-              }}
-                source={{
-                    uri: image,
-                }}
-            />}
+            }}
+            source={{
+              uri: image,
+            }}
+          />}
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>

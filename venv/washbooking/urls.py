@@ -13,6 +13,7 @@ urlpatterns = [
     path('book/get/', GetBookingsAPIVIEW.as_view(), name='get_all_bookings'),
     path('book/user/', GetUserBookingAPIVIEW.as_view(), name='get_user_bookings'),
     path('book/add/', CreateBookingAPIVIEW.as_view(), name='add_booking'),
+    path('book/delete/', DeleteBookingAPIVIEW.as_view(), name='delete_booking'),
     path('book/get/object/<int:object_pk>', GetBookingsFromObject.as_view(), name='get_booking_object'),
     path('book/get/object/<int:object_pk>/<str:date>', GetBookingsFromDay.as_view(), name='get_booking_object'),
     path('validate', checkValidationAPIVIEW.as_view(), name='check_validation'),
@@ -28,4 +29,4 @@ urlpatterns = [
     path('association/get/<int:pk>', GetImage.as_view(), name="get_image"),
     path('association/image/<int:pk>/update', UpdateAssociationImage.as_view(), name="update_image")
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
