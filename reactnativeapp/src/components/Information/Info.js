@@ -2,7 +2,7 @@
 import { StyleSheet, View, Text, Pressable } from "react-native"
 import React from 'react';
 
-export default function Schedule() {
+export default function Info() {
 
 
 

@@ -180,7 +180,7 @@ class GetUserBookingAPIVIEW(APIView):
     
 
 class AdminGetBookedTimes(APIView):
-    authentication_classes = [IsAssociation]
+    authentication_classes = [Association]
 
     
 

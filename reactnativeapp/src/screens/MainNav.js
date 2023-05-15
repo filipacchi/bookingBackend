@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AssociationStack from "../components/Associations/AssociationStack";
 import Settings from "../components/Settings/Settings";
-import Schedule from "../components/Schedule/Schedule"
+import ScheduleStack from "../components/Schedule/ScheduleStack"
 import Info from "..//components/Information/Info"
 import { TabRouter } from "@react-navigation/native";
 import { AntDesign } from '@expo/vector-icons';
@@ -49,7 +49,7 @@ export default function MainNav() {
                     <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />
                 )
             }} />
-            <Tab.Screen name="Booked Times" component={Schedule} options={{
+            <Tab.Screen name="Booked Times" component={ScheduleStack} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="calendar" size={28} color={color} />
                 )
