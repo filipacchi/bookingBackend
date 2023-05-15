@@ -28,7 +28,7 @@ class BookingSerializer(serializers.ModelSerializer):
 class AssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model=Association
-        fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id', 'region', 'profile_image')
+        fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id', 'region', 'profile_image', 'join_key')
 
 class BookedTimeSerializer(serializers.ModelSerializer): 
     class Meta:

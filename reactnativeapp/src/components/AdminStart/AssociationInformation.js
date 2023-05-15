@@ -11,7 +11,7 @@ import base64 from 'react-native-base64'
 import FormData from 'form-data'
 
 export default function AssociationInformation({ route }) {
-  const { associationId, associationName } = route.params
+  const { associationId, associationName, associationKey } = route.params
   const [image, setImage] = useState(null);
   const { state } = React.useContext(AuthContext)
   const [isLoaded, setIsLoaded] = React.useState(false)
@@ -131,7 +131,7 @@ export default function AssociationInformation({ route }) {
       <ScrollView style={styles.container}>
         <View style={styles.settingContainer}>
           <MaterialIcons name="vpn-key" size={24} color="black" />
-          <Text style={styles.objectName}>  Key</Text>
+          <Text style={styles.objectName}>Key: <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
         </View>
         <View style={styles.settingContainer}>
           <MaterialCommunityIcons name="account" size={24} color="black" />
