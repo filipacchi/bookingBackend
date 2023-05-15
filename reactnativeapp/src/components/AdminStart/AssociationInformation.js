@@ -73,7 +73,26 @@ export default function AssociationInformation({ route }) {
         axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
         )
             .then(response => {
-                base64string = base64.encode(String.fromCharCode(...new Uint8Array(response.data)))
+              let uintArray = new Uint8Array(response.data);
+        
+              let chunkSize = 65536; // Number of elements per chunk
+              let chunks = Math.ceil(uintArray.length / chunkSize);
+        
+              let chunkArray = [];
+               for (let i = 0; i < chunks; i++) {
+                 let start = i * chunkSize;
+                 let end = start + chunkSize;
+                 let chunk = Array.from(uintArray.slice(start, end));
+                 chunkArray.push(chunk);
+               }
+        
+               let base64Chunks = chunkArray.map((chunk) =>
+               base64.encode(String.fromCharCode(...chunk))
+               );
+               let base64string = base64Chunks.join('');
+        
+
+              //base64string = base64.encode(String.fromCharCode(...uintArray))
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
                 setImage(url)
