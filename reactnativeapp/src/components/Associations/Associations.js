@@ -99,24 +99,6 @@ export default function Associations() {
         }
     )
 
-    const bo = [
-        {
-            name: "BRF Rosen",
-            region: "Uppsala",
-            id: 1
-        },
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 2
-        },
-        {
-            name: "BRF Torsgården",
-            region: "Uppsala",
-            id: 3
-        },
-    ];
-
     const loadData = (token) => {
         async function getUserAssociation(token) {
             console.log("Inuti getUser: " + token)

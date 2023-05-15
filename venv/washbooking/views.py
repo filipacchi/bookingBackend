@@ -24,15 +24,27 @@ from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
 import pandas
+from PIL import Image
+import io
+
 
 def save_image(file):
     filename = file.name
     path = os.path.join(settings.MEDIA_ROOT, 'images', filename)
-    with open(path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
 
+    image = Image.open(file)
+    quality = 70
 
+    save_options = {
+        'quality': quality,
+    }
+    image.save(path, **save_options)
+
+    # with open(path, 'wb+') as destination:
+    #     for chunk in file.chunks():
+    #         destination.write(chunk)
+
+    
 class UpdateAssociationImage(APIView):
     permission_classes = []
 
@@ -178,6 +190,13 @@ class GetUserBookingAPIVIEW(APIView):
 
         return Response(my_bookings)
     
+
+class AdminGetBookedTimes(APIView):
+    authentication_classes = [Association]
+
+    
+
+
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [isAssociation]#[checkGroup]
     def get(self,request):

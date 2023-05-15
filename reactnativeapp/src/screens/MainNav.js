@@ -25,20 +25,20 @@ export default function MainNav() {
 
     return (
         <Tab.Navigator
-            screenOptions={{
-                
-                tabBarActiveTintColor: colorTheme.firstColor,//"#577ac2",
-                tabBarStyle: {
-                    height: 90,
-                    padding: 10
-                },
-                headerStyle: {
-                    backgroundColor: colorTheme.firstColor//"#8AAAE5"
-                },
-                headerTitleStyle: {
-                    color: 'white'
-                  }
-            }}>
+        screenOptions={{
+            
+            tabBarActiveTintColor: colorTheme.firstColor,//"#577ac2",
+            tabBarStyle: {
+                height: 90,
+                padding: 10
+            },
+            headerStyle: {
+                backgroundColor: colorTheme.firstColor//"#8AAAE5"
+            },
+            headerTitleStyle: {
+                color: 'white'
+                }
+        }}>
             <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{
                     tabBarIcon: ({ focused, color }) => (
                         <AntDesign focused={focused} name="home" size={25} color={color} />
