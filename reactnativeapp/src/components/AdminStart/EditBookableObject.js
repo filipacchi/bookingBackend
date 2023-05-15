@@ -1,17 +1,21 @@
 import Style from "../../screens/Style";
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable, Modal } from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { ActivityIndicator } from "react-native-paper";
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../../auth/UserContextProvider";
+import { AntDesign } from '@expo/vector-icons';
 
 export default function EditBookableObject({ route }) {
-  const { objectId, associationName } = route.params
+  const { objectId, associationName, associationId } = route.params
   const [isLoading, setIsLoading] = useState(true)
   const [objectData, setObjectData] = useState();
+  const [objectName, setObjectName] = useState();
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
   const [selectedHoursBookable, setSelectedHoursBookable] = useState();
@@ -20,12 +24,97 @@ export default function EditBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
+  const [EnterModalVisible, setEnterModalVisible] = useState(false)
+  const navigation = useNavigation()
+  const { state } = React.useContext(AuthContext)
+
+  const PopUpModalDeleteObject = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={EnterModalVisible}
+        onRequestClose={() => setEnterModalVisible(false)}>
+
+        <View style={Style.modalWindow}>
+          <View style={Style.modalOuter}>
+            < View style={Style.inputAndCheckMark}>
+              <Text style={{ textAlign: 'center' }}>Are you sure you want to permanently remove this object?</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]}
+                onPress={() => {
+                  removeBookableObject()
+                  navigation.goBack()
+                }}>
+                <Text style={[styles.buttonText, { marginBottom: '3%' }]}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}
+              onPress={() => setEnterModalVisible(false)}>
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+            </View>
+
+            <Pressable
+              style={Style.modalCloseButton}
+              onPress={() => setEnterModalVisible(false)}>
+              <AntDesign name="close" size={24} color="black" />
+            </Pressable>
+          </View>
+        </View>
+      </Modal >
+    )
+  }
+
+  const editBookableObject = async () => {
+    console.log('Assosiation name?: ' + associationName + 'Association id: ' + associationId + 'object id: ' + objectId)
+    const config = {
+      headers: { Authorization: `Bearer ${state.userToken}` }
+    };
+
+    const bodyParameters = {
+      inAssociation: associationId,
+      objectName: objectName,
+      timeSlotLength: selectedHoursBookable,
+      timeSlotStartTime: earliestBookableTime,
+      timeSlotEndTime: latestBookableTime,
+      slotsPerDay: slotsBookablePerDay,
+      slotsPerWeek: slotsBookablePerWeek
+    }
+    axios.put(`association/bookableobject/${objectId}/update`,
+      bodyParameters,
+      config
+    )
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+
+  const removeBookableObject = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${state.userToken}` }
+    };
+
+    axios.delete(`association/bookableobject/${objectId}/delete`, config)
+      .then(response => {
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   async function GetObjectData(objectId) {
     axios.get('object/get/' + objectId)
       .then(response => {
         console.log("OBJECT DATAN HÄR: " + response.data)
         setObjectData(response.data)
+        setObjectName(response.data.objectName)
         setSelectedHoursBookable(response.data.timeSlotLength)
         setEarliestBookableTime(response.data.timeSlotStartTime)
         setLatestBookableTime(response.data.timeSlotEndTime)
@@ -138,9 +227,13 @@ export default function EditBookableObject({ route }) {
 
   return (
     <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
-      <Text style={styles.header}> {associationName} Association name - {objectId.toString()}</Text>
+      <Text style={styles.header}> {associationName} Edit Bookable Object</Text>
       <View style={styles.settingContainer}>
-        <TextInput style={styles.objectName}>{objectData.objectName}</TextInput>
+        <TextInput style={styles.objectName}
+          placeholder={objectName}
+          onChangeText={(objectName) => setObjectName(objectName)}
+          value={objectName}
+        ></TextInput>
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Length per booking</Text>
@@ -229,7 +322,7 @@ export default function EditBookableObject({ route }) {
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per day</Text>
         <SelectList
-        placeholder={slotsBookablePerDay}
+          placeholder={slotsBookablePerDay}
           setSelected={(val) => {
             setSelected(val)
             // this.slotsBookablePerDay = lengthPerBooking[val - 1].value
@@ -241,7 +334,7 @@ export default function EditBookableObject({ route }) {
       <View style={styles.settingContainer}>
         <Text style={styles.settingLabel}>Slots bookable per week</Text>
         <SelectList
-        placeholder={slotsBookablePerWeek}
+          placeholder={slotsBookablePerWeek}
           setSelected={(val) => {
             setSelected(val)
             //this.slotsBookablePerWeek = lengthPerBooking[val - 1].value
@@ -250,12 +343,18 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+        onPress={() => {
+          editBookableObject()
+        }}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={{color:'#bb0a1e', alignSelf:'center', margin: '4%'}}>Remove this object</Text>
+      <TouchableOpacity
+        onPress={() => setEnterModalVisible(true)}
+      >
+        <Text style={{ color: '#bb0a1e', alignSelf: 'center', margin: '4%' }}>Remove this object</Text>
       </TouchableOpacity>
+      <PopUpModalDeleteObject />
     </ScrollView>
   );
 }

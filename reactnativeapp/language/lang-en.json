@@ -3,13 +3,22 @@
     "MyAssociations": "My Associations",
     "ScheduledTimes": "Booked Times",
     "Settings": "Settings",
-    
+    "EnterAssociationKey": "Enter Association Key",
+    "DoYouWantToJoin": "Do you want to join the association:",
+    "TryAgain": "Something went wrong, do you want to try again?",
+    "YouHaveNotJoined": "You have not joined any associations yet, press the button below to join an association",
+
     "CreateAccountPage": "Create Account",
     "Username": "Username",
     "Password": "Password",
+    "PasswordRepeat": "Repeat Password",
     "Email": "E-mail",
     "CreateAccount": "Create Account",
     "Login": "Login",
+    "Firstname": "First Name",
+    "Lastname": "Last Name",
+    "Return": "Return", 
+    "BookTime": "Do you want to book: ",
 
     "BookingPage": "Booking",
     "Date": "Date",
@@ -42,5 +51,8 @@
 
     "AssociationsPage": "My Associations",
     "EnterKey": "Enter Your Key",
-    "AssociationsQMark": "Enter the key that you have received from your association. It consists of 10 characters in the format XXXX-XXXXX"
+    "AssociationsQMark": "Enter the key that you have received from your association. It consists of 10 characters in the format XXXX-XXXXX",
+    "Yes": "Yes",
+    "No": "No",
+    "Cancel": "Cancel"
 }

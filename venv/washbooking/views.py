@@ -13,7 +13,41 @@ from rest_framework.views import APIView
 from .serializer import *
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
-from datetime import datetime
+from django.shortcuts import get_object_or_404
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import HttpResponse
+import base64
+import math
+import pprint
+from datetime import datetime, timedelta
+from .forms import UpdateAssociationImageForm
+import os
+from django.conf import settings
+import pandas
+
+def save_image(file):
+    filename = file.name
+    path = os.path.join(settings.MEDIA_ROOT, 'images', filename)
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+    
+class UpdateAssociationImage(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        association = get_object_or_404(Association, pk=pk)
+        form = UpdateAssociationImageForm(request.data, instance=association)
+        if form.is_valid():
+            save_image(request.FILES['profile_image'])
+            form.save(commit=False)
+            association.profile_image = request.FILES['profile_image']
+            association.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AddBookableObject(APIView):
     permission_classes = []
@@ -24,6 +58,30 @@ class AddBookableObject(APIView):
             return Response('Added object!')
         else:
             return Response("An error occured, please try again later")
+        
+class UpdateBookableObject(APIView):
+    permission_classes = []
+
+    def put(self, request, pk):
+        bookable_object = get_object_or_404(BookableObject, pk=pk)
+        serializer = AddBookableObjectSerializer(bookable_object, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class DeleteBookableObject(APIView):
+    permission_classes = []
+
+    def delete(self, request, pk):
+        try:
+            bookable_object = BookableObject.objects.get(pk=pk)
+            bookable_object.delete()
+            return Response('Deleted object!')
+        except BookableObject.DoesNotExist:
+            return Response("Object does not exist", status=status.HTTP_404_NOT_FOUND)
+
 
 class RegisterView(APIView):
     authentication_classes = []
@@ -31,8 +89,11 @@ class RegisterView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
-
+        user = UserData.objects.get(id=serializer.data["id"])
+        refresh = RefreshToken.for_user(user)
+        data = {"info": serializer.data, "access_token": str(refresh.access_token), "refresh_token": str(refresh) }
+        return Response(data)
+    
 
 #####
 #Inte min egna kod, ett exempel som vi kan jobba utifrån
@@ -87,8 +148,6 @@ class GetUserBookingAPIVIEW(APIView):
             bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
             bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
 
-            """ vi vill ha tillhörande association också """
-
             for object in bookable_objects: #bookable_objects_db?
                 print("--- Försöker printa object --- ")
                 print(object)
@@ -103,21 +162,29 @@ class GetUserBookingAPIVIEW(APIView):
                 print("booked times: ")
                 print(booked_times)
 
-                for match in booked_times:
-                    print(match)
+                for booked_time in booked_times:
+                    print(booked_time)
+                    """ behöver troligen inte skicka key """
                     my_bookings.append(
                     {
-                    "booking_object": match["booking_object"],
-                    "date": match["date"],
-                    "start_time": match["start_time"],
-                    "end_time": match["end_time"],
+                    "bookingObjectKey": booked_time["booking_object"],
+                    "bookingObject": object["objectName"],
+                    "date": booked_time["date"],
+                    "startTime": booked_time["start_time"][:-3],
+                    "endTime": booked_time["end_time"][:-3],
+                    "association": association["name"],
+                    "opened": False
                     })
-
-        
-        print(my_bookings)
 
         return Response(my_bookings)
     
+
+class AdminGetBookedTimes(APIView):
+    authentication_classes = [IsAssociation]
+
+    
+
+
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [AllowAny]#[checkGroup]
     def get(self,request):
@@ -125,6 +192,25 @@ class GetBookingsAPIVIEW(APIView):
         bookings = BookedTime.objects.all()
         serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
+
+class GetBookingsFromDateRange(APIView):
+    authentication_classes = []
+    def get(self, request, bookid, startdate, enddate):
+        """ pprint.pprint(request.data)
+        bookid = request.data["bookable_id"]
+        startdate = request.data["startdate"]
+        enddate = request.data["enddate"] """
+        bookable_object = BookableObject.objects.get(objectId=bookid)
+        bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
+        serializer = BookedTimeSerializer(bookings, many=True)
+        format = "%Y-%m-%d"
+        print(startdate)
+        sdate = datetime.strptime(startdate, format)
+        edate = datetime.strptime(enddate, format)
+        print(bookable_object)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object),sdate, edate)
+        return Response(time_slot_array)
+
     
 class GetBookingsFromObject(APIView):
     permission_classes=[]
@@ -158,15 +244,23 @@ class GetBookableObject(APIView):
         return Response(serializer.data)
     
 class CreateBookingAPIVIEW(APIView):
-    permission_classes= []
-    def post(self,request,object_pk) : 
+    permission_classes= [IsAuthenticated]
+    def post(self,request) : 
         request.data["booked_by"] = self.request.user.id
-        request.data["booking_object"] = object_pk
         serializer = BookedTimeSerializer(data=request.data)
         if serializer.is_valid():
-            return checkBooking(serializer, object_pk)
-            #serializer.save()
+            #return checkBooking(serializer, object_pk)
+            serializer.save()
+            return Response("Bokar")
         return Response("An error occured, this time might not be available")
+    
+class DeleteBookingAPIVIEW(APIView):
+    permission_classes= [IsAuthenticated]
+    def delete(self,request) : 
+        pprint.pprint(request.data)
+        booking = BookedTime.objects.filter(start_time=request.data["start_time"], end_time=request.data["end_time"], date=request.data["date"], booking_object=request.data["booking_object"])
+        booking.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class checkValidationAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]
@@ -223,21 +317,13 @@ class UserJoinAssociation(APIView):
         person.save()
         return Response(join_key)
 
+class GetImage(APIView):
+    permission_classes = []
+    def get(self, request, pk):
+        image = Association.objects.get(pk=pk).profile_image
+        return HttpResponse(image, content_type="image/png")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -273,3 +359,73 @@ def calculateTimeDifference(t1, t2):
     
     print("CALCULATE: "+t1)
     return int(t2[0:2]) - int(t1[0:2])
+
+def populateTimeSlots(booked_times, bookable_object, sdate, edate):
+    time_slot_dict = {}
+    format = "%Y-%m-%d"
+    #print(sdate)
+    date_array = pandas.date_range(sdate,edate,freq='d')
+    for date in date_array:
+    
+        currentdate = datetime.strftime(date, format)
+        time_slot_dict[currentdate] = createTimeSlots(bookable_object)
+    
+    #pprint.pprint(time_slot_dict)
+    #pprint.pprint(booked_times)
+    for booking in booked_times:
+        for slot in time_slot_dict[booking["date"]]:
+            if int(booking["start_time"][0:2]) == slot["id"]:
+                slot["booked"] = True
+                slot["booked_by"] = booking["booked_by"]
+    return time_slot_dict
+
+
+def createTimeSlots(bookable_object):
+    #print(bookable_object["timeSlotEndTime"].value)
+    start_time = int(bookable_object["timeSlotStartTime"].value[0:2])
+    end_time = int(bookable_object["timeSlotEndTime"].value[0:2])
+    #print(startTime)
+    slot_length = int(bookable_object["timeSlotLength"].value)
+    loop_range = int((24-slot_length)/slot_length)
+    #print("SlotLength: "+str(slot_length))
+    #print("loopRange "+ str(loop_range))
+    time_slot_array = []
+
+    if(start_time == end_time):
+        index = start_time % slot_length
+        end_range = index+24
+
+    elif end_time < start_time:
+        index = start_time
+        end_range = end_time + 24
+
+    else: 
+        index = start_time
+        end_range = end_time
+
+    while index < end_range:
+        next_index = (index+slot_length) % 24
+        
+        if (index+slot_length) <= end_range:
+            title_temp = prettyDate(index % 24, next_index)
+            time_slot_array.append({ "id": index % 24, "title": title_temp, "booked": False, "booked_by": "" })
+            #print(title_temp)
+        """  timeSlotArray.append({"id": index, "title": titleTemp, "booked": False}) """
+        index = index + slot_length
+    return time_slot_array
+
+    
+def prettyDate(i1, i2):
+    if(i1 == 24):
+        i1 = 0
+    if(i2 == 24):
+        i2 = 0
+    if len(str(i1)) == 1:
+        t1 = "0" + str(i1) + ":00"
+    else:
+        t1 = str(i1) + ":00"
+    if len(str(i2)) == 1:
+        t2 = "0" + str(i2) + ":00"
+    else:
+        t2 = str(i2) + ":00"
+    return t1 + " - " + t2

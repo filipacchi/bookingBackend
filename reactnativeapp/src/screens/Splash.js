@@ -6,10 +6,12 @@ import { ActivityIndicator } from "react-native-paper";
 import { Svg } from "react-native-svg";
 import Logo from "../components/assets/Logo";
 import { StyleSheet, Animated } from "react-native"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useContext } from "react"
+import { AuthContext } from "../../auth/UserContextProvider";
 export default function Splash({ setLoadingState }) {
     const opacityAnimation = useRef(new Animated.Value(0)).current;
     const opacityStyle = { opacity: opacityAnimation, marginTop: "50%" };
+    const {colorTheme} = useContext(AuthContext)
     const animateElement = () => {
 
         Animated.timing(opacityAnimation, {
@@ -31,7 +33,7 @@ export default function Splash({ setLoadingState }) {
         animateElement()
     }, [])
     return (
-        <LinearGradient /* colors={["#53d5d5", "#2f9d9d"]} */ /* colors={["#6ea1ff", "#4d70b3"]} */   /* colors={["#FE4384", "#FFE681" ]} */      colors={["#8AAAE5", "#bad2ff"]} start={{ x: 0, y: 0.7 }} style={{ flex: 1, alignItems: 'center' }}>
+        <LinearGradient   /* colors={["#53d5d5", "#2f9d9d"]} */  colors={[colorTheme.firstColor, colorTheme.secondColor]}          /* colors={["#FE4384", "#FFE681" ]} */       /* colors={["#262626", "#575757"]} */        /* start={{ x: 0, y: 0.7 }} */  style={{ flex: 1, alignItems: 'center' }}>
             <Animated.View style={opacityStyle}>
             <Logo/>
             </Animated.View>

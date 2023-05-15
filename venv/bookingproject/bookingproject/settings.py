@@ -15,6 +15,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 #Here we go again MF
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -95,12 +96,38 @@ WSGI_APPLICATION = 'bookingproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+} 
+
+# print(os.environ.get("password"))
+# print(os.environ.get("host"))
+
+# DATABASES = {  
+#     'default': {  
+#         'ENGINE': 'django.db.backends.mysql',  
+#         'NAME': 'book_booking',  
+#         'USER': 'book_django',  
+#         'PASSWORD': '',  
+#         'HOST': '',  
+#         'PORT': '3306',  
+#     }  
+# }  
+
+""" DATABASES = {  
+    'default': {  
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'book_booking',  
+        'USER': 'book_django',  
+        'PASSWORD': 'klm12345',  
+        'HOST': 'bookease.se',  
+        'PORT': '3306',  
+    }  
+}   """
 
 
 # Password validation
@@ -145,3 +172,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'washbooking.UserData'
+
+MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = '/media/'

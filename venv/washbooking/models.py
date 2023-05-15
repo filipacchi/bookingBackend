@@ -8,6 +8,10 @@ from django.dispatch import receiver
 from django.core.validators import RegexValidator
 import uuid 
 
+# lets us explicitly set upload path and filename
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
 def randomHex():
     randomHex = uuid.uuid4().hex[:1]
     return randomHex
@@ -45,6 +49,7 @@ class Association(models.Model):
     # postalcode =  models.CharField(max_length=200, blank=False)
     coordinateX = models.FloatField(max_length=200, blank=False)
     coordinateY = models.FloatField(max_length=200, blank=False)
+    profile_image = models.ImageField(upload_to=upload_to, blank=True, null=True) 
 
     def __str__(self):
         return self.name
@@ -52,21 +57,23 @@ class Association(models.Model):
 class UserData(AbstractUser):
 
     username = None
-    name = models.CharField(max_length=100, unique=True)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_association = models.BooleanField(default=False)
     
     objects = UserManager()
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['first_name']
 
     def __str__(self):
-        return self.name
+        return self.first_name + " " + self.last_name
 
 class Booking(models.Model):
     id = models.AutoField(primary_key=True)
@@ -106,7 +113,7 @@ class Person(models.Model):
     #assocation = models.ForeignKey(Association,blank=True, null=True,on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.name
+        return self.user.first_name + " " +self.user.last_name
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -117,11 +124,14 @@ def update_profile_signal(sender, instance, created, **kwargs):
 
 class BookedTime(models.Model):
 
-    booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, null=True)
-    booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, null=True)
-    date = models.DateField(help_text="YYYY-MM-DD", null=True)
-    start_time = models.TimeField(help_text="HH:MM:SS", null=True)
-    end_time = models.TimeField(help_text="HH:MM:SS", null=True)
+    booking_object = models.ForeignKey(BookableObject, on_delete=models.CASCADE, blank=False)
+    booked_by = models.ForeignKey(Person, on_delete=models.CASCADE, blank=False)
+    date = models.DateField(help_text="YYYY-MM-DD", blank=False)
+    start_time = models.TimeField(help_text="HH:MM:SS", blank=False)
+    end_time = models.TimeField(help_text="HH:MM:SS", blank=False)
+
+    class Meta:
+        unique_together = ('date', 'start_time', 'end_time')
 
     def __str__(self):
         return str(self.booking_object.objectName + " "+ str(self.start_time)+ " - " +str(self.end_time))

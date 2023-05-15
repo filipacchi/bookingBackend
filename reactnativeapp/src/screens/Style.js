@@ -26,12 +26,15 @@ export default StyleSheet.create({
         fontSize: 16,
     },
     button: {
+        flex: 1,
         backgroundColor: '#53d5d5',
         borderRadius: 50,
         padding: 10,
         width: '60%',
         alignSelf: 'center',
-        marginTop: '2%'
+        marginTop: '2%',
+        marginLeft: '2%',
+        marginRight: '2%'
     },
     buttonText: {
         fontSize: 24,
@@ -94,9 +97,10 @@ export default StyleSheet.create({
     assoFlatView: {
         backgroundColor: "white",
         borderRadius: 10,
-        borderColor: "#999999",
+        //borderColor: "#999999",
         overflow: 'hidden',
         margin: 10,
+        //borderWidth: 1
     },
     noAssoText: {
         textAlign: "center",
@@ -127,6 +131,7 @@ export default StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
+        paddingTop: '7%',
     },
     modalInner: {
         position: "absolute",
@@ -154,7 +159,7 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     inputAndCheckMark: {
-
+        marginTop: 10,
         flexDirection: "row",
         gap: 10,
     },
@@ -177,8 +182,11 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     modalInput: {
-        paddingLeft: 10,
-        paddingRight: 10,
+        minWidth: 120,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 20,
+        paddingRight: 20,
         borderRadius: 10,
         backgroundColor: "#d9d9d9",
     },
@@ -224,4 +232,37 @@ export default StyleSheet.create({
         gap: 10,
         backgroundColor: "#22992e"
     },
+    inputCredentials: {
+        overflow: "hidden",
+        width: "70%",
+        height: 50,
+        borderRadius: 10,
+        justifyContent: "center",
+    },
+    swipeToDelView: {
+        backgroundColor: "red",
+        width: "20%",
+        marginBottom: 10,
+        //marginTop: 10,
+        marginRight: 10,
+        borderRadius: 10,
+    },
+    toSwipe: {
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+    },
+    assoViewInner: {
+        flex: 1,
+        gap: 5
+    },
+    bookedTimesView: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        //borderColor: "#999999",
+        //borderWidth: 1
+        marginBottom: 10,
+        marginLeft: 10,
+        marginRight: 10
+    }
 });

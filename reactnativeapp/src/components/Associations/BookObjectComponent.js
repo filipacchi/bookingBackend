@@ -8,10 +8,8 @@ import WeekCalendar from "./WeekCalendar";
 import BookablesView from "./BookablesView";
 import Swiper from 'react-native-swiper'
 
-export default function BookObjectComponent({timeSlots}) {
+export default function BookObjectComponent({booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
 
-
-    const [selectedTime, setSelectedTime] = useState("")
 
     return (
         <View style={{ flex: 1 }}>
@@ -19,15 +17,24 @@ export default function BookObjectComponent({timeSlots}) {
                 data={timeSlots}
                 style={{}}
                 renderItem={
-                    ({ item }) =>
-                        <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
-                            <Text suppressHighlighting={true}
-                                onPress={() => {
-                                    if (!item.booked) {
-                                        setSelectedTime(item.id)
-                                    }
-                                }}
-                                style={{ fontSize: 28, padding: 20, backgroundColor: selectedTime == item.id ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>}
+                    ({ item }) => {
+                        if (!item.booked || item.booked_by == user) {
+                            return (
+                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
+                                    <Text suppressHighlighting={true}
+                                        onPress={() => {
+                                            if (!item.booked) {
+                                                setSelectedTime(item.title)
+                                                console.log("TOKEN ÄR: " + user)
+                                                console.log("Bookedbt ÄR: " + item.booked_by)
+                                            }
+                                        }}
+                                        style={{ fontSize: 28, padding: 20, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>
+                            )
+                        }
+
+                    }
+                }
             >
             </FlatList>
         </View>
