@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
+import pandas
 
 def save_image(file):
     filename = file.name
@@ -178,7 +179,7 @@ class GetUserBookingAPIVIEW(APIView):
         return Response(my_bookings)
     
 class GetBookingsAPIVIEW(APIView):
-    permission_classes= [AllowAny]#[checkGroup]
+    permission_classes= [isAssociation]#[checkGroup]
     def get(self,request):
         print(self.request.data)
         bookings = BookedTime.objects.all()
@@ -239,7 +240,15 @@ class CreateBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]
     def post(self,request) : 
         request.data["booked_by"] = self.request.user.id
+        object = BookableObject.objects.get(objectId=request.data["bookable_object"])
+        date_str = request.data["date"]
+        date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
+        pprint.pprint(date_object.weekday())
+        slots_per_day = object.slotsPerDay
+        slots_per_week = object.slotsPerWeek
+        
         serializer = BookedTimeSerializer(data=request.data)
+
         if serializer.is_valid():
             #return checkBooking(serializer, object_pk)
             serializer.save()
@@ -288,7 +297,6 @@ class GetUserAssociationWithBookableObjects(APIView):
         #bookable_objects_serializer = BookableObjectSerializer(bookable_objects, many=True)
         #asso = json.loads(json.dumps(serializer.data))
         #asso['bookobjects'] = json.loads(json.dumps(bookable_objects_serializer.data))
-        print(asso)
         return Response(asso)
 
 class GetJoinAssociation(APIView):
