@@ -1,8 +1,10 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal } from "react-native";
 import LottieView from "lottie-react-native";
+import { SelectList } from 'react-native-dropdown-select-list';
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
+import * as SecureStore from 'expo-secure-store';
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
@@ -15,13 +17,22 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 
 export default function ScheduleAdmin() {
 
+    const { state } = useContext(AuthContext)
+    const [token, setToken] = useState("")
+
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState(moment())
     const [selectedTime, setSelectedTime] = useState()
-    const [loading, setLoading] = useState(false) /* true */
+    const [loading, setLoading] = useState(true) /* true */
+
+    /* Kalle */
+    const [currentAssociation, setCurrentAssociation] = useState("test")
+    const [myAssociations, setMyAssociations] = useState()
+
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
     const [noSwipe, setNoSwipe] = useState(false)
+
     const opacityAnimation = useRef(new Animated.Value(0)).current;
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
@@ -52,15 +63,45 @@ export default function ScheduleAdmin() {
 
 
 
-    const loadData = async (objectId, sdate, edate) => {
-        try {
-            const { data: response } = await axios.get('book/get/object/daterange/' + objectId + "/" + sdate + "/" + edate)
-            return response
+    const loadData = async (token) => {
+        console.log("---- Inuti loadData (ScheduleAdmin.js), token = " + token)
+        
+        async function getUserAssociations(token) {
+            /* console.log(token) */
+
+            axios.get('user/associationsonly/get'
+            )
+                .then(response => {
+                    console.log("response: ")
+                    console.log(response.data)
+                    setMyAssociations(response.data)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
-        catch (error) {
-            console.log(error);
+        async function getAllBookings(token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+
+            axios.get('user/associationsonly/get',
+                config
+            )
+                .then(response => {
+                    console.log("response: ")
+                    console.log(response.data)
+                    setMyAssociations(response.data)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
+
+        getUserAssociations(token)
     }
 
     const loadWeek = async (objectid, startDate) => {
@@ -81,14 +122,14 @@ export default function ScheduleAdmin() {
     }
 
     React.useEffect(() => {
-        //loadData(1, selectedDate)
-        /* if (route.params.id) {
-            loadWeek(route.params.id, selectedDate)
+        const getToken = async () => {
+            let access_token = await SecureStore.getItemAsync('userToken')
+            console.log("ASSO: " + access_token)
+            setToken(access_token)
+            loadData(access_token)
         }
-        if (route.params.token){
-            let decoded = jwt_decode(route.params.token)
-            setUser(decoded["user_id"])
-        } */
+        getToken()
+        loadData(token)
 
     }, [])
 
@@ -180,6 +221,17 @@ export default function ScheduleAdmin() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={ {flex: 1}}>
+                <SelectList 
+                placeholder={currentAssociation}
+                editable={false}
+
+                setSelected={(val) => {
+                    setCurrentAssociation(val)
+                }}
+                data={myAssociations}>
+
+
+                </SelectList>
                 <WeekCalendar 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} />
