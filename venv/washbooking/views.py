@@ -137,7 +137,24 @@ class LogoutUserAPIView(APIView):
         return Response(status=status.HTTP_200_OK)
     #####
 
-class GetUserBookingAPIVIEW(APIView):
+class GetUserAssociationsAPIVIEW(APIView):
+    """ permission_classes = [IsAuthenticated] """#[checkGroup]
+
+    def get(self, request):
+        user = self.request.user
+        person = Person.objects.get(user=user.id) # jag
+        my_associations_db = person.associations.all() # mina associations django-format
+        print(my_associations_db)
+
+        associations_serializer = AssociationSerializer(my_associations_db, many=True)
+        my_associations = json.loads(json.dumps(associations_serializer.data))
+        
+        for association in my_associations:
+            print("association in my_associations: " + association["name"])
+
+        return Response(my_associations)
+
+class GetUserBookingsAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
 
     def get(self, request):
@@ -161,22 +178,12 @@ class GetUserBookingAPIVIEW(APIView):
             bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
 
             for object in bookable_objects: #bookable_objects_db?
-                print("--- Försöker printa object --- ")
-                print(object)
                 booked_times_db = BookedTime.objects.filter(booking_object=object["objectId"], booked_by=person)
-                print("booked_times_db: ")
-                print(booked_times_db)
                 booked_times_serializer = BookedTimeSerializer(booked_times_db, many=True)
-                print("booked_times_serializer: ")
-                print(booked_times_serializer)
                 booked_times = json.loads(json.dumps(booked_times_serializer.data))
-
-                print("booked times: ")
-                print(booked_times)
 
                 for booked_time in booked_times:
                     print(booked_time)
-                    """ behöver troligen inte skicka key """
                     my_bookings.append(
                     {
                     "bookingObjectKey": booked_time["booking_object"],
