@@ -259,7 +259,7 @@ class CreateBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]
     def post(self,request) : 
         request.data["booked_by"] = self.request.user.id
-        object = BookableObject.objects.get(objectId=request.data["bookable_object"])
+        object = BookableObject.objects.get(objectId=request.data["booking_object"])
         date_str = request.data["date"]
         date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
         pprint.pprint(date_object.weekday())

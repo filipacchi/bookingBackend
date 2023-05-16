@@ -21,8 +21,8 @@ export default StyleSheet.create({
         padding: 10,
         marginBottom: 5,
         marginTop: 5
-      },
-      settingLabel: {
+    },
+    settingLabel: {
         fontSize: 16,
     },
     button: {
@@ -198,9 +198,9 @@ export default StyleSheet.create({
     langSwitchBox: {
         right: "15%",
         top: "5%",
-        position: "absolute", 
-        borderRadius: 10, 
-        borderWidth: 2, 
+        position: "absolute",
+        borderRadius: 10,
+        borderWidth: 2,
         borderColor: "white",
         height: 35,
         width: 50,
@@ -214,12 +214,12 @@ export default StyleSheet.create({
     },
     shadowProp: {
         shadowColor: '#171717',
-        shadowOffset: {width: -2, height: 4},
+        shadowOffset: { width: -2, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 3,
-      },
-      pressableBook: {
-        width: "70%",
+    },
+    pressableBook: {
+        flexGrow: 7,
         borderRadius: 10,
         borderColor: "transparent",
         borderStyle: "solid",
@@ -231,6 +231,20 @@ export default StyleSheet.create({
         flexDirection: "row",
         gap: 10,
         backgroundColor: "#22992e"
+    },
+    pressableCancelBook: {
+        flexGrow: 1,
+        borderRadius: 10,
+        borderColor: "transparent",
+        borderStyle: "solid",
+        justifyContent: "center",
+        borderWidth: 2,
+        alignItems: "center",
+        alignSelf: "center",
+        padding: 15,
+        flexDirection: "row",
+        gap: 10,
+        backgroundColor: "#Be2525",
     },
     inputCredentials: {
         overflow: "hidden",
@@ -264,5 +278,11 @@ export default StyleSheet.create({
         marginBottom: 10,
         marginLeft: 10,
         marginRight: 10
+    },
+    viewBookButton: {
+        flexDirection: "row",
+        padding: 20,
+        backgroundColor: "white",
+        gap: 20
     }
 });

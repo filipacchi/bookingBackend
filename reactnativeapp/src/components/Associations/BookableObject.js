@@ -22,6 +22,7 @@ export default function BookableObject({ route }) {
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState(moment())
     const [selectedTime, setSelectedTime] = useState()
+    const [selectedCancelTime, setSelectedCancelTime] = useState()
     const [loading, setLoading] = useState(true)
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
@@ -161,8 +162,8 @@ export default function BookableObject({ route }) {
 
                     <View style={Style.modalOuter}>
                         <View style={{ gap: 10 }}>
-                            <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
-                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
+                            <Text style={{ textAlign: "center" }}>{selectedCancelTime == null ? t("BookTime"): t("CancelBookTime")} </Text>
+                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
                                 <Pressable onPress={() => {bookTime(), setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
                                 <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
@@ -187,7 +188,7 @@ export default function BookableObject({ route }) {
             <View style={{ flex: 1 }}>
                 <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
                 <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    <BookObjectComponent booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
                 </Animated.View>
                 {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
@@ -213,8 +214,9 @@ export default function BookableObject({ route }) {
 
 
                 </Swiper> */}
-                <View style={{ padding: 20 }}>
-                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
+                <View style={Style.viewBookButton}>
+                    <Pressable onPress={() => {if (selectedTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableBook, {opacity: selectedCancelTime == null ? 1 : 0.5}]}><Text style={Style.pressableText}>Boka</Text></Pressable>
+                    <Pressable onPress={() => {if (selectedCancelTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableCancelBook, {opacity: selectedCancelTime == null ? 0.5 : 1}]}><Text style={Style.pressableText}>Avboka</Text></Pressable>
                 </View>
                 <PopUpModalConfirm />
             </View>

@@ -44,11 +44,11 @@ export default function MainNav() {
                         <AntDesign focused={focused} name="home" size={25} color={color} />
                     )
                 }} />
-            <Tab.Screen name="Info" component={NavButtons} options={{
+           {/*  <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />
                 )
-            }} />
+            }} /> */}
             <Tab.Screen name="Booked Times" component={Schedule} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="calendar" size={28} color={color} />
