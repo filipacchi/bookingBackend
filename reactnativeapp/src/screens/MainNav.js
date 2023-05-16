@@ -50,11 +50,9 @@ export default function MainNav() {
                 )
 <<<<<<< HEAD
             }} /> */}
-            <Tab.Screen name="Booked Times" component={Schedule} options={{
-=======
-            }} />
+    
             <Tab.Screen name="Booked Times" component={ScheduleStack} options={{
->>>>>>> d7e405a1486777818ccd38599bcd632f6fcc5545
+
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="calendar" size={28} color={color} />
                 )
