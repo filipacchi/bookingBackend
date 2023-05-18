@@ -12,6 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import { ActivityIndicator } from "react-native-paper";
+import base64 from 'react-native-base64'
+
 
 export default function Associations() {
     const navigation = useNavigation()
@@ -36,10 +38,22 @@ export default function Associations() {
                 .then(response => {
                     console.log(response.data)
                     setAssociation(response.data)
+                    getImage(response.data[0].id)
+                })
+                .catch(error => {
+                    console.log(error);
+                }).finally(() => setIsLoading(false), setIsRefreshing(false))
+        }
+        getUserAssociation()
+    }
 
-                    let uintArray = new Uint8Array(response.data[0].profile_image);
+    const getImage = async (associationId) => {
+        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        )
+            .then(response => {
+              let uintArray = new Uint8Array(response.data);
         
-              let chunkSize = 65536; // Number of elements per chunk
+              let chunkSize = 65536; 
               let chunks = Math.ceil(uintArray.length / chunkSize);
         
               let chunkArray = [];
@@ -60,12 +74,12 @@ export default function Associations() {
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
                 setImage(url)
-                })
-                .catch(error => {
-                    console.log(error);
-                }).finally(() => setIsLoading(false), setIsRefreshing(false), setIsImageLoaded(true))
-        }
-        getUserAssociation()
+                console.log("URL: "+url)
+
+            })
+            .catch(error => {
+                console.log(error);
+            }).finally(()=>setIsImageLoaded(true))
     }
 
     React.useEffect(() => {
@@ -108,8 +122,8 @@ export default function Associations() {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                            <View style={{width: '15%', height: '15%'}}>
-                                            {image ?
+                                            <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                                            {isImageLoaded ?
                                                 (<Image
                                                     style={{
                                                     width: '100%',
