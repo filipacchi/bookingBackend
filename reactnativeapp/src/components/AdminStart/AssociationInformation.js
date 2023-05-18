@@ -75,7 +75,7 @@ export default function AssociationInformation({ route }) {
             .then(response => {
               let uintArray = new Uint8Array(response.data);
         
-              let chunkSize = 65536; // Number of elements per chunk
+              let chunkSize = 65536; 
               let chunks = Math.ceil(uintArray.length / chunkSize);
         
               let chunkArray = [];
