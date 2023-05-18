@@ -9,6 +9,7 @@ import axios from "../../../axios/axios";
 import { AuthContext } from "../../../auth/UserContextProvider";
 import base64 from 'react-native-base64'
 import FormData from 'form-data'
+import { ActivityIndicator } from "react-native-paper";
 
 export default function AssociationInformation({ route }) {
   const { associationId, associationName } = route.params
@@ -113,9 +114,10 @@ export default function AssociationInformation({ route }) {
       <Text style={[styles.header, { alignSelf: 'center' }]}>{associationName}</Text>
       <View style={{ alignSelf: 'center' }}>
         <TouchableOpacity
-          style={{ width: 150, height: 150, borderRadius: 75, backgroundColor: '#ccc' }}
+          style={{ width: 150, height: 150, borderRadius: 75, backgroundColor: '#fff', justifyContent: 'center', alignItems:'center' }}
           onPress={pickImage}>
-          {isLoaded && <Image
+          {isLoaded ?
+            (<Image
             style={{
               width: '100%',
               height: '100%',
@@ -125,7 +127,10 @@ export default function AssociationInformation({ route }) {
             source={{
               uri: image,
             }}
-          />}
+          />):(
+            <ActivityIndicator/>
+          )
+}
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.container}>
