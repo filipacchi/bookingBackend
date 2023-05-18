@@ -8,7 +8,7 @@ import WeekCalendar from "./WeekCalendar";
 import BookablesView from "./BookablesView";
 import Swiper from 'react-native-swiper'
 
-export default function BookObjectComponent({booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
+export default function BookObjectComponent({selectedCancelTime,setSelectedCancelTime,booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
 
 
     return (
@@ -20,16 +20,20 @@ export default function BookObjectComponent({booked, user, selectedDay, timeSlot
                     ({ item }) => {
                         if (!item.booked || item.booked_by == user) {
                             return (
-                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: 10 }}>
+                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: selectedCancelTime == item.title ? 6 : 8 }}>
                                     <Text suppressHighlighting={true}
                                         onPress={() => {
                                             if (!item.booked) {
+                                                setSelectedCancelTime(null)
                                                 setSelectedTime(item.title)
                                                 console.log("TOKEN ÄR: " + user)
                                                 console.log("Bookedbt ÄR: " + item.booked_by)
+                                            } else{
+                                                setSelectedTime(null)
+                                                setSelectedCancelTime(item.title)
                                             }
                                         }}
-                                        style={{ fontSize: 28, padding: 20, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>
+                                        style={{borderColor: "black", borderWidth: selectedCancelTime == item.title ? 2 : 0, borderRadius: 10, fontSize: 28, padding: 20, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>
                             )
                         }
 

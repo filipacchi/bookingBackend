@@ -19,6 +19,7 @@
     "Lastname": "Last Name",
     "Return": "Return", 
     "BookTime": "Do you want to book: ",
+    "CancelBookTime": "Do you want to cancel booking: ",
 
     "BookingPage": "Booking",
     "Date": "Date",

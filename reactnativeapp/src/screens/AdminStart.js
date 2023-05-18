@@ -28,16 +28,9 @@ export default function Associations() {
     // });
     // DETTA REFRECHAR NÄR DU GÅR TBX TILL SIDAN MEN VERKAR SKAPA EN LOOP... INTE BRA!
 
-      const loadData = (token) => {
-        async function getUserAssociation(token) {
-            console.log("Inuti getUser: " + token)
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
+      const loadData = () => {
+        async function getUserAssociation() {
 
-            const bodyParameters = {
-                key: "value"
-            };
             axios.get('user/association/get'
             )
                 .then(response => {
@@ -72,17 +65,11 @@ export default function Associations() {
                     console.log(error);
                 }).finally(() => setIsLoading(false), setIsRefreshing(false), setIsImageLoaded(true))
         }
-        getUserAssociation(token)
+        getUserAssociation()
     }
 
     React.useEffect(() => {
-        const getToken = async () => {
-            let access_token = await SecureStore.getItemAsync('userToken')
-            console.log("ASSO: " + access_token)
-            setToken(access_token)
-            loadData(access_token)
-        }
-        getToken()
+        loadData()
     }, [])
 
     if(isLoading) {
@@ -118,7 +105,7 @@ export default function Associations() {
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
                             <Pressable onPress={() => {
-                                            navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name']})
+                                            navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
                                             <View style={{width: '15%', height: '15%'}}>

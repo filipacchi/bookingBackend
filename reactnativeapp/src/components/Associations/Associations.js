@@ -323,14 +323,9 @@ export default function Associations() {
                                 <View style={Style.assoView}>
                                     <AntDesign name="home" size={28} color={"#222222"} />
                                     <View>
-                                        <Text suppressHighlighting={true}
-                                            onPress={() => {
-                                                navigation.navigate("BookableObject")
-                                            }}
-                                            style={Style.assoText}>
-
-                                            {item.name}</Text>
-                                        <Text style={{ color: "#767676" }}>{item.region}</Text></View>
+                                        <Text suppressHighlighting={true} style={Style.assoText}> {item.name} </Text>
+                                        <Text style={{ color: "#767676" }}> {item.region} </Text>
+                                    </View>
                                 </View>
                                 <View style={Style.assoDarkView}>
                                     <FlatList

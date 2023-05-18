@@ -1,36 +1,41 @@
 import React from "react";
 import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal } from "react-native";
 import LottieView from "lottie-react-native";
+import { SelectList } from 'react-native-dropdown-select-list';
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
+import * as SecureStore from 'expo-secure-store';
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
-import WeekCalendar from "./WeekCalendar";
-import BookablesView from "./BookablesView";
-import Swiper from 'react-native-swiper'
-import BookObjectComponent from "./BookObjectComponent";
+import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
 import Style from "../../screens/Style";
-import { Animated } from "react-native"
+import { Animated } from "react-native";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
 
 
-export default function BookableObject({ route }) {
+export default function ScheduleAdmin() {
 
-    const [timeSlots, setTimeSlots] = useState([])
+    const { state } = useContext(AuthContext)
+    const [token, setToken] = useState("")
+
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState(moment())
     const [selectedTime, setSelectedTime] = useState()
-    const [selectedCancelTime, setSelectedCancelTime] = useState()
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true) /* true */
+
+    /* Kalle */
+    const [currentAssociation, setCurrentAssociation] = useState("test")
+    const [myAssociations, setMyAssociations] = useState()
+
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
     const [noSwipe, setNoSwipe] = useState(false)
+
     const opacityAnimation = useRef(new Animated.Value(0)).current;
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
-    const [bookedSlot, setBookedSlot] = useState([])
     const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
     const { authContext  } = useContext(AuthContext)
     const {t} = authContext
@@ -58,15 +63,45 @@ export default function BookableObject({ route }) {
 
 
 
-    const loadData = async (objectId, sdate, edate) => {
-        try {
-            const { data: response } = await axios.get('book/get/object/daterange/' + objectId + "/" + sdate + "/" + edate)
-            return response
+    const loadData = async (token) => {
+        console.log("---- Inuti loadData (ScheduleAdmin.js), token = " + token)
+        
+        async function getUserAssociations(token) {
+            /* console.log(token) */
+
+            axios.get('user/associationsonly/get'
+            )
+                .then(response => {
+                    console.log("response: ")
+                    console.log(response.data)
+                    setMyAssociations(response.data)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
-        catch (error) {
-            console.log(error);
+        async function getAllBookings(token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            }
+
+            axios.get('user/associationsonly/get',
+                config
+            )
+                .then(response => {
+                    console.log("response: ")
+                    console.log(response.data)
+                    setMyAssociations(response.data)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
+
+        getUserAssociations(token)
     }
 
     const loadWeek = async (objectid, startDate) => {
@@ -87,14 +122,14 @@ export default function BookableObject({ route }) {
     }
 
     React.useEffect(() => {
-        //loadData(1, selectedDate)
-        if (route.params.id) {
-            loadWeek(route.params.id, selectedDate)
+        const getToken = async () => {
+            let access_token = await SecureStore.getItemAsync('userToken')
+            console.log("ASSO: " + access_token)
+            setToken(access_token)
+            loadData(access_token)
         }
-        if(route.params.token){
-            let decoded = jwt_decode(route.params.token)
-            setUser(decoded["user_id"])
-        }
+        getToken()
+        loadData(token)
 
     }, [])
 
@@ -162,8 +197,8 @@ export default function BookableObject({ route }) {
 
                     <View style={Style.modalOuter}>
                         <View style={{ gap: 10 }}>
-                            <Text style={{ textAlign: "center" }}>{selectedCancelTime == null ? t("BookTime"): t("CancelBookTime")} </Text>
-                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text>
+                            <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
+                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
                                 <Pressable onPress={() => {bookTime(), setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
                                 <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
@@ -185,11 +220,24 @@ export default function BookableObject({ route }) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={{ flex: 1 }}>
-                <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
-                <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
-                </Animated.View>
+            <View style={ {flex: 1}}>
+                <SelectList 
+                placeholder={currentAssociation}
+                editable={false}
+
+                setSelected={(val) => {
+                    setCurrentAssociation(val)
+                }}
+                data={myAssociations}>
+
+
+                </SelectList>
+                <WeekCalendar 
+                selectedDay={selectedDay} 
+                setSelectedDay={setSelectedDay} />
+                {/* <Animated.View style={[opacityStyle, { flex: 1 }]}>
+                    { {/* ändra här 
+                </Animated.View> */}
                 {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
                     if (!noSwipe) {
@@ -214,9 +262,8 @@ export default function BookableObject({ route }) {
 
 
                 </Swiper> */}
-                <View style={Style.viewBookButton}>
-                    <Pressable onPress={() => {if (selectedTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableBook, {opacity: selectedCancelTime == null ? 1 : 0.5}]}><Text style={Style.pressableText}>Boka</Text></Pressable>
-                    <Pressable onPress={() => {if (selectedCancelTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableCancelBook, {opacity: selectedCancelTime == null ? 0.5 : 1}]}><Text style={Style.pressableText}>Avboka</Text></Pressable>
+                <View style={{ padding: 20 }}>
+                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
                 </View>
                 <PopUpModalConfirm />
             </View>

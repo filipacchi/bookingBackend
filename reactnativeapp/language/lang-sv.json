@@ -18,7 +18,8 @@
     "Firstname": "Förnamn",
     "Lastname": "Efternamn",
     "Return": "Tillbaka", 
-    "BookTime": "Do you want to book: ",
+    "BookTime": "Vill du boka tiden:  ",
+    "CancelBookTime": "Vill du avboka tiden: ",
 
     "Booking": "Bokning",
     "Date": "Datum",
