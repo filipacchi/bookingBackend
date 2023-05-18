@@ -19,6 +19,8 @@ export default function Associations() {
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
+    const [image, setImage] = useState(null);
+    const [isImageLoaded, setIsImageLoaded] = React.useState(false)
 
     //  this.focusListener = navigation.addListener('focus', () => {
     //      let access_token = SecureStore.getItemAsync('userToken')
@@ -34,10 +36,34 @@ export default function Associations() {
                 .then(response => {
                     console.log(response.data)
                     setAssociation(response.data)
+
+                    let uintArray = new Uint8Array(response.data[0].profile_image);
+        
+              let chunkSize = 65536; // Number of elements per chunk
+              let chunks = Math.ceil(uintArray.length / chunkSize);
+        
+              let chunkArray = [];
+               for (let i = 0; i < chunks; i++) {
+                 let start = i * chunkSize;
+                 let end = start + chunkSize;
+                 let chunk = Array.from(uintArray.slice(start, end));
+                 chunkArray.push(chunk);
+               }
+        
+               let base64Chunks = chunkArray.map((chunk) =>
+               base64.encode(String.fromCharCode(...chunk))
+               );
+               let base64string = base64Chunks.join('');
+        
+
+              //base64string = base64.encode(String.fromCharCode(...uintArray))
+                contentType = response.headers['content-type']
+                url = "data:" + contentType + ";base64," + base64string
+                setImage(url)
                 })
                 .catch(error => {
                     console.log(error);
-                }).finally(() => setIsLoading(false), setIsRefreshing(false))
+                }).finally(() => setIsLoading(false), setIsRefreshing(false), setIsImageLoaded(true))
         }
         getUserAssociation()
     }
@@ -82,7 +108,21 @@ export default function Associations() {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                 <AntDesign name="home" size={28} color={"#222222"} />
+                                            <View style={{width: '15%', height: '15%'}}>
+                                            {image ?
+                                                (<Image
+                                                    style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    borderRadius: 75,
+                                                    alignSelf: 'center'
+                                                    }}
+                                                    source={{
+                                                    uri: image,
+                                                    }}
+                                                />):(
+                                 <AntDesign name="home" size={28} color={"#222222"} />)}
+                                 </View>
                                 <View>
                                     <Text suppressHighlighting={true}
                                         style={Style.assoText}>

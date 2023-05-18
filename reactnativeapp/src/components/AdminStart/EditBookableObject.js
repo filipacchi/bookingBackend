@@ -346,6 +346,7 @@ export default function EditBookableObject({ route }) {
       <TouchableOpacity style={styles.button}
         onPress={() => {
           editBookableObject()
+          navigation.goBack()
         }}>
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
