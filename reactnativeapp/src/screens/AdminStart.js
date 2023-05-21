@@ -35,19 +35,47 @@ export default function Associations() {
 
             axios.get('user/association/get'
             )
-                .then(response => {
-                    console.log(response.data)
-                    setAssociation(response.data)
-                    getImage(response.data[0].id)
-                })
-                .catch(error => {
+                .then(async (response) => {
+                    const updatedData = [];
+                    for (let i = 0; i < response.data.length; i++) {
+                      console.log('INUTI FOR LOOP');
+                      console.log(response.data[i].profile_image);
+                      console.log(response.data[i].id);
+            
+                      let item = response.data[i];
+                      try {
+                        // Call the getImage function and await the result
+                        let profileImage = await getImage(item.id);
+            
+                        // Update the profile_image of the captured data item
+                        item.profile_image = profileImage;
+            
+                        // Debugging: Verify the correct profile_image is set
+                        console.log(item.profile_image);
+                      } catch (error) {
+                        console.log(error);
+                      }
+            
+                      updatedData.push(item);
+                    }
+            
+                    console.log('UTANFÖR FOR LOOP');
+                    // Update the state with the updated data
+                    setAssociation(updatedData);
+                  })
+                  .catch(error => {
                     console.log(error);
-                }).finally(() => setIsLoading(false), setIsRefreshing(false))
-        }
+                  })
+                  .finally(() => {
+                    setIsLoading(false);
+                    setIsRefreshing(false);
+                  });
+              }
         getUserAssociation()
     }
 
     const getImage = async (associationId) => {
+        return new Promise((resolve, reject) => {
         axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
         )
             .then(response => {
@@ -73,13 +101,14 @@ export default function Associations() {
               //base64string = base64.encode(String.fromCharCode(...uintArray))
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
-                setImage(url)
-                console.log("URL: "+url)
-
+                resolve(url);
+                console.log('SÄTTER NY BILD')
             })
             .catch(error => {
                 console.log(error);
+                reject(error);
             }).finally(()=>setIsImageLoaded(true))
+        });
     }
 
     React.useEffect(() => {
@@ -123,7 +152,7 @@ export default function Associations() {
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
                                             <View style={{alignSelf: 'left', width: 45, height: 45}}>
-                                            {isImageLoaded ?
+                                            {item.profile_image != null ?
                                                 (<Image
                                                     style={{
                                                     width: '100%',
@@ -132,7 +161,7 @@ export default function Associations() {
                                                     alignSelf: 'center'
                                                     }}
                                                     source={{
-                                                    uri: image,
+                                                    uri: item.profile_image,
                                                     }}
                                                 />):(
                                  <AntDesign name="home" size={28} color={"#222222"} />)}
