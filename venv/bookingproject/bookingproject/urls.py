@@ -31,5 +31,5 @@ urlpatterns = [
          MyTokenRefreshPairView.as_view(),
          name='token_refresh'),
     path('', include('washbooking.urls')),
-    path("accounts/", include("django.contrib.auth.urls")),
+    path('', include('webapp.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
