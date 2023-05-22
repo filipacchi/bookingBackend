@@ -12,6 +12,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { ActivityIndicator } from "react-native-paper";
+import base64 from 'react-native-base64'
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 
 
@@ -33,71 +34,47 @@ export default function Associations() {
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [joinAssociationName, setJoinAssociationName] = useState("No Association")
     const [isLoading, setIsLoading] = useState(true)
-
+    const [image, setImage] = useState(null);
+    const [isImageLoaded, setIsImageLoaded] = React.useState(false)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
 
+    const getImage = async (associationId) => {
+        return new Promise((resolve, reject) => {
+        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        )
+            .then(response => {
+              let uintArray = new Uint8Array(response.data);
+        
+              let chunkSize = 65536; 
+              let chunks = Math.ceil(uintArray.length / chunkSize);
+        
+              let chunkArray = [];
+               for (let i = 0; i < chunks; i++) {
+                 let start = i * chunkSize;
+                 let end = start + chunkSize;
+                 let chunk = Array.from(uintArray.slice(start, end));
+                 chunkArray.push(chunk);
+               }
+        
+               let base64Chunks = chunkArray.map((chunk) =>
+               base64.encode(String.fromCharCode(...chunk))
+               );
+               let base64string = base64Chunks.join('');
+        
 
-    /* myAssociations */
-    const [AssociationTest, setAssociationTest] = useState([
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 1,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-        },
-        {
-            name: "BRF Rosen",
-            region: "Uppsala",
-            id: 2,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-        },
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 3,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-        },
-        {
-            name: "BRF Gjuke",
-            region: "Uppsala",
-            id: 4,
-            bookobjects: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-        }
-
-    ])
-
-    const [bookableObjects, setBookObjects] = useState(
-        {
-            1: [
-                { name: "Grill 1" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-            2: [
-                { name: "Pingis" },
-                { name: "Bastu" },
-                { name: "Tvättstuga" }
-            ],
-
-        }
-    )
+              //base64string = base64.encode(String.fromCharCode(...uintArray))
+                contentType = response.headers['content-type']
+                url = "data:" + contentType + ";base64," + base64string
+                resolve(url);
+                console.log('SÄTTER NY BILD')
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            }).finally(()=>setIsImageLoaded(true))
+        });
+    }
 
     const loadData = (token) => {
         async function getUserAssociation(token) {
@@ -105,20 +82,47 @@ export default function Associations() {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-
             const bodyParameters = {
                 key: "value"
             };
             axios.get('user/association/get'
             )
-                .then(response => {
-                    console.log(response.data)
-                    setAssociation(response.data)
-                })
-                .catch(error => {
+            .then(async (response) => {
+                const updatedData = [];
+                for (let i = 0; i < response.data.length; i++) {
+                  console.log('INUTI FOR LOOP');
+                  console.log(response.data[i].profile_image);
+                  console.log(response.data[i].id);
+        
+                  let item = response.data[i];
+                  try {
+                    // Call the getImage function and await the result
+                    let profileImage = await getImage(item.id);
+        
+                    // Update the profile_image of the captured data item
+                    item.profile_image = profileImage;
+        
+                    // Debugging: Verify the correct profile_image is set
+                    console.log(item.profile_image);
+                  } catch (error) {
                     console.log(error);
-                }).finally(() => setIsLoading(false), setIsRefreshing(false))
-        }
+                  }
+        
+                  updatedData.push(item);
+                }
+        
+                console.log('UTANFÖR FOR LOOP');
+                // Update the state with the updated data
+                setAssociation(updatedData);
+              })
+              .catch(error => {
+                console.log(error);
+              })
+              .finally(() => {
+                setIsLoading(false);
+                setIsRefreshing(false);
+              });
+          }
         getUserAssociation(token)
     }
 
@@ -318,10 +322,26 @@ export default function Associations() {
                         <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
                     }
                     renderItem={
-                        ({ item }) =>
+                        ({ item }) =>{
+                            //     getImage(item['id']);
+                        return(
                             <View style={[Style.assoFlatView, Style.shadowProp]}>
                                 <View style={Style.assoView}>
-                                    <AntDesign name="home" size={28} color={"#222222"} />
+                                <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                                            {item.profile_image != null ?
+                                                (<Image
+                                                    style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    borderRadius: 75,
+                                                    alignSelf: 'center'
+                                                    }}
+                                                    source={{
+                                                    uri: item.profile_image,
+                                                    }}
+                                                />):(
+                                 <AntDesign name="home" size={28} color={"#222222"} />)}
+                                 </View>
                                     <View>
                                         <Text suppressHighlighting={true} style={Style.assoText}> {item.name} </Text>
                                         <Text style={{ color: "#767676" }}> {item.region} </Text>
@@ -347,7 +367,7 @@ export default function Associations() {
 
                                     </FlatList>
                                 </View>
-                            </View>}
+                            </View>)}}
                 >
                 </FlatList>
             }
@@ -366,7 +386,6 @@ export default function Associations() {
             })}>
                 <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
                 {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
-            
         </View>
     )
 }

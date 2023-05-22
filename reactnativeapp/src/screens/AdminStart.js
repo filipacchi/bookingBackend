@@ -12,6 +12,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import { ActivityIndicator } from "react-native-paper";
+import base64 from 'react-native-base64'
+
 
 export default function Associations() {
     const navigation = useNavigation()
@@ -33,13 +35,53 @@ export default function Associations() {
 
             axios.get('user/association/get'
             )
-                .then(response => {
-                    console.log(response.data)
-                    setAssociation(response.data)
+                .then(async (response) => {
+                    const updatedData = [];
+                    for (let i = 0; i < response.data.length; i++) {
+                      console.log('INUTI FOR LOOP');
+                      console.log(response.data[i].profile_image);
+                      console.log(response.data[i].id);
+            
+                      let item = response.data[i];
+                      try {
+                        // Call the getImage function and await the result
+                        let profileImage = await getImage(item.id);
+            
+                        // Update the profile_image of the captured data item
+                        item.profile_image = profileImage;
+            
+                        // Debugging: Verify the correct profile_image is set
+                        console.log(item.profile_image);
+                      } catch (error) {
+                        console.log(error);
+                      }
+            
+                      updatedData.push(item);
+                    }
+            
+                    console.log('UTANFÖR FOR LOOP');
+                    // Update the state with the updated data
+                    setAssociation(updatedData);
+                  })
+                  .catch(error => {
+                    console.log(error);
+                  })
+                  .finally(() => {
+                    setIsLoading(false);
+                    setIsRefreshing(false);
+                  });
+              }
+        getUserAssociation()
+    }
 
-                    let uintArray = new Uint8Array(response.data[0].profile_image);
+    const getImage = async (associationId) => {
+        return new Promise((resolve, reject) => {
+        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        )
+            .then(response => {
+              let uintArray = new Uint8Array(response.data);
         
-              let chunkSize = 65536; // Number of elements per chunk
+              let chunkSize = 65536; 
               let chunks = Math.ceil(uintArray.length / chunkSize);
         
               let chunkArray = [];
@@ -59,13 +101,14 @@ export default function Associations() {
               //base64string = base64.encode(String.fromCharCode(...uintArray))
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
-                setImage(url)
-                })
-                .catch(error => {
-                    console.log(error);
-                }).finally(() => setIsLoading(false), setIsRefreshing(false), setIsImageLoaded(true))
-        }
-        getUserAssociation()
+                resolve(url);
+                console.log('SÄTTER NY BILD')
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            }).finally(()=>setIsImageLoaded(true))
+        });
     }
 
     React.useEffect(() => {
@@ -108,8 +151,8 @@ export default function Associations() {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                            <View style={{width: '15%', height: '15%'}}>
-                                            {image ?
+                                            <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                                            {item.profile_image != null ?
                                                 (<Image
                                                     style={{
                                                     width: '100%',
@@ -118,7 +161,7 @@ export default function Associations() {
                                                     alignSelf: 'center'
                                                     }}
                                                     source={{
-                                                    uri: image,
+                                                    uri: item.profile_image,
                                                     }}
                                                 />):(
                                  <AntDesign name="home" size={28} color={"#222222"} />)}
