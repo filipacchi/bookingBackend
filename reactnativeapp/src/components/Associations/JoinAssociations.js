@@ -170,7 +170,7 @@ export default function JoinAssociations() {
 
                 <View style={{border: "solid", borderWidth: 4}}>
                     <Text>
-                        {"key match found: " + keyMatchFound}
+                        {t("KeyMatchFound") + keyMatchFound}
                     </Text>
                 </View>
 
@@ -183,14 +183,14 @@ export default function JoinAssociations() {
                     <View style={styles.modalWindow}>
                         <View style={styles.modalOuter}>
                             <View style={styles.modalInner}>
-                                <Text>{"Submit Your Association Key:"}</Text>
+                                <Text>{t("SubmitYourAssociationKey")}</Text>
 
                                 <View style={styles.inputAndCheckMark}>
                                     <TextInput 
                                         value={inputText}
                                         /* style={styles.modalTextInput} */
                                         onPress={() => setIsFocused(true)}
-                                        placeholder={"Enter Association Key"}
+                                        placeholder={t("EnterAssociationKey")}
                                         onChangeText={handleChangeText}>
                                     </TextInput>
                                     <Pressable onPress={ () => {
