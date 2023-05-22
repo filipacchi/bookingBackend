@@ -10,6 +10,8 @@ import Logo from "../components/assets/Logo";
 import Style from "./Style";
 import LoginComp from "./LoginComp";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
+import { Linking } from "react-native";
+import axios from "../../axios/axios";
 
 
 import { useNavigation } from "@react-navigation/native";
@@ -22,6 +24,7 @@ export default function Auth() {
     const [lang, setLanguage] = useState(getLang())
     const [isLoginDisplayed, setIsLoginDisplayed] = React.useState(false);
     const [isRegisterDisplayed, setIsDisplayed] = React.useState(false);
+    const resetUrl = axios.defaults.baseURL + "/accounts/password_reset/"
     function changeLang() {
         console.log("KlickarBenim")
         if (lang == "en") {
@@ -52,6 +55,7 @@ export default function Auth() {
                         {isLoginDisplayed ?
                             <View>
                                 <LoginComp />
+                                <Pressable style={[styles.back]} onPress={() => { Linking.openURL(resetUrl) }}><Text style={[styles.inputText, styles.login]}>{t("ResetPassword")}</Text></Pressable>
                                 <Pressable style={[styles.back]} onPress={() => { setIsLoginDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></Pressable>
                             </View>
                             :
@@ -105,6 +109,7 @@ const styles = StyleSheet.create({
     back: {
         justifyContent: "center",
         alignItems: "center",
+        marginBottom: "5%"
     }
 
 })
