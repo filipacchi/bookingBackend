@@ -24,7 +24,7 @@ export default function Auth() {
     const [lang, setLanguage] = useState(getLang())
     const [isLoginDisplayed, setIsLoginDisplayed] = React.useState(false);
     const [isRegisterDisplayed, setIsDisplayed] = React.useState(false);
-    const resetUrl = axios.defaults.baseURL + "/accounts/password_reset/"
+    const resetUrl = axios.defaults.baseURL + "/accounts/password-reset/"
     function changeLang() {
         console.log("KlickarBenim")
         if (lang == "en") {
