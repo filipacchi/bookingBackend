@@ -263,7 +263,7 @@ export default function ScheduleAdmin() {
 
                 </Swiper> */}
                 <View style={{ padding: 20 }}>
-                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
+                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
                 </View>
                 <PopUpModalConfirm />
             </View>
