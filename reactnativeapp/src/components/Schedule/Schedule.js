@@ -13,6 +13,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
+import base64 from 'react-native-base64'
 
 
 
@@ -56,10 +57,35 @@ export default function Schedule() {
             axios.get('user/bookedtimes/get',
                 config
             )
-                .then(response => {
+                .then(async (response) => {
                     console.log("response: ")
                     console.log(response.data)
-                    setBookedTimes(sortObjectsByDate(response.data))
+                    console.log("response 2: ")
+                    console.log(response.data[0].associationId)
+
+                    const updatedData = [];
+                    for (let i = 0; i < response.data.length; i++) {
+                      console.log('INUTI FOR LOOP');
+                      console.log(response.data[i].profile_image);
+                      console.log(response.data[i]);
+            
+                      let item = response.data[i];
+                      try {
+                        console.log(item.associationId)
+                        let profileImage = await getImage(item.associationId);
+            
+                        item.profile_image = profileImage;
+            
+                        console.log(item.profile_image);
+                      } catch (error) {
+                        console.log(error);
+                      }
+            
+                      updatedData.push(item);
+                    }
+            
+                    console.log('UTANFÖR FOR LOOP');
+                    setBookedTimes(sortObjectsByDate(updatedData))
                     setIsRefreshing(false)
                 })
                 .catch(error => {
@@ -70,6 +96,43 @@ export default function Schedule() {
         console.log(bookedTimes)
         setIsRefreshing(false)
     })
+
+    const getImage = async (associationId) => {
+        return new Promise((resolve, reject) => {
+        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        )
+            .then(response => {
+              let uintArray = new Uint8Array(response.data);
+        
+              let chunkSize = 65536; 
+              let chunks = Math.ceil(uintArray.length / chunkSize);
+        
+              let chunkArray = [];
+               for (let i = 0; i < chunks; i++) {
+                 let start = i * chunkSize;
+                 let end = start + chunkSize;
+                 let chunk = Array.from(uintArray.slice(start, end));
+                 chunkArray.push(chunk);
+               }
+        
+               let base64Chunks = chunkArray.map((chunk) =>
+               base64.encode(String.fromCharCode(...chunk))
+               );
+               let base64string = base64Chunks.join('');
+        
+
+              //base64string = base64.encode(String.fromCharCode(...uintArray))
+                contentType = response.headers['content-type']
+                url = "data:" + contentType + ";base64," + base64string
+                resolve(url);
+                console.log('SÄTTER NY BILD')
+            })
+            .catch(error => {
+                console.log(error);
+                reject(error);
+            }).finally()
+        });
+    }
 
 
     /* useEffect(()=>{

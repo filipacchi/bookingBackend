@@ -1,5 +1,5 @@
 
-import { StyleSheet, View, Text, Pressable, FlatList, TouchableOpacity, TextComponent } from "react-native"
+import { StyleSheet, View, Text, Pressable, FlatList, TouchableOpacity, Image, TextComponent } from "react-native"
 import React, { useEffect, useRef, useState } from 'react';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
@@ -44,7 +44,21 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
         >
             <View style={Style.bookedTimesView}>
                 <View style={Style.assoView}>
-                    <AntDesign name="pushpino" size={28} color={colorTheme.firstColor} />
+                <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                {item.profile_image != null ?
+                                                (<Image
+                                                    style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    borderRadius: 75,
+                                                    alignSelf: 'center'
+                                                    }}
+                                                    source={{
+                                                    uri: item.profile_image,
+                                                    }}
+                                                />):(
+                                                    <AntDesign name="pushpino" size={28} color={colorTheme.firstColor} />)}
+                     </View>
                     <View style={Style.assoViewInner}>
                         <Text suppressHighlighting={true}
                             style={Style.assoText}>

@@ -192,6 +192,8 @@ class GetUserBookingsAPIVIEW(APIView):
                     "startTime": booked_time["start_time"][:-3],
                     "endTime": booked_time["end_time"][:-3],
                     "association": association["name"],
+                    "associationId": association["id"],
+                    "profile_image": association["profile_image"],
                     "opened": False
                     })
 
