@@ -4,7 +4,7 @@
     "ScheduledTimes": "Bokade tider",
     "Settings": "Inställningar",
     "EnterAssociationKey": "Skriv in föreningsnyckel",
-    "DoYouWantToJoin": "Vill du gå med i föreningen:",
+    "DoYouWantToJoin": "Vill du gå med i föreningen: ",
     "TryAgain": "Nåt gick fel, vill du prova igen?",
     "YouHaveNotJoined": "Du har inte gått med i någon förening ännu, klicka på knappen nedan för att gå med",
     
@@ -47,6 +47,7 @@
 
     "SettingsPage": "Inställningar",
     "ChangeLanguage": "Byt språk",
+    "ColorTheme": "Färgtema",
     "ChangeEmail": "Byt e-postadress",
     "LogOut": "Logga ut",
     "Language": "Språk",

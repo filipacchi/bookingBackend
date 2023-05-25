@@ -44,13 +44,10 @@ export default function Associations() {
             
                       let item = response.data[i];
                       try {
-                        // Call the getImage function and await the result
                         let profileImage = await getImage(item.id);
             
-                        // Update the profile_image of the captured data item
                         item.profile_image = profileImage;
             
-                        // Debugging: Verify the correct profile_image is set
                         console.log(item.profile_image);
                       } catch (error) {
                         console.log(error);
@@ -60,7 +57,7 @@ export default function Associations() {
                     }
             
                     console.log('UTANFÖR FOR LOOP');
-                    // Update the state with the updated data
+
                     setAssociation(updatedData);
                   })
                   .catch(error => {

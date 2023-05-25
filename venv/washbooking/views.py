@@ -192,6 +192,8 @@ class GetUserBookingsAPIVIEW(APIView):
                     "startTime": booked_time["start_time"][:-3],
                     "endTime": booked_time["end_time"][:-3],
                     "association": association["name"],
+                    "associationId": association["id"],
+                    "profile_image": association["profile_image"],
                     "opened": False
                     })
 
@@ -220,10 +222,7 @@ class GetBookingsAPIVIEW(APIView):
 class GetBookingsFromDateRange(APIView):
     authentication_classes = []
     def get(self, request, bookid, startdate, enddate):
-        """ pprint.pprint(request.data)
-        bookid = request.data["bookable_id"]
-        startdate = request.data["startdate"]
-        enddate = request.data["enddate"] """
+
         bookable_object = BookableObject.objects.get(objectId=bookid)
         bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
         serializer = BookedTimeSerializer(bookings, many=True)
@@ -232,8 +231,36 @@ class GetBookingsFromDateRange(APIView):
         sdate = datetime.strptime(startdate, format)
         edate = datetime.strptime(enddate, format)
         print(bookable_object)
-        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object),sdate, edate)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object).data, sdate, edate)
+
         return Response(time_slot_array)
+    
+class GetBookingsFromAssociationAndDateRange(APIView):
+    authentication_classes = []
+    def get(self, request, associationid, startdate, enddate):
+        sorted_bookings = []
+
+        bookable_objects_db = BookableObject.objects.filter(inAssociation=associationid)
+        bookable_objects_serializer = BookableObjectSerializer(bookable_objects_db, many=True)
+        bookable_objects = json.loads(json.dumps(bookable_objects_serializer.data))
+        """ kanske ta bort json load dump """
+
+        for object in bookable_objects:
+            bookings_db = BookedTime.objects.filter(booking_object=object["objectId"], date__range=[startdate, enddate])
+            bookings_serializer = BookedTimeSerializer(bookings_db, many=True)
+            bookings = json.loads(json.dumps(bookings_serializer.data))
+            format = "%Y-%m-%d"
+            print(startdate)
+            sdate = datetime.strptime(startdate, format)
+            edate = datetime.strptime(enddate, format)
+            print(object)
+            time_slot_array = populateTimeSlots(bookings, object, sdate, edate)
+
+            sorted_bookings.append({"bookingObject": object["objectName"], "bookedTimes": time_slot_array})
+        
+        print("skickar från GetBookingsFromAssociationAndDateRange")
+        print(sorted_bookings)
+        return Response(sorted_bookings)
 
     
 class GetBookingsFromObject(APIView):
@@ -413,10 +440,14 @@ def populateTimeSlots(booked_times, bookable_object, sdate, edate):
 
 def createTimeSlots(bookable_object):
     #print(bookable_object["timeSlotEndTime"].value)
-    start_time = int(bookable_object["timeSlotStartTime"].value[0:2])
-    end_time = int(bookable_object["timeSlotEndTime"].value[0:2])
+    """ print("type and value of bookableobject")
+    print(type(bookable_object))
+    print(bookable_object) """
+
+    start_time = int(bookable_object["timeSlotStartTime"][0:2])
+    end_time = int(bookable_object["timeSlotEndTime"][0:2])
     #print(startTime)
-    slot_length = int(bookable_object["timeSlotLength"].value)
+    slot_length = int(bookable_object["timeSlotLength"])
     loop_range = int((24-slot_length)/slot_length)
     #print("SlotLength: "+str(slot_length))
     #print("loopRange "+ str(loop_range))

@@ -9,6 +9,7 @@ import * as SecureStore from 'expo-secure-store';
 import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { Animated } from "react-native";
 import jwt_decode from "jwt-decode";
@@ -17,17 +18,23 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 
 export default function ScheduleAdmin() {
 
-    const { state } = useContext(AuthContext)
+    const { state, colorTheme } = useContext(AuthContext)
     const [token, setToken] = useState("")
 
+    /* datum */
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState(moment())
     const [selectedTime, setSelectedTime] = useState()
-    const [loading, setLoading] = useState(true) /* true */
+
+    /* loading */
+    const [associationsLoading, setAssociationsLoading] = useState(true)
+    const [bookingsLoading, setBookingsLoading] = useState(true) /* sätt true */
+    const [isRefreshing, setIsRefreshing] = useState(true)
 
     /* Kalle */
-    const [currentAssociation, setCurrentAssociation] = useState("test")
-    const [myAssociations, setMyAssociations] = useState()
+    const [currentAssoIndex, setcurrentAssoIndex] = useState(0)
+    const [myAssociationsWithBO, setMyAssociationsWithBO] = useState([])
+    const [allBookings, setAllBookings] = useState()
 
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
@@ -55,83 +62,185 @@ export default function ScheduleAdmin() {
         })
     };
 
+    
     useEffect(() => {
         setSelectedTime(null)
         opacityAnimation.setValue(0)
         animateElement()
     }, [selectedDate])
 
-
-
-    const loadData = async (token) => {
-        console.log("---- Inuti loadData (ScheduleAdmin.js), token = " + token)
+    useEffect(() => {
+        console.log(selectedDay.format().slice(0, 10))
+        setSelectedDate(selectedDay.format().slice(0, 10))
+    }, [selectedDay])
+    
+    useEffect(() => {
+        const afterAssociationChange = async () => {
+            console.log("blabla currentAssoIndex")
+        }
+        loadVariableData()
         
-        async function getUserAssociations(token) {
-            /* console.log(token) */
+    }, [currentAssoIndex])
 
-            axios.get('user/associationsonly/get'
-            )
-                .then(response => {
-                    console.log("response: ")
-                    console.log(response.data)
-                    setMyAssociations(response.data)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+    useEffect(() => {
+        loadVariableData()
+        
+        console.log("myAssociationsWithBO updated: ");
+        console.log(myAssociationsWithBO);
+        
+    }, [myAssociationsWithBO])
+    
+    useEffect(() => {
+        console.log("allBookings updated: ");
+        console.log(allBookings);
+        
+        /* if (allBookings) {
+            console.log(allBookings[0]["bookedTimes"][selectedDate])
+        } */
+
+}, [allBookings])
+
+
+React.useEffect(() => {
+    const getData = async () => {
+        let access_token = await SecureStore.getItemAsync('userToken')
+        console.log("ASSO: " + access_token)
+        setToken(access_token)
+        
+        loadAssociations(access_token)
+    }
+    getData()
+    
+}, [])
+
+const loadVariableData = async () => {
+    if (myAssociationsWithBO && myAssociationsWithBO.length > 0) {
+        console.log("myAssociationsWithBO INTE falsy")
+        loadWeek()
+    } else {
+        console.log("myAssociationsWithBO falsy")
+    }
+}
+
+const loadAssociations = async (token) => {
+    
+    console.log("---- Inuti loadAssociations (ScheduleAdmin.js), token = " + token)
+    
+    try {
+        const { data: response } = await axios.get('user/association/get')
+        console.log("response from loadAssociations: ")
+        console.log(response)
+        
+        setMyAssociationsWithBO(response)
+    }
+        
+        catch (error) {
+            console.log("från catch i loadAssociations: ")
+            console.log(error)
         }
 
-        async function getAllBookings(token) {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            }
-
-            axios.get('user/associationsonly/get',
-                config
-            )
-                .then(response => {
-                    console.log("response: ")
-                    console.log(response.data)
-                    setMyAssociations(response.data)
-                    setLoading(false)
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        finally {
+            setAssociationsLoading(false)
         }
+    }
+    
+    const loadBookings = async (sdate, edate) => {
+        console.log("myAssociationsWithBO[currentAssoIndex].id från loadBookings: ")
+        console.log(myAssociationsWithBO[currentAssoIndex].id)
 
-        getUserAssociations(token)
+        try {
+            const {data: response} = await axios.get('association/allobjects/bookedtimes/daterange/get/' + myAssociationsWithBO[currentAssoIndex].id + "/" + sdate + "/" + edate)
+            console.log("response from getAllBookings: ")
+            console.log(response)
+
+            /* setAllBookings(response.data) */
+            return(response)
+        }
+        catch (error) {
+            console.log("ERROR CATCHAT I loadBookings")
+            console.log(error);
+        }
+        finally {
+            setBookingsLoading(false)
+        }
     }
 
-    const loadWeek = async (objectid, startDate) => {
+        /* axios.get('user/association/get')
+        .then(response => {
+            console.log("mina associations och bokningsbara objekt:")
+            console.log(response.data)
 
-        let sdate = startDate.format().slice(0, 10)
-        let edate = startDate.add(1, "months").format().slice(0, 10)
-        let returnValue = await loadData(objectid, sdate, edate)
-        setTimeSlots(returnValue)
+            return(response.data)
+        })
+        .catch(error => {
+            console.log("från catch i getAssociationsWithBO: ")
+            console.log(error)
+        })
+        .finally(() => {
+            setAssociationsLoading(false)
+        }) */
+
+
+        /* getAllBookings(token) */
+
+        const addMonth = (startDate) => {
+            const month = startDate.slice(5, 7)
+          
+            if (Number(month) <= 8) {
+              const incrementedMonth = Number(month) + 1
+              return ("0" + incrementedMonth).slice(-2)
+          
+            } else if (Number(month) <= 11) {
+              const incrementedMonth = Number(month) + 1
+              return ("0" + incrementedMonth).slice(-2)
+          
+            } else if (Number(month) === 12) {
+              return "01"
+          
+            } else {
+              console.log("not a valid month")
+              return "notvalid"
+            }
+        }
+
+    const loadWeek = async () => {
+
+        console.log("startDate från loadWeek: ")
+        console.log(selectedDate)
+
+        /*  HÄR ÄR PROBLEMET!! */
+        let sdate = selectedDate.slice(0, 10)
+        /* let edate = selectedDate.add(1, "months").slice(0, 10) */
+        /* ger 'TypeError: undefined is not a function' */
+
+        /* let sdate = "2023-05-24" */
+        const edate = sdate.slice(0, 5) + addMonth(sdate) + sdate.slice(7, 10);
+        
+        console.log("sdate från loadWeek: ")
+        console.log(sdate)
+
+        console.log("edate från loadWeek: ")
+        console.log(edate)
+
+        if (sdate && edate) {
+            let loadedBookings = await loadBookings(sdate, edate)
+            setAllBookings(loadedBookings)
+        } else {
+            console.log("ahsdiuhasuidhad")
+        }
+        
+        
+        /* setAllBookings(loadedBookings) */
+
         /* for (let index = 0; index < updatedWeekDates.length; index++) {
 
-            let returnValue = await loadData(objectid, updatedWeekDates[index].format().slice(0, 10))
+            let returnValue = await loadAssociations(objectid, updatedWeekDates[index].format().slice(0, 10))
 
             tempBookArray.push(returnValue[0])
             tempTimeSlotArray.push(returnValue[1])
         } */
         /* setTimeSlotsWeekArray(tempTimeSlotArray) */
-        setLoading(false)
     }
-
-    React.useEffect(() => {
-        const getToken = async () => {
-            let access_token = await SecureStore.getItemAsync('userToken')
-            console.log("ASSO: " + access_token)
-            setToken(access_token)
-            loadData(access_token)
-        }
-        getToken()
-        loadData(token)
-
-    }, [])
 
 
     /*  useEffect(() => {
@@ -150,10 +259,6 @@ export default function ScheduleAdmin() {
     }
  */
 
-    useEffect(() => {
-        console.log(selectedDay.format().slice(0, 10))
-        setSelectedDate(selectedDay.format().slice(0, 10))
-    }, [selectedDay])
 
     const addBookableObject = async (bodyParameters) => {
         axios.post('book/add/',
@@ -200,17 +305,29 @@ export default function ScheduleAdmin() {
                             <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
                             <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => {bookTime(), setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
+                                <Pressable onPress={() => {/* bookTime(),  */ setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
                                 <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
                             </View>
                         </View>
                     </View>
                 </View>
-            </Modal >
+            </Modal>
         )
     }
 
-    if (loading) {
+
+    const getAssociationNames = (test) => {
+        let namesList = []
+
+        for (let i = 0; i < test.length; i++) {
+            namesList[i] = {key: i, value: test[i].name}
+        }
+
+        return namesList
+    }
+
+
+    if (associationsLoading || bookingsLoading) {
         return (
             <View style={{ flex: 1 }}>
                 <ActivityIndicator />
@@ -222,51 +339,110 @@ export default function ScheduleAdmin() {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={ {flex: 1}}>
                 <SelectList 
-                placeholder={currentAssociation}
+                /* placeholder={myAssociationsWithBO[currentAssoIndex].name} */
+                placeholder={myAssociationsWithBO[currentAssoIndex].name}
                 editable={false}
 
-                setSelected={(val) => {
-                    setCurrentAssociation(val)
+                setSelected={ (key) => {
+                    setcurrentAssoIndex(key)
                 }}
-                data={myAssociations}>
+
+
+                data={getAssociationNames(myAssociationsWithBO)}
+                /* data={myAssociationsWithBO["bookobjects"]} */>
 
 
                 </SelectList>
                 <WeekCalendar 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} />
-                {/* <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    { {/* ändra här 
-                </Animated.View> */}
-                {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
-                    console.log(noSwipe)
-                    if (!noSwipe) {
-                        if (i > swiperIndex) {
-                            setSelectedDay(moment(selectedDay).add(1, 'days'))
-                            setSelectedDayCalendar(moment(selectedDay).add(1, 'days'))
-                        } else {
-                            setSelectedDay(moment(selectedDay).subtract(1, 'days'))
-                            setSelectedDayCalendar(moment(selectedDay).subtract(1, 'days'))
-                        }
-                    }
-                    setSwiperIndex(i)
-                    console.log("Indexet är: " + i)
-
-                }
-                }>
-                    {
-                        timeSlotsWeekArray.map((timeSlot, index) => (
-                            <BookObjectComponent timeSlots={timeSlot} key={index} />
-                        ))
-                    }
-
-
-                </Swiper> */}
-                <View style={{ padding: 20 }}>
-                    <Pressable onPress={() => setConfirmModalVisible(true)} style={[Style.pressableBook]}><Text style={Style.pressableText}>Boka</Text></Pressable>
-                </View>
-                <PopUpModalConfirm />
+                
             </View>
+
+            {/* bokningar */}
+
+            <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
+            {myAssociationsWithBO.length == 0 ?
+                <View style={{ flex: 1, justifyContent: "center" }}>
+                    <View style={{
+                        borderStyle: "solid",
+                        borderRadius: 10,
+                        borderColor: "#999999",
+                        borderWidth: 3,
+                        margin: 20
+                    }}>
+                        <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
+                    <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                </View> :
+
+                <FlatList
+                data={allBookings}
+                    style={Style.expandFlatlist}
+                    onRefresh={() => loadAssociations(token)}
+                    refreshing={isRefreshing}
+                    renderItem={({ item }) => {
+                        console.log("från renderItem, item: ")
+                        console.log(item)
+                        
+                        return(
+                            <View style={[Style.assoFlatView, Style.shadowProp]}>
+                                <View style={Style.assoView}>
+                                    <View style={{/* alignSelf: "left",  */width: 45, height: 45}}>
+                                        <AntDesign name="pushpino" size={28} color={"#222222"} />
+                                    </View>
+                                    <View>
+                                        <Text suppressHighlighting={true} style={Style.assoText}> {item["bookingObject"]} </Text>
+                                        <Text style={{ color: "#767676" }}> {"blabla"} </Text>
+                                    </View>
+                                </View>
+                                <View style={Style.assoDarkView}>
+                                    <FlatList
+                                        data={item["bookedTimes"][selectedDate]}
+                                        /* data={[1, 2, 3]} */
+                                        style={{}}
+                                        horizontal={true}
+                                        renderItem={
+                                            ({ item }) => (
+                                                
+                                                
+                                                <Pressable 
+                                                onPress={() => {}} 
+                                                style={Style.bookObject}>
+                                                    <Text>{item['title']}</Text>
+                                                    {/* <Text>{item}</Text> */}
+                                                </Pressable>
+                                            )
+                                        }
+                                        
+                                    >
+
+                                    </FlatList>
+                                </View>
+                            </View>)}}
+                >
+                </FlatList>
+            }
+
+            <View style={{ padding: 20 }}>
+                <Pressable onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
+                    <Text style={Style.pressableText}>{t("Book")}</Text>
+                </Pressable>
+            </View>
+            <PopUpModalConfirm />
+
+            {/* <Pressable 
+            style={Style.addAssociation}
+            onPress={( () => {
+                console.log(
+                    Platform.OS === 'ios'
+            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
+            : NativeModules.I18nManager.localeIdentifier
+            )
+            })}>
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
+                {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
+    
+        </View>
         </SafeAreaView>
     )
 }

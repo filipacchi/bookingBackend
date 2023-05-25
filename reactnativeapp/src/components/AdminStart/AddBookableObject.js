@@ -30,6 +30,9 @@ export default function AddBookableObject({ route }) {
   const scrollViewRef = useRef(null);
   const [selectListPosition, setSelectListPosition] = useState(0);
 
+  const { authContext } = React.useContext(AuthContext);
+  const { signOut, t, setLang, getLang } = authContext
+
   // var selectedHoursBookable
   // var earliestBookableTime
   // var latestBookableTime = '';
@@ -171,18 +174,20 @@ export default function AddBookableObject({ route }) {
 
   return (
     <ScrollView style={styles.container} ref={scrollViewRef} scrollEventThrottle={1} contentInset={{ bottom: '30%' }}>
-      <Text style={styles.header}>Add Bookable Object</Text>
+      <Text style={styles.header}>{t("AddBookableObject")}</Text>
       <View style={[styles.settingContainer, { backgroundColor: objectNameBackgroundColor }]}>
         <TextInput
           style={styles.objectName}
-          placeholder="Object name"
+          placeholder={t("ObjectName")}
           onChangeText={(objectName) => setObjectName(objectName)}
           value={objectName}
         ></TextInput>
       </View>
       <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor }]}>
         <View style={styles.settingContainer}>
-          <Text style={styles.settingLabel}>Length per booking</Text>
+        <View style={styles.settingLabelOverhead}>
+          <Text style={styles.settingLabel}>{t("LengthPerBooking")}</Text>
+          </View>
           <SelectList
             setSelected={(val) => {
               setSelected(val)
@@ -198,7 +203,9 @@ export default function AddBookableObject({ route }) {
         </View>
       </View>
       <View style={styles.settingContainer}>
-        <Text style={styles.settingLabel}>Bookable all day</Text>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
+        </View>
         <Switch
           trackColor={{ false: '#767577', true: '#53d5d5' }}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
@@ -208,7 +215,9 @@ export default function AddBookableObject({ route }) {
           <View style={[styles.settingContainer, { backgroundColor: firstStartTimeBackgroundColor }]}>
             <View style={styles.settingContainer}
             onLayout={handleLayout}>
-              <Text style={styles.settingLabel}>First start time</Text>
+              <View style={{alignSelf: 'left', width: '50%'}}>
+              <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
+              </View>
               <SelectList
                 setSelected={(val) => {
                   setSelected(val)
@@ -245,7 +254,9 @@ export default function AddBookableObject({ route }) {
             <View style={[styles.settingContainer, { backgroundColor: earliestBookableTimeBackgroundColor }]}>
               <View style={styles.settingContainer}
               onLayout={handleLayout}>
-                <Text style={styles.settingLabel}>Earliest bookable time</Text>
+                <View style={{alignSelf: 'left', width: '50%'}}>
+                <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
+                </View>
                 <SelectList
                   setSelected={(val) => {
                     setSelected(val)
@@ -259,7 +270,9 @@ export default function AddBookableObject({ route }) {
             <View style={[styles.settingContainer, { backgroundColor: latestBookableTimeBackgroundColor }]}>
               <View style={styles.settingContainer}
               onLayout={handleLayout}>
-                <Text style={styles.settingLabel}>Latest bookable time</Text>
+                <View style={{alignSelf: 'left', width: '50%'}}>
+                <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
+                </View>
                 <SelectList
                   setSelected={(val) => {
                     setSelected(val)
@@ -276,7 +289,9 @@ export default function AddBookableObject({ route }) {
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor }]}>
         <View style={styles.settingContainer}
         onLayout={handleLayout}>
-          <Text style={styles.settingLabel}>Slots bookable per day</Text>
+          <View style={{alignSelf: 'left', width: '50%'}}>
+          <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
+          </View>
           <SelectList
             setSelected={(val) => {
               setSelected(val)
@@ -290,7 +305,9 @@ export default function AddBookableObject({ route }) {
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor }]}>
         <View style={styles.settingContainer}
           onLayout={handleLayout}>
-          <Text style={styles.settingLabel}>Slots bookable per week</Text>
+            <View style={{alignSelf: 'left', width: '50%'}}>
+          <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
+          </View>
           <SelectList
             setSelected={(val) => {
               setSelected(val)
@@ -344,7 +361,7 @@ export default function AddBookableObject({ route }) {
           }
         }
       }}>
-        <Text style={styles.buttonText}>Save</Text>
+        <Text style={styles.buttonText}>{t("Save")}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
