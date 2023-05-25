@@ -4,7 +4,7 @@
     "ScheduledTimes": "Booked Times",
     "Settings": "Settings",
     "EnterAssociationKey": "Enter Association Key",
-    "DoYouWantToJoin": "Do you want to join the association:",
+    "DoYouWantToJoin": "Do you want to join the association: ",
     "TryAgain": "Something went wrong, do you want to try again?",
     "YouHaveNotJoined": "You have not joined any associations yet, press the button below to join an association",
 
@@ -44,9 +44,9 @@
     "Sunday": "Sunday",
     "SundayShort": "Sun",
 
-
     "SettingsPage": "Settings",
     "ChangeLanguage": "Change Language",
+    "ColorTheme": "Color Theme",
     "ChangeEmail": "Change E-mail Address",
     "LogOut": "Log out",
     "Language": "Language",
