@@ -28,7 +28,8 @@ urlpatterns = [
     path('association/bookableobject/<int:pk>/update', UpdateBookableObject.as_view(), name='update_bookable_object'), #
     path('book/get/object/daterange/<int:bookid>/<str:startdate>/<str:enddate>', GetBookingsFromDateRange.as_view(), name='get_booking_from_date'), #
     path('association/get/<int:pk>', GetImage.as_view(), name="get_image"), #
-    path('association/image/<int:pk>/update', UpdateAssociationImage.as_view(), name="update_image") #
+    path('association/image/<int:pk>/update', UpdateAssociationImage.as_view(), name="update_image"),
+    path('user/account/get', GetUserAccount.as_view(), name="get_user")
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

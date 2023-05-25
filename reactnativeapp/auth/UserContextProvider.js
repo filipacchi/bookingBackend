@@ -34,6 +34,8 @@ function UserContextProvider({children}) {
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
             isAssociation: action.token.isAssociation,
+            firstName: action.token.firstName,
+            lastName: action.token.lastName,
             isLoading: false,
           };
         case 'SIGN_IN':
@@ -43,6 +45,8 @@ function UserContextProvider({children}) {
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
             isAssociation: action.token.isAssociation,
+            firstName: action.token.firstName,
+            lastName: action.token.lastName,
             isLoading: false,
           };
         case 'SIGN_OUT':
@@ -52,6 +56,8 @@ function UserContextProvider({children}) {
             isSignout: true,
             userToken: null,
             userRefreshToken: null,
+            firstName: null,
+            lastName: null,
             isAssociation: null,
           };
       }
@@ -101,7 +107,7 @@ function UserContextProvider({children}) {
           .then(response => {
             //console.log("TOKEN OKAY")
             /* response.data innehåller data från databasen */
-            console.log("isSTAFF? : " + response.data.isStaff)
+            console.log("isSTAFF? : " + response.data.firstName)
             save("userToken", response.data.access)
             save("userRefreshToken", response.data.refresh)
             axios.defaults.headers.common = {'Authorization': `Bearer ${response.data.access}`}

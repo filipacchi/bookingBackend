@@ -34,7 +34,6 @@ export default function Settings() {
         { key: 'en', value: 'English' },
         { key: 'sv', value: 'Svenska' },
     ]
-
     const supportedColorThemes = [
         { key: 'blue', value: "The Original" },
         { key: 'black', value: "Midnight" },

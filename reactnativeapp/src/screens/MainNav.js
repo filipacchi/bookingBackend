@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
 import { AuthContext } from "../../auth/UserContextProvider";
+import SettingStack from "../components/Settings/SettingStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,7 +59,7 @@ export default function MainNav() {
                 )
             }} />
 
-            <Tab.Screen name="Settings" component={Settings} options={{
+            <Tab.Screen name="Profile" component={SettingStack} options={{
                 tabBarIcon: ({ focused, color }) => (
                     <AntDesign focused={focused} name="user" size={25} color={color} />
                 )

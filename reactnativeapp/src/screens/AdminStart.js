@@ -151,7 +151,7 @@ export default function Associations() {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                            <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                                            <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
                                             {item.profile_image != null ?
                                                 (<Image
                                                     style={{

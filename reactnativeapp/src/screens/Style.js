@@ -284,5 +284,36 @@ export default StyleSheet.create({
         padding: 20,
         backgroundColor: "white",
         gap: 20
-    }
+    },
+    containerSettings: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      },
+      innerContainerSettings: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: "5%"
+      },
+      settingsView: {
+        padding: "5%",
+        gap: "30%"
+      },
+      nameTextLarge: {
+        fontSize: 20,
+        fontWeight: 500
+      },
+      nameHeader: {
+        justifyContent: "center",
+        alignItems: "center"
+      },
+      iconContainer: {
+        height: 30,
+        width: 30,
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      settingNameText: {
+        fontSize: 20
+      }
 });

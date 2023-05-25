@@ -327,7 +327,7 @@ export default function Associations() {
                         return(
                             <View style={[Style.assoFlatView, Style.shadowProp]}>
                                 <View style={Style.assoView}>
-                                <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                                <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
                                             {item.profile_image != null ?
                                                 (<Image
                                                     style={{

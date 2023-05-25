@@ -202,15 +202,20 @@ class AdminGetBookedTimes(APIView):
     authentication_classes = [Association]
 
     
-
+class GetUserAccount(APIView):
+    authentication_classes = [IsAuthenticated]
+    def get(self, request):
+        return Response(self.request.user.first_name)
 
 class GetBookingsAPIVIEW(APIView):
-    permission_classes= [isAssociation]#[checkGroup]
+    permission_classes= [AllowAny]#[checkGroup]
     def get(self,request):
         print(self.request.data)
         bookings = BookedTime.objects.all()
         serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
+    def put(self, request):
+        return Response("PUT")
 
 class GetBookingsFromDateRange(APIView):
     authentication_classes = []
