@@ -10,6 +10,7 @@ const IOSPopup = ({
   buttonColor,
   inputValue,
   setInputValue,
+  bodyText,
   onButtonPress,
   onCancelPress,
 }) => {
@@ -41,13 +42,23 @@ const IOSPopup = ({
           <TouchableWithoutFeedback>
             <View style={styles.popup}>
               <Text style={styles.title}>{title}</Text>
-              {hasInput && (
+              {hasInput ? (
                 <TextInput
                   style={styles.input}
                   placeholder={placeholder}
                   value={inputValue}
                   onChangeText={handleInputChange}
                 />
+              ) : ( bodyText ? 
+              <View style={styles.bodyTextContainer}>
+                <Text style={styles.bodyText}>
+                  {bodyText}
+                </Text>
+              </View>
+              : 
+              <View>
+                
+              </View>
               )}
               <View style={styles.buttonContainer}>
                 {renderButtons()}
@@ -88,6 +99,18 @@ const styles = {
     marginBottom: 10,
     paddingHorizontal: 10,
   },
+
+  bodyTextContainer: {
+    width: "100%",
+    margin: 5,
+    justifyContent: "left"
+  },
+
+  bodyText: {
+    fontWeight: 500,
+    margin: 10
+  },
+
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

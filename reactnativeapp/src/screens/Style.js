@@ -85,7 +85,7 @@ export default StyleSheet.create({
         alignSelf: "center",
     },
     expandFlatlist: {
-
+        
     },
     assoText: {
         color: "#222222",
@@ -209,6 +209,15 @@ export default StyleSheet.create({
         width: 50,
         justifyContent: "center",
         alignItems: "center"
+    },
+    noBookablesContainer: {
+        justifyContent: "center",
+        height: 90,
+    },
+    noBookablesText: {
+        fontWeight: "500",
+        fontSize: 17,
+        textAlign: "center"
     },
     langText: {
         color: "white",
