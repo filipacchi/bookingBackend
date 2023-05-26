@@ -22,6 +22,7 @@ export default function AddBookableObject({ route }) {
   const [slotsBookablePerDayBackgroundColor, setSlotsBookablePerDayBackgroundColor] = useState('white');
   const [slotsBookablePerWeekBackgroundColor, setSlotsBookablePerWeekBackgroundColor] = useState('white');
   const [selectedHoursBookable, setSelectedHoursBookable] = useState();
+  const [selectedWeeksBookable, setSelectedWeeksBookable] = useState();
   const [earliestBookableTime, setEarliestBookableTime] = useState();
   const [latestBookableTime, setLatestBookableTime] = useState();
   const [firstStartTime, setFirstStartTime] = useState();
@@ -63,7 +64,8 @@ export default function AddBookableObject({ route }) {
       timeSlotStartTime: earliestBookableTime,
       timeSlotEndTime: latestBookableTime,
       slotsPerDay: slotsBookablePerDay,
-      slotsPerWeek: slotsBookablePerWeek
+      slotsPerWeek: slotsBookablePerWeek,
+      bookAheadWeeks: selectedWeeksBookable
     }
     axios.post('association/bookableobject/add',
       bodyParameters
@@ -116,6 +118,21 @@ export default function AddBookableObject({ route }) {
     { key: '22', value: '22 hours' },
     { key: '23', value: '23 hours' },
     { key: '24', value: '24 hours' },
+  ]
+
+  const maxprebookValues = [
+    { key: '1', value: '1 week' },
+    { key: '2', value: '2 weeks' },
+    { key: '3', value: '3 weeks' },
+    { key: '4', value: '4 weeks' },
+    { key: '5', value: '5 weeks' },
+    { key: '6', value: '6 weeks' },
+    { key: '7', value: '7 weeks' },
+    { key: '8', value: '8 weeks' },
+    { key: '9', value: '9 weeks' },
+    { key: '10', value: '10 weeks' },
+    { key: '11', value: '11 weeks' },
+    { key: '12', value: '12 weeks' },
   ]
 
   const amountOfTimes = [
@@ -199,6 +216,25 @@ export default function AddBookableObject({ route }) {
               setSelectedHoursBookable(lengthInHoursInt)
             }}
             data={lengthPerBooking}
+          />
+        </View>
+      </View>
+      <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor }]}>
+        <View style={styles.settingContainer}>
+        <View style={styles.settingLabelOverhead}>
+          <Text style={styles.settingLabel}>{t("BookAhead")}</Text>
+          </View>
+          <SelectList
+            setSelected={(val) => {
+              setSelected(val)
+              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
+
+              lengthInWeeks = maxprebookValues[val - 1].value.substring(0, 2)
+              lengthInWeeksInt = parseInt(lengthInWeeks)
+              console.log('length In Hours: ' + lengthInWeeksInt)
+              setSelectedWeeksBookable(lengthInWeeksInt)
+            }}
+            data={maxprebookValues}
           />
         </View>
       </View>

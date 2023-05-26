@@ -20,6 +20,7 @@ export default function EditBookableObject({ route }) {
   const [allDayEnabled, setAllDayEnabled] = useState(false);
   const [selected, setSelected] = React.useState("");
   const [selectedHoursBookable, setSelectedHoursBookable] = useState();
+  const [selectedWeeksBookable, setSelectedWeeksBookable] = useState();
   const [earliestBookableTime, setEarliestBookableTime] = useState();
   const [latestBookableTime, setLatestBookableTime] = useState();
   const [firstStartTime, setFirstStartTime] = useState();
@@ -59,7 +60,8 @@ export default function EditBookableObject({ route }) {
       timeSlotStartTime: earliestBookableTime,
       timeSlotEndTime: latestBookableTime,
       slotsPerDay: slotsBookablePerDay,
-      slotsPerWeek: slotsBookablePerWeek
+      slotsPerWeek: slotsBookablePerWeek,
+      bookAheadWeeks: selectedWeeksBookable
     }
     axios.put(`association/bookableobject/${objectId}/update`,
       bodyParameters,
@@ -95,11 +97,13 @@ export default function EditBookableObject({ route }) {
         setObjectData(response.data)
         setObjectName(response.data.objectName)
         setSelectedHoursBookable(response.data.timeSlotLength)
+        setSelectedWeeksBookable(response.data.bookAheadWeeks)
         setEarliestBookableTime(response.data.timeSlotStartTime)
         setLatestBookableTime(response.data.timeSlotEndTime)
         setFirstStartTime(response.data.timeSlotStartTime)
         setSlotsBookablePerDay(response.data.slotsPerDay)
         setSlotsBookablePerWeek(response.data.slotsPerWeek)
+
       })
       .catch(error => {
         console.log(error);
@@ -141,6 +145,21 @@ export default function EditBookableObject({ route }) {
     { key: '22', value: '22' },
     { key: '23', value: '23' },
     { key: '24', value: '24' },
+  ]
+
+  const maxprebookValues = [
+    { key: '1', value: '1 week' },
+    { key: '2', value: '2 weeks' },
+    { key: '3', value: '3 weeks' },
+    { key: '4', value: '4 weeks' },
+    { key: '5', value: '5 weeks' },
+    { key: '6', value: '6 weeks' },
+    { key: '7', value: '7 weeks' },
+    { key: '8', value: '8 weeks' },
+    { key: '9', value: '9 weeks' },
+    { key: '10', value: '10 weeks' },
+    { key: '11', value: '11 weeks' },
+    { key: '12', value: '12 weeks' },
   ]
 
   const amountOfTimes = [
@@ -203,7 +222,6 @@ export default function EditBookableObject({ route }) {
 
     )
   }
-
   return (
     <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
       <Text style={styles.header}>{t("EditBookableObject")}</Text>
@@ -229,6 +247,24 @@ export default function EditBookableObject({ route }) {
           }}
           data={lengthPerBooking}
         />
+      </View>
+      <View style={styles.settingContainer}>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("BookAhead")}</Text>
+        </View>
+        <SelectList
+        placeholder={selectedWeeksBookable}
+            setSelected={(val) => {
+              setSelected(val)
+              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
+
+              lengthInWeeks = maxprebookValues[val - 1].value.substring(0, 2)
+              lengthInWeeksInt = parseInt(lengthInWeeks)
+              console.log('length In Hours: ' + lengthInWeeksInt)
+              setSelectedWeeksBookable(lengthInWeeksInt)
+            }}
+            data={maxprebookValues}
+          />
       </View>
       <View style={styles.settingContainer}>
       <View style={styles.settingLabelOverhead}>

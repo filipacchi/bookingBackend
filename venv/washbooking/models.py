@@ -98,6 +98,7 @@ class BookableObject(models.Model):
     timeSlotEndTime = models.TimeField(blank=False)
     slotsPerDay = models.IntegerField(blank=False, default=1)
     slotsPerWeek = models.IntegerField(blank=False, default=2)
+    bookAheadWeeks = models.IntegerField(blank=False, default=4)
 
     def __str__(self):
         return self.objectName

@@ -261,6 +261,25 @@ class GetBookingsFromAssociationAndDateRange(APIView):
         print("skickar från GetBookingsFromAssociationAndDateRange")
         print(sorted_bookings)
         return Response(sorted_bookings)
+    
+class GetBookingsFromBookableObject(APIView):
+    authentication_classes = []
+    def get(self, request, bookableid, startdate):
+        bookable_object = BookableObject.objects.get(objectId=bookableid)
+        book_ahead_weeks = int(bookable_object.bookAheadWeeks)
+        format = "%Y-%m-%d"
+        sdate = datetime.strptime(startdate, format)
+        weeks = timedelta(weeks = book_ahead_weeks)
+        edate = sdate + weeks
+        enddate = datetime.strftime(edate, format)
+
+        bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
+        serializer = BookedTimeSerializer(bookings, many=True)
+        print(startdate)
+        print(bookable_object)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object).data, sdate, edate)
+
+        return Response(time_slot_array)
 
     
 class GetBookingsFromObject(APIView):

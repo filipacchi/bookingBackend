@@ -4,7 +4,7 @@ import LottieView from "lottie-react-native";
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
 //import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
-import WeekCalendar from "./WeekCalendar";
+import SwipeableCalendar from "../Misc/SwipeableCalendar";
 import BookablesView from "./BookablesView";
 import Swiper from 'react-native-swiper'
 import BookObjectComponent from "./BookObjectComponent";
@@ -54,13 +54,13 @@ export default function BookableObject({ route }) {
         setSelectedTime(null)
         opacityAnimation.setValue(0)
         animateElement()
-    }, [selectedDate])
+    }, [selectedDay])
 
 
 
     const loadData = async (objectId, sdate, edate) => {
         try {
-            const { data: response } = await axios.get('book/get/object/daterange/' + objectId + "/" + sdate + "/" + edate)
+            const { data: response } = await axios.get('association/bookableobject/bookedtimes/get/' + objectId + "/" + sdate)
             return response
         }
 
@@ -115,10 +115,10 @@ export default function BookableObject({ route }) {
     }
  */
 
-    useEffect(() => {
-        console.log(selectedDay.format().slice(0, 10))
-        setSelectedDate(selectedDay.format().slice(0, 10))
-    }, [selectedDay])
+   /*  useEffect(() => {
+        console.log("BOOKAHEAD: "+route.params.bookAhead)
+        setSelectedDate(selectedDay.clone().format().slice(0, 10))
+    }, [selectedDay]) */
 
     const addBookableObject = async (bodyParameters) => {
         axios.post('book/add/',
@@ -136,7 +136,7 @@ export default function BookableObject({ route }) {
         if (selectedTime != null) {
             let startTime = selectedTime.slice(0,5)
             let endTime = selectedTime.slice(8,13)
-            let bookDate = selectedDay.format().slice(0, 10)
+            let bookDate = selectedDay.clone().format().slice(0, 10)
             let bookingObject = route.params.id
             setBookedSlot([selectedTime, bookDate])
             let bodyParameters = {
@@ -186,9 +186,9 @@ export default function BookableObject({ route }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
-                <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+                <SwipeableCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} bookAhead={route.params.bookAhead} />
                 <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
                 </Animated.View>
                 {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
