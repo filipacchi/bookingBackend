@@ -70,6 +70,7 @@ export default function Schedule() {
                       console.log(response.data[i]);
             
                       let item = response.data[i];
+                      if (item.profile_image != null){
                       try {
                         console.log(item.associationId)
                         let profileImage = await getImage(item.associationId);
@@ -79,7 +80,7 @@ export default function Schedule() {
                         console.log(item.profile_image);
                       } catch (error) {
                         console.log(error);
-                      }
+                      }}
             
                       updatedData.push(item);
                     }

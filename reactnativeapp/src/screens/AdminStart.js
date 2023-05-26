@@ -43,6 +43,7 @@ export default function Associations() {
                       console.log(response.data[i].id);
             
                       let item = response.data[i];
+                      if (item.profile_image != null){
                       try {
                         let profileImage = await getImage(item.id);
             
@@ -51,7 +52,7 @@ export default function Associations() {
                         console.log(item.profile_image);
                       } catch (error) {
                         console.log(error);
-                      }
+                      }}
             
                       updatedData.push(item);
                     }
@@ -145,7 +146,7 @@ export default function Associations() {
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
                             <Pressable onPress={() => {
-                                            navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key']})
+                                            navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key'], associationImage: item['profile_image']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
                                             <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
