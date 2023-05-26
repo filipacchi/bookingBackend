@@ -77,6 +77,8 @@
     "RemoveThisObject": "Radera objekt",
 
     "AddBookableObject": "Lägg till bokningsbart objekt",
-    "ObjectName": "Objektets namn"
+    "ObjectName": "Objektets namn",
+
+    "Avboka": "Avboka"
     
 }

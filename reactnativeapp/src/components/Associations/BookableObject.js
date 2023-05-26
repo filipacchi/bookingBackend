@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal } from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
 import LottieView from "lottie-react-native";
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
@@ -14,6 +14,7 @@ import Style from "../../screens/Style";
 import { Animated } from "react-native"
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import IOSPopup from "../Misc/PopUp";
 
 
 export default function BookableObject({ route }) {
@@ -31,9 +32,49 @@ export default function BookableObject({ route }) {
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
     const [bookedSlot, setBookedSlot] = useState([])
-    const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
-    const { authContext  } = useContext(AuthContext)
+    const { colorTheme, authContext  } = useContext(AuthContext)
     const {t} = authContext
+    const [popupVisible, setPopupVisible] = useState(false);
+
+    const delBookingAxios = async () =>{
+        let data = {
+            booking_object: route.params.id,
+            date: selectedDate,
+            start_time: selectedCancelTime.slice(0,5),
+            end_time: selectedCancelTime.slice(8,13)
+        }
+        axios.delete('book/delete/',
+            {data}
+        )
+            .then(response => {
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    const handleButtonPress = (index) => {
+        if (index === 0) { // Yes button pressed
+          setPopupVisible(false);
+          bookTime()
+        }
+
+        console.log('Button Pressed:', index);
+        console.log('Popup Cancelled: ' + selectedTime);
+        setPopupVisible(false);
+      };
+
+      const handleDeleteButtonPress = (index) => {
+        if (index === 0) { // Yes button pressed
+          setPopupVisible(false);
+          delBookingAxios()
+        }
+
+        console.log('Button Pressed:', index);
+        console.log('Popup Cancelled: ' + selectedCancelTime.slice(8,13));
+        setPopupVisible(false);
+      };
 
     const animateElement = () => {
 
@@ -150,30 +191,6 @@ export default function BookableObject({ route }) {
             
         }
     }
-    const PopUpModalConfirm = () => {
-        return (
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={ConfirmModalVisible}
-                onRequestClose={() => setConfirmModalVisible(false)}
-                >
-                <View style={Style.modalWindow}>
-
-                    <View style={Style.modalOuter}>
-                        <View style={{ gap: 10 }}>
-                            <Text style={{ textAlign: "center" }}>{selectedCancelTime == null ? t("BookTime"): t("CancelBookTime")} </Text>
-                            <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text>
-                            <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => {bookTime(), setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
-                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-            </Modal >
-        )
-    }
 
     if (loading) {
         return (
@@ -215,10 +232,18 @@ export default function BookableObject({ route }) {
 
                 </Swiper> */}
                 <View style={Style.viewBookButton}>
-                    <Pressable onPress={() => {if (selectedTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableBook, {opacity: selectedCancelTime == null ? 1 : 0.5}]}><Text style={Style.pressableText}>Boka</Text></Pressable>
-                    <Pressable onPress={() => {if (selectedCancelTime != null){setConfirmModalVisible(true)}}} style={[Style.pressableCancelBook, {opacity: selectedCancelTime == null ? 0.5 : 1}]}><Text style={Style.pressableText}>Avboka</Text></Pressable>
+                    <Pressable onPress={() => {if (selectedTime != null){setPopupVisible(true)}}} style={[Style.pressableBook, {opacity: selectedCancelTime == null ? 1 : 0.5}]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
+                    <Pressable onPress={() => {if (selectedCancelTime != null){setPopupVisible(true)}}} style={[Style.pressableCancelBook, {opacity: selectedCancelTime == null ? 0.5 : 1}]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
-                <PopUpModalConfirm />
+                <IOSPopup
+  visible={popupVisible}
+  title={<Text style={{fontWeight:200}}>{selectedCancelTime == null ? t("BookTime"): t("CancelBookTime")}<Text style={{ textDecorationLine: "underline", textAlign: "center", fontWeight:500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></Text>}
+  hasInput={false}
+  buttonTexts={['Yes', 'No']}
+  buttonColor={colorTheme.firstColor}
+  onButtonPress={selectedCancelTime == null ? handleButtonPress: handleDeleteButtonPress}
+  onCancelPress={selectedCancelTime == null ? handleButtonPress: handleDeleteButtonPress}
+/>
             </View>
         </SafeAreaView>
     )

@@ -1,5 +1,5 @@
 
-import { StyleSheet, View, Text, Pressable, TextInput, TouchableOpacity, SafeAreaView, Image, FlatList, Modal, Button } from "react-native"
+import { StyleSheet, View, Text, Pressable, TextInput, TouchableOpacity, SafeAreaView, Image, FlatList } from "react-native"
 import { useState, useContext } from "react";
 import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
 import { NativeModules, Platform } from 'react-native';

@@ -1,6 +1,6 @@
 import Style from "../../screens/Style";
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable, Modal } from 'react-native';
+import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable } from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
@@ -25,7 +25,6 @@ export default function EditBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
-  const [EnterModalVisible, setEnterModalVisible] = useState(false)
   const navigation = useNavigation()
   const [popupVisible, setPopupVisible] = useState(false);
     const { state, colorTheme, authContext  } = useContext(AuthContext)
@@ -103,7 +102,6 @@ export default function EditBookableObject({ route }) {
       })
       .catch(error => {
         console.log(error);
-        setErrorModalVisible(true)
       })
       .finally(() => {
         setIsLoading(false)

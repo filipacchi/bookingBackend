@@ -76,5 +76,7 @@
     "RemoveThisObject": "Remove this object",
 
     "AddBookableObject": "Add Bookable Object",
-    "ObjectName": "Object Name"
+    "ObjectName": "Object Name",
+
+    "Avboka": "Delete"
 }
