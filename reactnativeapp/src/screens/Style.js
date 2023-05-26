@@ -22,6 +22,9 @@ export default StyleSheet.create({
         marginBottom: 5,
         marginTop: 5,
     },
+    settingLabelOverhead:{
+        width: '50%'
+    },
     settingLabel: {
         fontSize: 16,
     },

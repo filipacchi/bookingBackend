@@ -66,7 +66,21 @@
     "//Misc": "",
     "Error": "Error",
     "PopupJoin": "Gå med",
-    "PopupCancel": "Avbryt"
+    "PopupCancel": "Avbryt",
 
+    "WantToDelete": "Är du säker på att du vill radera detta objekt permanent?",
+    "EditBookableObject": "Redigera bokningsbart objekt",
+    "LengthPerBooking": "Längd per bokning",
+    "BookableAllDay": "Bokningsbar hela dygnet",
+    "FirstStartTime": "Starttid",
+    "EarliestBookableTime": "Tidigaste bokningsbara tiden",
+    "LatestBookableTime": "Inte bokningsbar efter",
+    "SlotsBookablePerDay": "Max antal möjliga bokningar per dygn",
+    "SlotsBookablePerWeek": "Max antal möjliga bokningar per vecka",
+    "Save": "Spara",
+    "RemoveThisObject": "Radera objekt",
+
+    "AddBookableObject": "Lägg till bokningsbart objekt",
+    "ObjectName": "Objektets namn"
     
 }

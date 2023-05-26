@@ -1,5 +1,5 @@
 import Style from "../../screens/Style";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable, Modal } from 'react-native';
 import { TextInput } from "react-native-paper";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
@@ -10,6 +10,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { AntDesign } from '@expo/vector-icons';
+import IOSPopup from "../Misc/PopUp";
 
 export default function EditBookableObject({ route }) {
   const { objectId, associationName, associationId } = route.params
@@ -26,46 +27,24 @@ export default function EditBookableObject({ route }) {
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
   const [EnterModalVisible, setEnterModalVisible] = useState(false)
   const navigation = useNavigation()
-  const { state } = React.useContext(AuthContext)
+  const [popupVisible, setPopupVisible] = useState(false);
+    const { state, colorTheme, authContext  } = useContext(AuthContext)
+    const {t} = authContext
 
-  const PopUpModalDeleteObject = () => {
-    return (
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={EnterModalVisible}
-        onRequestClose={() => setEnterModalVisible(false)}>
+  const handleButtonPress = (index) => {
+    if (index === 0) { // Yes button pressed
+      setPopupVisible(false);
+      removeBookableObject()
+      navigation.goBack()
+    }
+    console.log('Button Pressed:', index);
+    setPopupVisible(false);
+  };
 
-        <View style={Style.modalWindow}>
-          <View style={Style.modalOuter}>
-            < View style={Style.inputAndCheckMark}>
-              <Text style={{ textAlign: 'center' }}>Are you sure you want to permanently remove this object?</Text>
-            </View>
-
-            <View style={{ flexDirection: 'row' }}>
-              <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]}
-                onPress={() => {
-                  removeBookableObject()
-                  navigation.goBack()
-                }}>
-                <Text style={[styles.buttonText, { marginBottom: '3%' }]}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]}
-              onPress={() => setEnterModalVisible(false)}>
-                <Text style={styles.buttonText}>No</Text>
-              </TouchableOpacity>
-            </View>
-
-            <Pressable
-              style={Style.modalCloseButton}
-              onPress={() => setEnterModalVisible(false)}>
-              <AntDesign name="close" size={24} color="black" />
-            </Pressable>
-          </View>
-        </View>
-      </Modal >
-    )
-  }
+  const handleCancelPress = () => {
+    console.log('Popup Cancelled');
+    setPopupVisible(false);
+  };
 
   const editBookableObject = async () => {
     console.log('Assosiation name?: ' + associationName + 'Association id: ' + associationId + 'object id: ' + objectId)
@@ -227,7 +206,7 @@ export default function EditBookableObject({ route }) {
 
   return (
     <ScrollView style={styles.container} contentInset={{ bottom: '20%' }}>
-      <Text style={styles.header}> {associationName} Edit Bookable Object</Text>
+      <Text style={styles.header}>{t("EditBookableObject")}</Text>
       <View style={styles.settingContainer}>
         <TextInput style={styles.objectName}
           placeholder={objectName}
@@ -236,7 +215,9 @@ export default function EditBookableObject({ route }) {
         ></TextInput>
       </View>
       <View style={styles.settingContainer}>
-        <Text style={styles.settingLabel}>Length per booking</Text>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("LengthPerBooking")}</Text>
+        </View>
         <SelectList
           placeholder={selectedHoursBookable}
           setSelected={(val) => {
@@ -250,7 +231,9 @@ export default function EditBookableObject({ route }) {
         />
       </View>
       <View style={styles.settingContainer}>
-        <Text style={styles.settingLabel}>Bookable all day</Text>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
+        </View>
         <Switch
           trackColor={{ false: '#767577', true: '#53d5d5' }}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
@@ -258,7 +241,9 @@ export default function EditBookableObject({ route }) {
       <View>
         {allDayEnabled ? (
           <View style={styles.settingContainer}>
-            <Text style={styles.settingLabel}>First start time</Text>
+            <View style={styles.settingLabelOverhead}>
+            <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
+            </View>
             <SelectList
               placeholder={firstStartTime}
               setSelected={(val) => {
@@ -293,7 +278,9 @@ export default function EditBookableObject({ route }) {
         ) : (
           <View>
             <View style={styles.settingContainer}>
-              <Text style={styles.settingLabel}>Earliest bookable time</Text>
+            <View style={styles.settingLabelOverhead}>
+              <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
+              </View>
               <SelectList
                 placeholder={earliestBookableTime}
                 setSelected={(val) => {
@@ -305,7 +292,9 @@ export default function EditBookableObject({ route }) {
               />
             </View>
             <View style={styles.settingContainer}>
-              <Text style={styles.settingLabel}>Latest bookable time</Text>
+            <View style={styles.settingLabelOverhead}>
+              <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
+              </View>
               <SelectList
                 placeholder={latestBookableTime}
                 setSelected={(val) => {
@@ -320,7 +309,9 @@ export default function EditBookableObject({ route }) {
         )}
       </View>
       <View style={styles.settingContainer}>
-        <Text style={styles.settingLabel}>Slots bookable per day</Text>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
+        </View>
         <SelectList
           placeholder={slotsBookablePerDay}
           setSelected={(val) => {
@@ -332,7 +323,9 @@ export default function EditBookableObject({ route }) {
         />
       </View>
       <View style={styles.settingContainer}>
-        <Text style={styles.settingLabel}>Slots bookable per week</Text>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
+        </View>
         <SelectList
           placeholder={slotsBookablePerWeek}
           setSelected={(val) => {
@@ -348,14 +341,22 @@ export default function EditBookableObject({ route }) {
           editBookableObject()
           navigation.goBack()
         }}>
-        <Text style={styles.buttonText}>Save</Text>
+        <Text style={styles.buttonText}>{t("Save")}</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => setEnterModalVisible(true)}
+        onPress={() => setPopupVisible(true)}
       >
-        <Text style={{ color: '#bb0a1e', alignSelf: 'center', margin: '4%' }}>Remove this object</Text>
+        <Text style={{ color: '#bb0a1e', alignSelf: 'center', margin: '4%' }}>{t("RemoveThisObject")}</Text>
       </TouchableOpacity>
-      <PopUpModalDeleteObject />
+      <IOSPopup
+  visible={popupVisible}
+  title={<Text style={{fontWeight:200}}>{t("WantToDelete")}</Text>}
+  hasInput={false}
+  buttonTexts={['Yes', 'No']}
+  buttonColor={colorTheme.firstColor}
+  onButtonPress={handleButtonPress}
+  onCancelPress={handleCancelPress}
+/>
     </ScrollView>
   );
 }
