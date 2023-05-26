@@ -134,6 +134,7 @@ export default function Associations() {
                   console.log(response.data[i].id);
         
                   let item = response.data[i];
+                  if (item.profile_image != null){
                   try {
                     // Call the getImage function and await the result
                     let profileImage = await getImage(item.id);
@@ -145,7 +146,7 @@ export default function Associations() {
                     console.log(item.profile_image);
                   } catch (error) {
                     console.log(error);
-                  }
+                  }}
         
                   updatedData.push(item);
                 }
