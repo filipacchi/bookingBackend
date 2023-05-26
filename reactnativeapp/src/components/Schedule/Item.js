@@ -44,7 +44,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
         >
             <View style={Style.bookedTimesView}>
                 <View style={Style.assoView}>
-                <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                 <View style={{/*alignSelf: 'left',*/ width: 45, height: 45}}> 
                 {item.profile_image != null ?
                                                 (<Image
                                                     style={{
