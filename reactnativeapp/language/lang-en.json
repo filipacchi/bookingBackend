@@ -54,7 +54,7 @@
     "Language": "Language",
     "ChangePassword": "Change Password",
     "Information": "Information",
-    "DoLogOut": "Do you want to logout?",
+    "SureLogOut?": "Do you want to log out?",
 
     "AssociationsPage": "My Associations",
     "EnterKey": "Enter Your Key",
@@ -66,8 +66,10 @@
     "//Misc": "",
     "Error": "Error",
     "PopupJoin": "Join",
-    "PopupCancel": "Cancel", 
-    
+    "PopupCancel": "Close", 
+    "RequestFailed": "Request failed with status code: ",
+    "AssoNoBookables": "The association does not have any bookable objects",
+
     "WantToDelete": "Are you sure you want to permanently remove this object?",
     "EditBookableObject": "Edit Bookable Object",
     "LengthPerBooking": "Length per booking",

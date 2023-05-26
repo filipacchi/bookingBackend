@@ -54,7 +54,8 @@
     "Language": "Språk",
     "ChangePassword": "Ändra lösenord",
     "Information": "Information",
-    "DoLogOut": "Do you want to logout?",
+    "SureLogOut?": "Vill du logga ut?",
+    
 
     "AssociationsPage": "Mina föreningar",
     "EnterKey": "Skriv in din nyckel",
@@ -63,10 +64,12 @@
     "No": "Nej",
     "Cancel": "Avbryt",
 
-    "//Misc": "",
+    "//Error": "",
     "Error": "Error",
     "PopupJoin": "Gå med",
-    "PopupCancel": "Avbryt",
+    "PopupCancel": "Stäng",
+    "RequestFailed": "Hämtningen misslyckades med statuskod: ",
+    "AssoNoBookables": "Föreningen har inga bokningsbara objekt",
 
     "WantToDelete": "Är du säker på att du vill radera detta objekt permanent?",
     "EditBookableObject": "Redigera bokningsbart objekt",

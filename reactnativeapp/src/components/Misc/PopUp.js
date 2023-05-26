@@ -49,13 +49,17 @@ const IOSPopup = ({
                   value={inputValue}
                   onChangeText={handleInputChange}
                 />
-              ) : 
+              ) : ( bodyText ? 
               <View style={styles.bodyTextContainer}>
                 <Text style={styles.bodyText}>
                   {bodyText}
                 </Text>
               </View>
-              }
+              : 
+              <View>
+                
+              </View>
+              )}
               <View style={styles.buttonContainer}>
                 {renderButtons()}
               </View>

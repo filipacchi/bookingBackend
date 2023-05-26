@@ -47,7 +47,7 @@ export default function MainNav() {
                     tabBarIcon: ({ focused, color }) => {
                         if(focused){
                             return <Ionicons name="ios-home" size={24} color={color} />
-                        }else {
+                        } else {
                             return <Ionicons name="ios-home-outline" size={24} color={color} />
                         }
                     }
