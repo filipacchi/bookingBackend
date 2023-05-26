@@ -20,7 +20,7 @@ export default StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 5,
-        marginTop: 5
+        marginTop: 5,
     },
     settingLabel: {
         fontSize: 16,

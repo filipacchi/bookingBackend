@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from "./Settings";
 import SettingsNav from "./SettingsNav";
+import { AuthContext } from "../../../auth/UserContextProvider";
 
 
 
@@ -11,21 +12,36 @@ import SettingsNav from "./SettingsNav";
 import * as SecureStore from 'expo-secure-store';
 
 import { useContext } from "react";
+import { color } from "react-native-reanimated";
 
 
 export default function SettingStack() {
-    const Stack = createNativeStackNavigator();
+    const { colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
+    const {t} = authContext
+    const SettingStack = createNativeStackNavigator();
     return (
-        <NavigationContainer>
 
-            <Stack.Navigator screenOptions={{
+        <SettingStack.Navigator screenOptions={{
 
-            }}>
-                <Stack.Screen name="SettingsNav" component={SettingsNav} />
-                <Stack.Screen name="Settings" component={Settings} />
+        }}>
+            <SettingStack.Screen name="SettingsNav" component={SettingsNav} options={{
 
-            </Stack.Navigator>
+                tabBarActiveTintColor: colorTheme.firstColor,//"#577ac2",
+                tabBarStyle: {
+                    height: 90,
+                    padding: 10
+                },
+                headerStyle: {
+                    backgroundColor: colorTheme.firstColor//"#8AAAE5"
+                },
+                headerTitleStyle: {
+                    color: 'white'
+                },
+                headerTitle: t("Profile")
+            }} />
+            <SettingStack.Screen name="Settings" component={Settings} options={{ headerTitle: "", headerStyle: { backgroundColor: colorTheme.firstColor }, headerTintColor: "white"}} />
 
-        </NavigationContainer>
+        </SettingStack.Navigator>
+
     )
 }

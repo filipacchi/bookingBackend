@@ -26,7 +26,7 @@ export default function Schedule() {
     const [isRefreshing, setIsRefreshing] = useState(true)
     const { colorTheme } = useContext(AuthContext)
     const { authContext  } = useContext(AuthContext)
-    const {t} = authContext
+    const {t, signOut} = authContext
     const [bookedTimes, setBookedTimes] = useState([])
     const [selectedTime, setSelectedTime] = useState("")
     React.useEffect(() => {
@@ -210,6 +210,7 @@ export default function Schedule() {
                        
                 }
             ></FlatList>
+            <Pressable onPress={() => signOut()} style={[Style.button, { position: 'absolute', bottom: '2%', backgroundColor: 'red' }]}><Text style={Style.buttonText}>{t("LogOut")}</Text></Pressable>
         </View>
     )
 }

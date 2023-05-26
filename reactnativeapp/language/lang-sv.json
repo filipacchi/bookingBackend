@@ -7,6 +7,7 @@
     "DoYouWantToJoin": "Vill du gå med i föreningen: ",
     "TryAgain": "Nåt gick fel, vill du prova igen?",
     "YouHaveNotJoined": "Du har inte gått med i någon förening ännu, klicka på knappen nedan för att gå med",
+    "Bookings": "Mina bokningar",
     
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",
@@ -28,6 +29,7 @@
     "EndTime": "Sluttid",
     "Notification": "Notifikation",
     "Book": "Boka",
+    "Profile": "Profil",
 
     "Monday": "Måndag",
     "MondayShort": "Mån",
@@ -53,6 +55,7 @@
     "Language": "Språk",
     "ChangePassword": "Ändra lösenord",
     "Information": "Information",
+    "DoLogOut": "Do you want to logout?",
 
     "AssociationsPage": "Mina föreningar",
     "EnterKey": "Skriv in din nyckel",

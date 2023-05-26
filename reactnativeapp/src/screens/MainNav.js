@@ -15,12 +15,14 @@ import { Header } from "@react-navigation/native";
 import AdminStart from "./AdminStart";
 import { AuthContext } from "../../auth/UserContextProvider";
 import SettingStack from "../components/Settings/SettingStack";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 const Tab = createBottomTabNavigator();
 
 export default function MainNav() {
-    const {authContext} = React.useContext(AuthContext)
-    const {colorTheme} = React.useContext(AuthContext)
+    const {tabTitles, authContext, colorTheme} = React.useContext(AuthContext)
     const {signOut, t, setLang, getLang} = authContext
 
 
@@ -40,10 +42,14 @@ export default function MainNav() {
                 color: 'white'
                 }
         }}>
-            <Tab.Screen name={t("AssociationsPage")} component={AssociationStack} options={{
-                    tabBarIcon: ({ focused, color }) => (
-                        <AntDesign focused={focused} name="home" size={25} color={color} />
-                    )
+            <Tab.Screen name={tabTitles.AssociationsPage} component={AssociationStack} options={{
+                    tabBarIcon: ({ focused, color }) => {
+                        if(focused){
+                            return <Ionicons name="ios-home" size={24} color={color} />
+                        }else {
+                            return <Ionicons name="ios-home-outline" size={24} color={color} />
+                        }
+                    }
                 }} />
            {/*  <Tab.Screen name="Info" component={NavButtons} options={{
                 tabBarIcon: ({ focused, color }) => (
@@ -52,17 +58,26 @@ export default function MainNav() {
 <<<<<<< HEAD
             }} /> */}
     
-            <Tab.Screen name="Booked Times" component={ScheduleStack} options={{
+            <Tab.Screen name={tabTitles.Bookings} component={ScheduleStack} options={{
 
-                tabBarIcon: ({ focused, color }) => (
-                    <AntDesign focused={focused} name="calendar" size={28} color={color} />
-                )
+                tabBarIcon: ({ focused, color }) => {
+                    if(focused){
+                        return <MaterialCommunityIcons name="calendar-month" size={24} color={color} />
+                    }else {
+                        return <MaterialCommunityIcons name="calendar-month-outline" size={24} color={color} />
+                    }
+                }
             }} />
 
-            <Tab.Screen name="Profile" component={SettingStack} options={{
-                tabBarIcon: ({ focused, color }) => (
-                    <AntDesign focused={focused} name="user" size={25} color={color} />
-                )
+            <Tab.Screen name={tabTitles.Profile} component={SettingStack} options={{
+                tabBarIcon: ({ focused, color }) => {
+                    if(focused){
+                        return <FontAwesome name="user" size={27} color={color} />
+                    }else {
+                        return <FontAwesome name="user-o" size={24} color={color} />
+                    }
+                }, 
+                headerShown: false
             }} />
         </Tab.Navigator>
     )

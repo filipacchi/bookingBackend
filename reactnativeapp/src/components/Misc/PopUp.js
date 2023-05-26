@@ -18,7 +18,7 @@ const IOSPopup = ({
       <TouchableOpacity
         key={index}
         style={[styles.button, { backgroundColor: buttonColor }]}
-        onPress={() => onButtonPress(index)}
+        onPress={() => {onButtonPress(index)}}
       >
         <Text style={styles.buttonText}>{text}</Text>
       </TouchableOpacity>

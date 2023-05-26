@@ -10,16 +10,38 @@ import * as SecureStore from 'expo-secure-store';
 import axios from "../../../axios/axios";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import IOSPopup from "../Misc/PopUp";
 
 
 
 
 
 export default function SettingsNav() {
-    const { authContext } = React.useContext(AuthContext);
-    const { colorTheme, setColorTheme, state } = React.useContext(AuthContext);
+    const { colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
     const { signOut, t, setLang, getLang } = authContext
     const navigation = useNavigation()
+    const [confirmPopupVisible, setConfirmPopupVisible] = React.useState(false)
+
+    const handleSignOut = () => {
+        setTimeout(()=>signOut(), 5000)
+    }
+
+    const handleButtonPress = (index) => {
+        if (index === 1) { // Yes button pressed
+            console.log("LOGGA INTE UT")
+            setConfirmPopupVisible(false);
+        }
+        else {
+            console.log("LOGGA UT")
+            signOut()
+        }
+
+    };
+
+    const handleCancelPress = () => {
+        console.log('Popup Cancelled');
+        //setConfirmPopupVisible(false);
+    };
 
 
 
@@ -28,7 +50,7 @@ export default function SettingsNav() {
             <View style={styles.nameHeader}>
                 <Text style={styles.nameTextLarge}>{state.firstName + " " + state.lastName}</Text>
             </View>
-            <TouchableOpacity style={styles.containerSettings} onPress={() => {navigation.navigate('Settings')}}>
+            <TouchableOpacity style={styles.containerSettings} onPress={() => { navigation.navigate('Settings') }}>
                 <View style={styles.innerContainerSettings}>
                     <View style={styles.iconContainer}><Ionicons name="settings-outline" size={25} color="black" /></View>
                     <Text style={styles.settingNameText}>{t('SettingsPage')}</Text>
@@ -56,7 +78,7 @@ export default function SettingsNav() {
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.containerSettings}>
+            <TouchableOpacity style={styles.containerSettings} onPress={() => signOut()}>
                 <View style={styles.innerContainerSettings}>
                     <View style={styles.iconContainer}><MaterialIcons name="logout" size={24} color="black" /></View>
                     <Text style={styles.settingNameText}>{t('LogOut')}</Text>

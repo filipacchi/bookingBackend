@@ -51,8 +51,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['firstname'] = self.user.first_name
-        data['lastname'] = self.user.last_name
+        data['firstName'] = self.user.first_name
+        data['lastName'] = self.user.last_name
         data['isAssociation'] = self.user.is_association
         return data
 
