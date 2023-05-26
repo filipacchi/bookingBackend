@@ -210,7 +210,6 @@ export default function Schedule() {
                        
                 }
             ></FlatList>
-            <Pressable onPress={() => signOut()} style={[Style.button, { position: 'absolute', bottom: '2%', backgroundColor: 'red' }]}><Text style={Style.buttonText}>{t("LogOut")}</Text></Pressable>
         </View>
     )
 }
