@@ -62,6 +62,21 @@
     "AssociationsQMark": "Skriv in nyckeln som du har fått av din förening. Den består av 10 tecken på formen XXXX-XXXXXX.",
     "Yes": "Ja",
     "No": "Nej",
-    "Cancel": "Avbryt"
+    "Cancel": "Avbryt",
+
+    "WantToDelete": "Är du säker på att du vill radera detta objekt permanent?",
+    "EditBookableObject": "Redigera bokningsbart objekt",
+    "LengthPerBooking": "Längd per bokning",
+    "BookableAllDay": "Bokningsbar hela dygnet",
+    "FirstStartTime": "Starttid",
+    "EarliestBookableTime": "Tidigaste bokningsbara tiden",
+    "LatestBookableTime": "Inte bokningsbar efter",
+    "SlotsBookablePerDay": "Max antal möjliga bokningar per dygn",
+    "SlotsBookablePerWeek": "Max antal möjliga bokningar per vecka",
+    "Save": "Spara",
+    "RemoveThisObject": "Radera objekt",
+
+    "AddBookableObject": "Lägg till bokningsbart objekt",
+    "ObjectName": "Objektets namn"
     
 }

@@ -61,5 +61,20 @@
     "AssociationsQMark": "Enter the key that you have received from your association. It consists of 10 characters in the format XXXX-XXXXX",
     "Yes": "Yes",
     "No": "No",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+
+    "WantToDelete": "Are you sure you want to permanently remove this object?",
+    "EditBookableObject": "Edit Bookable Object",
+    "LengthPerBooking": "Length per booking",
+    "BookableAllDay": "Bookable all day",
+    "FirstStartTime": "First start time",
+    "EarliestBookableTime": "Earliest bookable time",
+    "LatestBookableTime": "Not bookable after",
+    "SlotsBookablePerDay": "Slots bookable per day",
+    "SlotsBookablePerWeek": "Slots bookable per week",
+    "Save": "Save",
+    "RemoveThisObject": "Remove this object",
+
+    "AddBookableObject": "Add Bookable Object",
+    "ObjectName": "Object Name"
 }

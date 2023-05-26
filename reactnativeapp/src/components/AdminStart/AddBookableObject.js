@@ -215,7 +215,7 @@ export default function AddBookableObject({ route }) {
           <View style={[styles.settingContainer, { backgroundColor: firstStartTimeBackgroundColor }]}>
             <View style={styles.settingContainer}
             onLayout={handleLayout}>
-              <View style={{alignSelf: 'left', width: '50%'}}>
+               <View style={styles.settingLabelOverhead}>
               <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
               </View>
               <SelectList
@@ -254,7 +254,7 @@ export default function AddBookableObject({ route }) {
             <View style={[styles.settingContainer, { backgroundColor: earliestBookableTimeBackgroundColor }]}>
               <View style={styles.settingContainer}
               onLayout={handleLayout}>
-                <View style={{alignSelf: 'left', width: '50%'}}>
+                 <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
                 </View>
                 <SelectList
@@ -270,7 +270,7 @@ export default function AddBookableObject({ route }) {
             <View style={[styles.settingContainer, { backgroundColor: latestBookableTimeBackgroundColor }]}>
               <View style={styles.settingContainer}
               onLayout={handleLayout}>
-                <View style={{alignSelf: 'left', width: '50%'}}>
+                 <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
                 </View>
                 <SelectList
@@ -289,7 +289,7 @@ export default function AddBookableObject({ route }) {
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor }]}>
         <View style={styles.settingContainer}
         onLayout={handleLayout}>
-          <View style={{alignSelf: 'left', width: '50%'}}>
+           <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
           </View>
           <SelectList
@@ -305,7 +305,7 @@ export default function AddBookableObject({ route }) {
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor }]}>
         <View style={styles.settingContainer}
           onLayout={handleLayout}>
-            <View style={{alignSelf: 'left', width: '50%'}}>
+             <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
           </View>
           <SelectList
