@@ -4,8 +4,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from "./Settings";
 import SettingsNav from "./SettingsNav";
 import { AuthContext } from "../../../auth/UserContextProvider";
-
-
+import { Text } from "react-native-paper";
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -13,10 +14,12 @@ import * as SecureStore from 'expo-secure-store';
 
 import { useContext } from "react";
 import { color } from "react-native-reanimated";
+import { TouchableOpacity } from "react-native";
 
 
 export default function SettingStack() {
-    const { colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
+    const nav = useNavigation()
+    const { tabTitles, colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
     const {t} = authContext
     const SettingStack = createNativeStackNavigator();
     return (
@@ -37,9 +40,11 @@ export default function SettingStack() {
                 headerTitleStyle: {
                     color: 'white'
                 },
-                headerTitle: t("Profile")
+                headerBackTitleVisible: false,
+                headerTitle: tabTitles.Profile,
+                headerTitleAlign: "center",
             }} />
-            <SettingStack.Screen name="Settings" component={Settings} options={{ headerTitle: "", headerStyle: { backgroundColor: colorTheme.firstColor }, headerTintColor: "white"}} />
+            <SettingStack.Screen name="Settings" component={Settings} options={{headerBackTitle: "TILLBAKA", headerTitle: "", headerStyle: { backgroundColor: colorTheme.firstColor }, headerTintColor: "white", headerLeft: () => <TouchableOpacity onPress={()=> nav.navigate("SettingsNav")} style={{flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 10}}><AntDesign name="left" size={20} color="white" /><Text style={{color: "white"}}>{tabTitles.Return}</Text></TouchableOpacity>,}} />
 
         </SettingStack.Navigator>
 

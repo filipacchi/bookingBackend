@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, TouchableWithoutFeedback, PanResponder, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, PanResponder, TouchableOpacity, Dimensions } from 'react-native';
 import moment from 'moment';
 import { Feather } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
@@ -11,6 +11,7 @@ const SwipeableCalendar = ({ selectedDay, setSelectedDay, bookAhead }) => {
   const [dateArray, setDateArray] = useState()
   const {colorTheme, authContext} = useContext(AuthContext)
   const {t} = authContext
+  const flatListRef = useRef(null)
 
  
 
@@ -41,10 +42,11 @@ const SwipeableCalendar = ({ selectedDay, setSelectedDay, bookAhead }) => {
   return (
     <View>
       <FlatList
+      ref={flatListRef}
       data={dateArray}
       horizontal={true}
       renderItem={
-        ({ item }) => {
+        ({ item, index }) => {
           selDay = selectedDay.format("Y-MM-DD")
           itemDay = item.day.format("Y-MM-DD")
           return(
@@ -52,6 +54,11 @@ const SwipeableCalendar = ({ selectedDay, setSelectedDay, bookAhead }) => {
             activeOpacity={0.5}
             onPress={() => {
               console.log("VALDDAG: "+item.day)
+              flatListRef.current.scrollToIndex({
+                index: index,
+                animated: true,
+                viewPosition: 0.5, // 0.5 means center of the container
+              });
                 setSelectedDay(item.day)
             }} 
             style={[Style.calendarOuterItemBox, {borderBottomColor: selDay == itemDay ? colorTheme.firstColor : "transparent"}]}>

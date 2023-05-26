@@ -54,9 +54,8 @@ export default function Settings() {
     }
 
     return (
-        <View style={{ width: '100%', height: '100%' }}>
-            <ScrollView style={styles.container}>
-                <View style={[styles.settingContainer, { zIndex: 2 }]}>
+            <View style={styles.container}>
+                <View style={[styles.settingContainer]}>
                     <Text style={styles.settingLabel}>{t("Language")}</Text>
                     <View style={{ width: "40%" }}>
                         <SelectList
@@ -91,8 +90,7 @@ export default function Settings() {
                         />
                     </View>
                 </View>
-            </ScrollView>
+            </View>
 
-        </View>
     )
 }

@@ -7,7 +7,7 @@
     "DoYouWantToJoin": "Do you want to join the association: ",
     "TryAgain": "Something went wrong, do you want to try again?",
     "YouHaveNotJoined": "You have not joined any associations yet, press the button below to join an association",
-    "Bookings": "My bookings",
+    "Bookings": "My Bookings",
 
     "CreateAccountPage": "Create Account",
     "Username": "Username",
@@ -29,6 +29,8 @@
     "EndTime": "End Time",
     "Notification": "Notification",
     "Book": "Book",
+    "NoBookings": "No bookings found",
+    "NoBookingsMsg": "Go to My Associations to book!",
 
     "Monday": "Monday",
     "Mon": "Mon",

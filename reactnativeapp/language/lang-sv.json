@@ -29,6 +29,8 @@
     "EndTime": "Sluttid",
     "Notification": "Notifikation",
     "Book": "Boka",
+    "NoBookings": "Inga bokningar hittades",
+    "NoBookingsMsg": "Gå till Mina föreningar för att boka!",
 
     "Monday": "Måndag",
     "Mon": "Mån",

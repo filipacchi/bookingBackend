@@ -12,7 +12,6 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     settingContainer: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -21,6 +20,7 @@ export default StyleSheet.create({
         padding: 10,
         marginBottom: 5,
         marginTop: 5,
+        zIndex: 2
     },
     settingLabelOverhead:{
         width: '50%'
@@ -90,6 +90,7 @@ export default StyleSheet.create({
     assoText: {
         color: "#222222",
         fontSize: 15,
+        fontWeight: 500
     },
     assoView: {
         flexDirection: "row",
@@ -111,14 +112,14 @@ export default StyleSheet.create({
     },
     assoDarkView: {
         backgroundColor: "#ededed",
-        padding: 15
+        padding: 5
     },
     bookObject: {
         backgroundColor: "white",
         borderRadius: 10,
         borderColor: "white",
         borderWidth: 1,
-        padding: 8,
+        padding: 15,
         margin: 5
     },
     modalWindow: {
@@ -280,7 +281,7 @@ export default StyleSheet.create({
     },
     assoViewInner: {
         flex: 1,
-        gap: 5
+        //gap: 5
     },
     bookedTimesView: {
         backgroundColor: "white",
@@ -301,15 +302,16 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginVertical: "5%"
       },
       innerContainerSettings: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: "5%"
+        //gap: "5%"
       },
       settingsView: {
         padding: "5%",
-        gap: "30%"
+        //gap: "30%"
       },
       nameTextLarge: {
         fontSize: 20,
@@ -330,7 +332,8 @@ export default StyleSheet.create({
       },
       calendarOuterItemBox: {
         backgroundColor: "white",
-        padding: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 5,
         justifyContent: "center",
         alignItems: "center",
         borderBottomWidth: 3
@@ -345,5 +348,19 @@ export default StyleSheet.create({
       },
       textDayNum: {
         fontFamily: Platform.OS === 'ios' ? "Avenir-Heavy" : "normal"
+      },
+      emptyFlatOuter: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        borderColor: "white",
+        borderWidth: 1,
+        padding: 15,
+        margin: 10,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+      },
+      emptyFlatInner: {
+        marginHorizontal: 20
       }
 });

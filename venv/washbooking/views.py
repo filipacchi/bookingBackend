@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 import base64
 import math
 import pprint
@@ -398,8 +398,18 @@ class GetImage(APIView):
     permission_classes = []
     def get(self, request, pk):
         image = Association.objects.get(pk=pk).profile_image
-        return HttpResponse(image, content_type="image/png")
-
+        if image == "": 
+            print("FEL")
+            return HttpResponse(status=404)
+        else:
+            return HttpResponse(image, content_type="image/png")
+        """ try:
+            
+            return HttpResponse(image, content_type="image/png")
+        except:
+            return Response()
+        else:
+            return HttpResponse(image, content_type="image/png") """
 
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]

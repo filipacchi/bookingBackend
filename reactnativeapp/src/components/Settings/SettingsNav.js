@@ -1,4 +1,4 @@
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet, View, Text, Pressable, ScrollView, Image } from "react-native"
@@ -61,7 +61,7 @@ export default function SettingsNav() {
 
     return (
         <View>
-        <View style={styles.settingsView}>
+         <View style={styles.settingsView}>
             <View style={styles.nameHeader}>
                 <Text style={styles.nameTextLarge}>{state.firstName + " " + state.lastName}</Text>
             </View>
@@ -101,7 +101,6 @@ export default function SettingsNav() {
                 <Ionicons name="chevron-forward" size={24} color="black" />
             </TouchableOpacity>
         </View>
-        
         <IOSPopup
             visible={logoutPopupVisible}
             title={t('SureLogOut?')} 
@@ -121,7 +120,7 @@ export default function SettingsNav() {
             buttonColor={colorTheme.firstColor}
             onButtonPress={handleErrorCancelPress}
             onCancelPress={handleErrorCancelPress}/>
-
+ 
         </View>
     )
 }

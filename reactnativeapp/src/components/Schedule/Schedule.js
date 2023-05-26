@@ -24,29 +24,18 @@ export default function Schedule() {
     myBookings = {}
     const [ConfirmModalVisible, setConfirmModalVisible] = useState(true)
     const navigation = useNavigation()
-    const [token, setToken] = useState("")
     const [isRefreshing, setIsRefreshing] = useState(true)
     const { colorTheme } = useContext(AuthContext)
-    const { authContext  } = useContext(AuthContext)
-    const {t, signOut} = authContext
+    const { authContext } = useContext(AuthContext)
+    const { t, signOut } = authContext
     const [bookedTimes, setBookedTimes] = useState([])
     const [selectedTime, setSelectedTime] = useState("")
 
     const [errorText, setErrorText] = useState()
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
-    const [isLoading, setisLoading] = useState(true)
+    const [isLoading, setisLoading] = useState(false)
 
-    React.useEffect(() => {
-        console.log("Inuti React.useEffect")
-        const getToken = async () => {
-            console.log("--- inuti getToken i React.useEffect ---")
-            let access_token = await SecureStore.getItemAsync('userToken')
-            console.log("ASSO: " + access_token)
-            setToken(access_token)
-            loadData(access_token)
-        }
-        getToken()
-    }, [])
+    useEffect(() => loadData(), [])
 
     const sortObjectsByDate = ((objects) => {
         return objects.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
@@ -58,103 +47,88 @@ export default function Schedule() {
         setErrorPopUpVisible(false)
     }
 
-    const loadData = ((token) => {
-        console.log("---- Inuti loadData (Schedule.js), token = " + token)
+    const loadBookingsAndImages = async (data) => {
+        const updatedData = [];
+        for (let i = 0; i < data.length; i++) {
 
-        async function getUserBookings(token) {
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
+            let item = data[i];
+            try {
+                console.log(item.associationId)
+                let profileImage = await getImage(item.associationId);
+                item.profile_image = profileImage;
+
+                //console.log(item.profile_image);
+            } catch (error) {
+                console.log(error);
             }
 
-            axios.get('user/bookedtimes/get',
-                config
-            )
-                .then(async (response) => {
-                    console.log("response: ")
-                    console.log(response.data)
-                    console.log("response 2: ")
-                    console.log(response.data[0].associationId)
+            updatedData.push(item);
+        }
 
-                    const updatedData = [];
-                    for (let i = 0; i < response.data.length; i++) {
-                      console.log('INUTI FOR LOOP');
-                      console.log(response.data[i].profile_image);
-                      console.log(response.data[i]);
-            
-                      let item = response.data[i];
-                      try {
-                        console.log(item.associationId)
-                        let profileImage = await getImage(item.associationId);
-            
-                        item.profile_image = profileImage;
-            
-                        console.log(item.profile_image);
-                      } catch (error) {
-                        console.log(error);
-                      }
-            
-                      updatedData.push(item);
-                    }
-            
-                    console.log('UTANFÖR FOR LOOP');
-                    setBookedTimes(sortObjectsByDate(updatedData))
-                    setIsRefreshing(false)
+        console.log('UTANFÖR FOR LOOP');
+        setBookedTimes(sortObjectsByDate(updatedData))
+        setIsRefreshing(false)
+    }
+
+    const loadData = (() => {
+        async function getUserBookings() {
+            axios.get('user/bookedtimes/get')
+                .then(response => {
+                    loadBookingsAndImages(response.data)
                 })
                 .catch(error => {
                     console.log(error);
                 });
         }
-        getUserBookings(token)
-        console.log(bookedTimes)
-        setIsRefreshing(false)
+        getUserBookings()
     })
 
+    const loadImages = async (response) => {
+        try {
+            let uintArray = new Uint8Array(response.data);
+            let chunkSize = 65536;
+            let chunks = Math.ceil(uintArray.length / chunkSize);
+
+            let chunkArray = [];
+            for (let i = 0; i < chunks; i++) {
+                let start = i * chunkSize;
+                let end = start + chunkSize;
+                let chunk = Array.from(uintArray.slice(start, end));
+                chunkArray.push(chunk);
+            }
+
+            let base64Chunks = chunkArray.map((chunk) =>
+                base64.encode(String.fromCharCode(...chunk))
+            );
+            let base64string = base64Chunks.join('');
+
+
+            //base64string = base64.encode(String.fromCharCode(...uintArray))
+            contentType = response.headers['content-type']
+            url = "data:" + contentType + ";base64," + base64string
+            return url
+        } catch (e) {
+            return e
+        }
+    }
     const getImage = async (associationId) => {
-        return new Promise((resolve, reject) => {
-        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
-        )
-            .then(response => {
-              let uintArray = new Uint8Array(response.data);
-        
-              let chunkSize = 65536; 
-              let chunks = Math.ceil(uintArray.length / chunkSize);
-        
-              let chunkArray = [];
-               for (let i = 0; i < chunks; i++) {
-                 let start = i * chunkSize;
-                 let end = start + chunkSize;
-                 let chunk = Array.from(uintArray.slice(start, end));
-                 chunkArray.push(chunk);
-               }
-        
-               let base64Chunks = chunkArray.map((chunk) =>
-               base64.encode(String.fromCharCode(...chunk))
-               );
-               let base64string = base64Chunks.join('');
-        
-
-              //base64string = base64.encode(String.fromCharCode(...uintArray))
-                contentType = response.headers['content-type']
-                url = "data:" + contentType + ";base64," + base64string
-                resolve(url);
-                console.log('SÄTTER NY BILD')
-            })
-            .catch(error => {
-                console.log(error);
-
+        try {
+            const response = await axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" })
+            return loadImages(response)
+        } catch (error) {
+            let errorCode = error.response.status.toString()
+            if (errorCode != "404") {
                 setErrorText(t('RequestFailed') + error.response.status.toString())
                 setErrorPopUpVisible(true)
-                reject(error);
-            })
-            .finally(
-                setisLoading(false)
-            )
-        });
+            }
+        } finally {
+            setisLoading(false)
+        }
     }
 
 
     /* useEffect(()=>{
-
+     
     }) */
 
 
@@ -163,7 +137,7 @@ export default function Schedule() {
         //OM BARA EN SKA KUNNA VARA ÖPPEN SAMTIDIGT
         let tempData = bookedTimes
         tempData.map((item, index) => {
-            if(index == ind) {
+            if (index == ind) {
                 item.opened = true
             } else {
                 item.opened = false
@@ -176,7 +150,7 @@ export default function Schedule() {
         setBookedTimes(temp)
     }
 
-    const delBookingAxios = async (ind) =>{
+    const delBookingAxios = async (ind) => {
         let booking = bookedTimes[ind]
         let data = {
             booking_object: booking["bookingObjectKey"],
@@ -185,7 +159,7 @@ export default function Schedule() {
             end_time: booking["endTime"]
         }
         axios.delete('book/delete/',
-            {data}
+            { data }
         )
             .then(response => {
                 console.log(response.data)
@@ -200,9 +174,9 @@ export default function Schedule() {
         let tempData = bookedTimes
         let temp = []
         tempData.map((item, index) => {
-            if(index != ind) {
+            if (index != ind) {
                 temp.push(item)
-            } 
+            }
         })
         setBookedTimes(temp)
     }
@@ -215,38 +189,54 @@ export default function Schedule() {
         )
     }
 
+    const emptyFlatComp = () => {
+        return (
+            <View style={[Style.emptyFlatOuter]}>
+                <MaterialCommunityIcons name="calendar-month-outline" size={24} color={"grey"} />
+                <View style={Style.emptyFlatInner}>
+                    <Text style={{fontWeight: 500, marginBottom: 5}}>{t('NoBookings')}</Text>
+                    <Text style={{color: "grey"}}>{t('NoBookingsMsg')}</Text>
+                </View>
+
+            </View>
+        )
+    }
+
 
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles1.text}></Text>
             <FlatList
                 data={bookedTimes}
-                style={Style.expandFlatlist}
-                onRefresh={() => { console.log("från onRefresh i FlatList"); loadData(token) }}
+                onRefresh={() => { console.log("från onRefresh i FlatList"); loadData() }}
                 refreshing={isRefreshing}
                 renderItem={
                     ({ item, index }) => {
-                        return <Item item={item} index={index} onComponentOpen={(x)=>{ console.log("aiosdjioas");
+                        return (<Item item={item} index={index} onComponentOpen={(x) => {
+                            console.log("aiosdjioas");
                             openComp(x)
                         }}
-                        onDelete={(x, y)=> {
-                            deleteBooking(x)
-                        }}
-                        />
+                            onDelete={(x, y) => {
+                                deleteBooking(x)
+                            }}
+                        />)
                     }
-                       
-                }>
+
+                }
+                ListEmptyComponent={emptyFlatComp}
+            >
+
             </FlatList>
 
             <IOSPopup
-            visible={errorPopUpVisible}
-            title={t("Error")}
-            hasInput={false}
-            bodyText={errorText}
-            buttonTexts={[t('PopupCancel')]}
-            buttonColor={colorTheme.firstColor}
-            onButtonPress={handlePopupClosePress}
-            onCancelPress={handlePopupClosePress}/>
+                visible={errorPopUpVisible}
+                title={t("Error")}
+                hasInput={false}
+                bodyText={errorText}
+                buttonTexts={[t('PopupCancel')]}
+                buttonColor={colorTheme.firstColor}
+                onButtonPress={handlePopupClosePress}
+                onCancelPress={handlePopupClosePress} />
         </View>
     )
 }

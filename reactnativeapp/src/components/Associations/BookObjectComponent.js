@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
 import LottieView from "lottie-react-native";
 import { useEffect, useState } from "react";
 import axios from "../../../axios/axios";
@@ -7,21 +7,23 @@ import axios from "../../../axios/axios";
 import WeekCalendar from "./WeekCalendar";
 import BookablesView from "./BookablesView";
 import Swiper from 'react-native-swiper'
+import { BookItem } from "./BookItem";
 
 export default function BookObjectComponent({selectedCancelTime,setSelectedCancelTime,booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
             <FlatList
                 data={timeSlots}
-                style={{}}
+                numColumns={2}
+                columnWrapperStyle = {{alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap"}}
                 renderItem={
                     ({ item }) => {
                         if (!item.booked || item.booked_by == user) {
                             return (
-                                <View style={{ borderRadius: 10, overflow: 'hidden', margin: selectedCancelTime == item.title ? 6 : 8 }}>
-                                    <Text suppressHighlighting={true}
+                                <View style={{width: timeSlots.length >= 10 ? "40%" : "90%", borderRadius: 10, overflow: 'hidden', margin: selectedCancelTime == item.title ? 6 : 8 }}>
+                                    <TouchableOpacity
                                         onPress={() => {
                                             if (!item.booked) {
                                                 setSelectedCancelTime(null)
@@ -33,7 +35,9 @@ export default function BookObjectComponent({selectedCancelTime,setSelectedCance
                                                 setSelectedCancelTime(item.title)
                                             }
                                         }}
-                                        style={{borderColor: "black", borderWidth: selectedCancelTime == item.title ? 2 : 0, borderRadius: 10, fontSize: 28, padding: 20, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5", color: "white" }}>{item.title}</Text></View>
+                                        style={{ borderColor: "black", borderWidth: selectedCancelTime == item.title ? 2 : 0, borderRadius: 10, padding: 15, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5"  : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5"}}><Text style={{color: "white"}}>{item.title}</Text>
+                                        </TouchableOpacity>
+                                        </View>
                             )
                         }
 

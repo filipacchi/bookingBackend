@@ -1,6 +1,6 @@
 
 import { StyleSheet, View, Text, Pressable, TextInput, TouchableOpacity, SafeAreaView, Image, FlatList, Modal, Button } from "react-native"
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
 import { NativeModules, Platform } from 'react-native';
 import React from 'react';
@@ -33,7 +33,6 @@ export default function Associations() {
     const [isLoading, setIsLoading] = useState(true)
     const [image, setImage] = useState(null);
     const [isImageLoaded, setIsImageLoaded] = React.useState(false)
-    const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
     const [popupVisible, setPopupVisible] = useState(false);
     const [confirmPopupVisible, setConfirmPopupVisible] = useState(false)
@@ -118,12 +117,10 @@ export default function Associations() {
         });
     }
 
-    const loadData = (token) => {
-        async function getUserAssociation(token) {
-            console.log("Inuti getUser: " + token)
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
+    useEffect(()=>loadData(),[])
+
+    const loadData = () => {
+        async function getUserAssociation() {
             const bodyParameters = {
                 key: "value"
             };
@@ -165,26 +162,11 @@ export default function Associations() {
                 setIsRefreshing(false);
               });
           }
-        getUserAssociation(token)
+        getUserAssociation()
     }
 
-    React.useEffect(() => {
-        const getToken = async () => {
-            let access_token = await SecureStore.getItemAsync('userToken')
-            console.log("ASSO: " + access_token)
-            setToken(access_token)
-            loadData(access_token)
-        }
-        getToken()
-    }, [])
 
     async function JoinAssociation() {
-        console.log("Inuti getUser: " + state.userToken)
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
-
         const bodyParameters = {
             key: "value"
         };
@@ -192,7 +174,7 @@ export default function Associations() {
         )
             .then(response => {
                 console.log("" + response.data)
-                loadData(token)
+                loadData()
             })
             .catch(error => {
                 console.log(error);
@@ -200,11 +182,6 @@ export default function Associations() {
     }
 
     async function GetAssociation(tI) {
-        console.log("Inuti getUser: " + state.userToken)
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
 
         const bodyParameters = {
             key: "value"
@@ -262,7 +239,7 @@ export default function Associations() {
                 <FlatList
                     data={Associations}
                     style={Style.expandFlatlist}
-                    onRefresh={() => loadData(token)}
+                    onRefresh={() => loadData()}
                     refreshing={isRefreshing}
                     ListFooterComponent={
                         <Pressable onPress={() => setPopupVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
@@ -272,7 +249,7 @@ export default function Associations() {
                         return(
                             <View style={[Style.assoFlatView, Style.shadowProp]}>
                                 <View style={Style.assoView}>
-                                <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
+                                <View style={{/* alignSelf: 'left', */ width: 45, height: 45, justifyContent: "center", alignItems: "center"}}>
                                             {item.profile_image != null ?
                                                 (<Image
                                                     style={{
@@ -303,7 +280,7 @@ export default function Associations() {
                                                     console.log(item['objectId'])
                                                     navigation.navigate("BookableObject", {name: item['objectName'] ,id: item['objectId'], bookAhead: item['bookAheadWeeks'], token: state.userToken })
                                                 }} style={Style.bookObject}>
-                                                    <Text>{item['objectName']}</Text>
+                                                    <Text style={{ color: "#1a1a1a" }}>{item['objectName']}</Text>
                                                 </TouchableOpacity>
                                             )
                                         }
