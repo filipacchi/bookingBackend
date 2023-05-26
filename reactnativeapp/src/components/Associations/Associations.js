@@ -298,12 +298,12 @@ export default function Associations() {
                                         horizontal={true}
                                         renderItem={
                                             ({ item }) => (
-                                                <Pressable onPress={() => {
+                                                <TouchableOpacity onPress={() => {
                                                     console.log(item['objectId'])
-                                                    navigation.navigate("BookableObject", { id: item['objectId'], token: state.userToken })
+                                                    navigation.navigate("BookableObject", {name: item['objectName'] ,id: item['objectId'], token: state.userToken })
                                                 }} style={Style.bookObject}>
                                                     <Text>{item['objectName']}</Text>
-                                                </Pressable>
+                                                </TouchableOpacity>
                                             )
                                         }
                                         

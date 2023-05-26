@@ -22,7 +22,7 @@ function UserContextProvider({ children }) {
 
 
   const [colorTheme, setColorTheme] = useState({ name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff" })
-  const [tabTitles, setTabTitles] = useState({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings")})
+  const [tabTitles, setTabTitles] = useState({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return")})
   const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -182,7 +182,7 @@ function UserContextProvider({ children }) {
       },
       setLang: (lang) => {
         i18n.locale = lang
-        setTabTitles({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings")})
+        setTabTitles({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return")})
 
       },
       getLang: () => {

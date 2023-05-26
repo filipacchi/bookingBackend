@@ -23,7 +23,6 @@ const Tab = createBottomTabNavigator();
 
 export default function MainNav() {
     const {tabTitles, authContext, colorTheme} = React.useContext(AuthContext)
-    const {signOut, t, setLang, getLang} = authContext
 
 
     return (
@@ -42,7 +41,9 @@ export default function MainNav() {
                 color: 'white'
                 }
         }}>
-            <Tab.Screen name={tabTitles.AssociationsPage} component={AssociationStack} options={{
+            <Tab.Screen name="AssociationNav" component={AssociationStack} options={{
+                headerShown: false,
+                tabBarLabel: tabTitles.AssociationsPage,
                     tabBarIcon: ({ focused, color }) => {
                         if(focused){
                             return <Ionicons name="ios-home" size={24} color={color} />
@@ -58,8 +59,8 @@ export default function MainNav() {
 <<<<<<< HEAD
             }} /> */}
     
-            <Tab.Screen name={tabTitles.Bookings} component={ScheduleStack} options={{
-
+            <Tab.Screen name="ScheduleNav" component={ScheduleStack} options={{
+                tabBarLabel: tabTitles.Bookings,
                 tabBarIcon: ({ focused, color }) => {
                     if(focused){
                         return <MaterialCommunityIcons name="calendar-month" size={24} color={color} />
@@ -69,7 +70,8 @@ export default function MainNav() {
                 }
             }} />
 
-            <Tab.Screen name={tabTitles.Profile} component={SettingStack} options={{
+            <Tab.Screen name="Profile" component={SettingStack} options={{
+                tabBarLabel: tabTitles.Profile,
                 tabBarIcon: ({ focused, color }) => {
                     if(focused){
                         return <FontAwesome name="user" size={27} color={color} />
