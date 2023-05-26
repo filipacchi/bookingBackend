@@ -7,7 +7,6 @@ import Auth from "./src/screens/Auth";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import MainNav from "./src/screens/MainNav";
-import Nav from "./src/screens/Nav";
 import AppStack from "./navigation/Stack";
 
 

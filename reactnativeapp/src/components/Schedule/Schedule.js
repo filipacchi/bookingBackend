@@ -6,6 +6,7 @@ import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import Style from "../../screens/Style";
+import { ActivityIndicator } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaFrame } from "react-native-safe-area-context";
@@ -13,6 +14,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
+import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import base64 from 'react-native-base64'
 
 
@@ -29,6 +31,11 @@ export default function Schedule() {
     const {t, signOut} = authContext
     const [bookedTimes, setBookedTimes] = useState([])
     const [selectedTime, setSelectedTime] = useState("")
+
+    const [errorText, setErrorText] = useState()
+    const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
+    const [isLoading, setisLoading] = useState(true)
+
     React.useEffect(() => {
         console.log("Inuti React.useEffect")
         const getToken = async () => {
@@ -45,6 +52,11 @@ export default function Schedule() {
         return objects.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
 
     })
+
+    const handlePopupClosePress = () => {
+        console.log("Popup cancel button pressed (Schedule)")
+        setErrorPopUpVisible(false)
+    }
 
     const loadData = ((token) => {
         console.log("---- Inuti loadData (Schedule.js), token = " + token)
@@ -130,8 +142,14 @@ export default function Schedule() {
             })
             .catch(error => {
                 console.log(error);
+
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
                 reject(error);
-            }).finally()
+            })
+            .finally(
+                setisLoading(false)
+            )
         });
     }
 
@@ -174,8 +192,8 @@ export default function Schedule() {
                 console.log(response.data)
             })
             .catch(error => {
-                console.log(error);
-            });
+                console.log(error)
+            })
     }
 
     const deleteBooking = (ind) => {
@@ -190,6 +208,15 @@ export default function Schedule() {
         setBookedTimes(temp)
     }
 
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1 }}>
+                <ActivityIndicator />
+            </View>
+        )
+    }
+
+
     return (
         <View style={{ flex: 1 }}>
             <Text style={styles1.text}></Text>
@@ -200,7 +227,7 @@ export default function Schedule() {
                 refreshing={isRefreshing}
                 renderItem={
                     ({ item, index }) => {
-                        return <Item item={item} index={index} onComponentOpen={(x)=>{
+                        return <Item item={item} index={index} onComponentOpen={(x)=>{ console.log("aiosdjioas");
                             openComp(x)
                         }}
                         onDelete={(x, y)=> {
@@ -209,8 +236,18 @@ export default function Schedule() {
                         />
                     }
                        
-                }
-            ></FlatList>
+                }>
+            </FlatList>
+
+            <IOSPopup
+            visible={errorPopUpVisible}
+            title={t("Error")}
+            hasInput={false}
+            bodyText={errorText}
+            buttonTexts={[t('PopupCancel')]}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handlePopupClosePress}
+            onCancelPress={handlePopupClosePress}/>
         </View>
     )
 }

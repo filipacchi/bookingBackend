@@ -85,9 +85,8 @@ function UserContextProvider({ children }) {
         }
         //setColorTheme(selectedColor)
       } catch (e) {
-
+        console.log(e)
       }
-
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
         //console.log("LOGGAR " + userRefreshToken),

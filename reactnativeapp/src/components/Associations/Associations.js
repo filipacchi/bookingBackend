@@ -113,7 +113,8 @@ export default function Associations() {
             .catch(error => {
                 console.log(error);
                 reject(error);
-            }).finally(()=>setIsImageLoaded(true))
+            })
+            .finally(() => setIsImageLoaded(true))
         });
     }
 
@@ -301,7 +302,7 @@ export default function Associations() {
                                             ({ item }) => (
                                                 <TouchableOpacity onPress={() => {
                                                     console.log(item['objectId'])
-                                                    navigation.navigate("BookableObject", {name: item['objectName'] ,id: item['objectId'], token: state.userToken })
+                                                    navigation.navigate("BookableObject", {name: item['objectName'] ,id: item['objectId'], bookAhead: item['bookAheadWeeks'], token: state.userToken })
                                                 }} style={Style.bookObject}>
                                                     <Text>{item['objectName']}</Text>
                                                 </TouchableOpacity>
@@ -317,36 +318,37 @@ export default function Associations() {
                 >
                 </FlatList>
             }
-      <IOSPopup
-  visible={popupVisible}
-  title={t("EnterAssociationKey")}
-  placeholder="Ex: 123456"
-  hasInput={true}
-  buttonTexts={['Join', 'Cancel']}
-  buttonColor={colorTheme.firstColor}
-  inputValue={inputValue}
-    setInputValue={setInputValue}
-  onButtonPress={handleButtonPress}
-  onCancelPress={handleCancelPress}
-/>
-<IOSPopup
-  visible={confirmPopupVisible}
-  title={<Text style={{fontWeight:200}}>{t("DoYouWantToJoin")}<Text style={{fontWeight:500}}>{joinAssociationName}</Text></Text>} 
-  hasInput={false}
-  buttonTexts={['Yes', 'No']}
-  buttonColor={colorTheme.firstColor}
-  onButtonPress={handleConfirmButtonPress}
-  onCancelPress={handleConfirmCancelPress}
-/>
-<IOSPopup
-  visible={errorPopupVisible}
-  title={<Text style={{fontWeight:200}}>{t("TryAgain")}</Text>} 
-  hasInput={false}
-  buttonTexts={['Yes', 'No']}
-  buttonColor={colorTheme.firstColor}
-  onButtonPress={handleErrorButtonPress}
-  onCancelPress={handleErrorCancelPress}
-/>
+
+            <IOSPopup
+            visible={popupVisible}
+            title={t("EnterAssociationKey")}
+            placeholder="Ex: 123456"
+            hasInput={true}
+            buttonTexts={['Join', 'Cancel']}
+            buttonColor={colorTheme.firstColor}
+            inputValue={inputValue}
+                setInputValue={setInputValue}
+            onButtonPress={handleButtonPress}
+            onCancelPress={handleCancelPress}/>
+
+            <IOSPopup
+            visible={confirmPopupVisible}
+            title={<Text style={{fontWeight:200}}>{t("DoYouWantToJoin")}<Text style={{fontWeight:500}}>{joinAssociationName}</Text></Text>} 
+            hasInput={false}
+            buttonTexts={['Yes', 'No']}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handleConfirmButtonPress}
+            onCancelPress={handleConfirmCancelPress}/>
+
+            <IOSPopup
+            visible={errorPopupVisible}
+            title={<Text style={{fontWeight:200}}>{t("TryAgain")}</Text>} 
+            hasInput={false}
+            buttonTexts={['Yes', 'No']}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handleErrorButtonPress}
+            onCancelPress={handleErrorCancelPress}/>
+
         </View>
     )
 }

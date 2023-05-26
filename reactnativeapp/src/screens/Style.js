@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform,StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
@@ -85,7 +85,7 @@ export default StyleSheet.create({
         alignSelf: "center",
     },
     expandFlatlist: {
-
+        
     },
     assoText: {
         color: "#222222",
@@ -210,6 +210,15 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+    noBookablesContainer: {
+        justifyContent: "center",
+        height: 90,
+    },
+    noBookablesText: {
+        fontWeight: "500",
+        fontSize: 17,
+        textAlign: "center"
+    },
     langText: {
         color: "white",
         fontWeight: "400",
@@ -318,5 +327,23 @@ export default StyleSheet.create({
       },
       settingNameText: {
         fontSize: 20
+      },
+      calendarOuterItemBox: {
+        backgroundColor: "white",
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        borderBottomWidth: 3
+      },
+      textMonth: {
+        textTransform: 'uppercase',
+        fontSize: 12,
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Medium" : "normal"
+      },
+      textWeekDay: {
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Medium" : "normal"
+      },
+      textDayNum: {
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Heavy" : "normal"
       }
 });
