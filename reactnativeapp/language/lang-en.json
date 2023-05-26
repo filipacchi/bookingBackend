@@ -45,6 +45,7 @@
     "Sunday": "Sunday",
     "SundayShort": "Sun",
 
+    "Profile": "Profile",
     "SettingsPage": "Settings",
     "ChangeLanguage": "Change Language",
     "ColorTheme": "Color Theme",
@@ -53,7 +54,6 @@
     "Language": "Language",
     "ChangePassword": "Change Password",
     "Information": "Information",
-    "Profile": "Profile",
     "DoLogOut": "Do you want to logout?",
 
     "AssociationsPage": "My Associations",
@@ -61,5 +61,10 @@
     "AssociationsQMark": "Enter the key that you have received from your association. It consists of 10 characters in the format XXXX-XXXXX",
     "Yes": "Yes",
     "No": "No",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+
+    "//Misc": "",
+    "Error": "Error",
+    "PopupJoin": "Join",
+    "PopupCancel": "Cancel"
 }

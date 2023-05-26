@@ -5,8 +5,8 @@
     "Settings": "Inställningar",
     "EnterAssociationKey": "Skriv in föreningsnyckel",
     "DoYouWantToJoin": "Vill du gå med i föreningen: ",
-    "TryAgain": "Nåt gick fel, vill du prova igen?",
-    "YouHaveNotJoined": "Du har inte gått med i någon förening ännu, klicka på knappen nedan för att gå med",
+    "TryAgain": "Något gick fel, vill du prova igen?",
+    "YouHaveNotJoined": "Du har inte gått med i någon förening ännu. Klicka på knappen nedan för att gå med.",
     "Bookings": "Mina bokningar",
     
     "CreateAccountPage": "Skapa konto",
@@ -29,7 +29,6 @@
     "EndTime": "Sluttid",
     "Notification": "Notifikation",
     "Book": "Boka",
-    "Profile": "Profil",
 
     "Monday": "Måndag",
     "MondayShort": "Mån",
@@ -46,7 +45,7 @@
     "Sunday": "Söndag",
     "SundayShort": "Sön",
 
-
+    "Profile": "Profil",
     "SettingsPage": "Inställningar",
     "ChangeLanguage": "Byt språk",
     "ColorTheme": "Färgtema",
@@ -62,6 +61,12 @@
     "AssociationsQMark": "Skriv in nyckeln som du har fått av din förening. Den består av 10 tecken på formen XXXX-XXXXXX.",
     "Yes": "Ja",
     "No": "Nej",
-    "Cancel": "Avbryt"
+    "Cancel": "Avbryt",
+
+    "//Misc": "",
+    "Error": "Error",
+    "PopupJoin": "Gå med",
+    "PopupCancel": "Avbryt"
+
     
 }

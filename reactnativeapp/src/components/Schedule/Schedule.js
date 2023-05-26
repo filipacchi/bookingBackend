@@ -13,6 +13,7 @@ import { Swipeable } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
+import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import base64 from 'react-native-base64'
 
 
@@ -29,6 +30,8 @@ export default function Schedule() {
     const {t, signOut} = authContext
     const [bookedTimes, setBookedTimes] = useState([])
     const [selectedTime, setSelectedTime] = useState("")
+    const [errorPopUpVisible, setErrorPopUpVisible] = useState(true)
+
     React.useEffect(() => {
         console.log("Inuti React.useEffect")
         const getToken = async () => {
@@ -45,6 +48,11 @@ export default function Schedule() {
         return objects.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
 
     })
+
+    const handlePopupCancelPress = () => {
+        console.log("Popup cancel button pressed (Schedule)")
+        setErrorPopUpVisible(false)
+    }
 
     const loadData = ((token) => {
         console.log("---- Inuti loadData (Schedule.js), token = " + token)
@@ -129,8 +137,10 @@ export default function Schedule() {
             })
             .catch(error => {
                 console.log(error);
+                setErrorPopUpVisible(true)
                 reject(error);
-            }).finally()
+            })
+            .finally()
         });
     }
 
@@ -208,8 +218,17 @@ export default function Schedule() {
                         />
                     }
                        
-                }
-            ></FlatList>
+                }>
+            </FlatList>
+
+            <IOSPopup
+            visible={errorPopUpVisible}
+            title={t("Error")}
+            hasInput={false}
+            bodyText={"teststt"}
+            buttonTexts={[t('PopupJoin'), t('PopupCancel')]}
+            buttonColor={colorTheme.firstColor}
+            onCancelPress={handlePopupCancelPress}/>
         </View>
     )
 }
