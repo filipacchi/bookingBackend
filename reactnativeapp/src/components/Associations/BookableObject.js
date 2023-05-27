@@ -32,19 +32,19 @@ export default function BookableObject({ route }) {
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
     const [bookedSlot, setBookedSlot] = useState([])
-    const { colorTheme, authContext  } = useContext(AuthContext)
-    const {t} = authContext
+    const { colorTheme, authContext } = useContext(AuthContext)
+    const { t } = authContext
     const [popupVisible, setPopupVisible] = useState(false);
 
-    const delBookingAxios = async () =>{
+    const delBookingAxios = async () => {
         let data = {
             booking_object: route.params.id,
             date: selectedDate,
-            start_time: selectedCancelTime.slice(0,5),
-            end_time: selectedCancelTime.slice(8,13)
+            start_time: selectedCancelTime.slice(0, 5),
+            end_time: selectedCancelTime.slice(8, 13)
         }
         axios.delete('book/delete/',
-            {data}
+            { data }
         )
             .then(response => {
                 console.log(response.data)
@@ -56,25 +56,25 @@ export default function BookableObject({ route }) {
 
     const handleButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
-          setPopupVisible(false);
-          bookTime()
+            bookTime()
+            setPopupVisible(false);
         }
 
         console.log('Button Pressed:', index);
         console.log('Popup Cancelled: ' + selectedTime);
         setPopupVisible(false);
-      };
+    };
 
-      const handleDeleteButtonPress = (index) => {
+    const handleDeleteButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
-          setPopupVisible(false);
-          delBookingAxios()
+            setPopupVisible(false);
+            delBookingAxios()
         }
 
         console.log('Button Pressed:', index);
-        console.log('Popup Cancelled: ' + selectedCancelTime.slice(8,13));
+        console.log('Popup Cancelled: ' + selectedCancelTime.slice(8, 13));
         setPopupVisible(false);
-      };
+    };
 
     const animateElement = () => {
 
@@ -132,7 +132,7 @@ export default function BookableObject({ route }) {
         if (route.params.id) {
             loadWeek(route.params.id, selectedDate)
         }
-        if(route.params.token){
+        if (route.params.token) {
             let decoded = jwt_decode(route.params.token)
             setUser(decoded["user_id"])
         }
@@ -156,17 +156,17 @@ export default function BookableObject({ route }) {
     }
  */
 
-   /*  useEffect(() => {
-        console.log("BOOKAHEAD: "+route.params.bookAhead)
-        setSelectedDate(selectedDay.clone().format().slice(0, 10))
-    }, [selectedDay]) */
+    /*  useEffect(() => {
+         console.log("BOOKAHEAD: "+route.params.bookAhead)
+         setSelectedDate(selectedDay.clone().format().slice(0, 10))
+     }, [selectedDay]) */
 
     const addBookableObject = async (bodyParameters) => {
         axios.post('book/add/',
             bodyParameters
         )
             .then(response => {
-                console.log(response.data)
+                console.log("Responses är: "+response.data)
             })
             .catch(error => {
                 console.log(error);
@@ -175,8 +175,8 @@ export default function BookableObject({ route }) {
 
     const bookTime = () => {
         if (selectedTime != null) {
-            let startTime = selectedTime.slice(0,5)
-            let endTime = selectedTime.slice(8,13)
+            let startTime = selectedTime.slice(0, 5)
+            let endTime = selectedTime.slice(8, 13)
             let bookDate = selectedDay.clone().format().slice(0, 10)
             let bookingObject = route.params.id
             setBookedSlot([selectedTime, bookDate])
@@ -188,7 +188,7 @@ export default function BookableObject({ route }) {
             }
 
             addBookableObject(bodyParameters)
-            
+
         }
     }
 
@@ -232,18 +232,18 @@ export default function BookableObject({ route }) {
 
                 </Swiper> */}
                 <View style={Style.viewBookButton}>
-                    <Pressable onPress={() => {if (selectedTime != null){setPopupVisible(true)}}} style={[Style.pressableBook, {opacity: selectedCancelTime == null ? 1 : 0.5}]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
-                    <Pressable onPress={() => {if (selectedCancelTime != null){setPopupVisible(true)}}} style={[Style.pressableCancelBook, {opacity: selectedCancelTime == null ? 0.5 : 1}]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
+                    <Pressable onPress={() => { if (selectedTime != null) { setPopupVisible(true) } }} style={[Style.pressableBook, { opacity: selectedCancelTime == null ? 1 : 0.5 }]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
+                    <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
                 <IOSPopup
-  visible={popupVisible}
-  title={<Text style={{fontWeight:200}}>{selectedCancelTime == null ? t("BookTime"): t("CancelBookTime")}<Text style={{ textDecorationLine: "underline", textAlign: "center", fontWeight:500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></Text>}
-  hasInput={false}
-  buttonTexts={['Yes', 'No']}
-  buttonColor={colorTheme.firstColor}
-  onButtonPress={selectedCancelTime == null ? handleButtonPress: handleDeleteButtonPress}
-  onCancelPress={selectedCancelTime == null ? handleButtonPress: handleDeleteButtonPress}
-/>
+                    visible={popupVisible}
+                    title={<Text style={{ fontWeight: 200 }}>{selectedCancelTime == null ? t("BookTime") : t("CancelBookTime")}<Text style={{ textDecorationLine: "underline", textAlign: "center", fontWeight: 500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></Text>}
+                    hasInput={false}
+                    buttonTexts={['Yes', 'No']}
+                    buttonColor={colorTheme.firstColor}
+                    onButtonPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
+                    onCancelPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
+                />
             </View>
         </SafeAreaView>
     )

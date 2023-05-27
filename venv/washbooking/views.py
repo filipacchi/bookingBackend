@@ -319,7 +319,7 @@ class CreateBookingAPIVIEW(APIView):
         slots_per_week = object.slotsPerWeek
         
         serializer = BookedTimeSerializer(data=request.data)
-
+        pprint.pprint(serializer)
         if serializer.is_valid():
             #return checkBooking(serializer, object_pk)
             serializer.save()
