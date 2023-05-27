@@ -44,6 +44,19 @@ def save_image(file):
     #     for chunk in file.chunks():
     #         destination.write(chunk)
 
+class DeleteImage(APIView):
+    permission_classes = []
+
+    def delete(self, request, pk):
+        association = get_object_or_404(Association, pk=pk)
+        if association.profile_image:
+            image_path = association.profile_image.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+                association.profile_image.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     
 class UpdateAssociationImage(APIView):
     permission_classes = []

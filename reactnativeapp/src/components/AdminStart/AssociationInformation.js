@@ -14,8 +14,10 @@ import { ActivityIndicator } from "react-native-paper";
 export default function AssociationInformation({ route }) {
   const { associationId, associationName, associationKey,associationImage } = route.params
   const [image, setImage] = useState(null);
-  const { state } = React.useContext(AuthContext)
   const [isLoaded, setIsLoaded] = React.useState(false)
+  const { state, colorTheme, authContext  } = React.useContext(AuthContext)
+  const {t} = authContext
+
 
 
   const postPhotoToServer = (formData) => {
@@ -50,6 +52,9 @@ export default function AssociationInformation({ route }) {
     console.log('RESULT: ' + result.assets[0].uri);
 
     if (!result.canceled) {
+      if(associationImage != null){
+        axios.delete(`association/delete/${associationId}`)
+      }
       setImage(result.assets[0].uri);
       console.log('NÅGOT: ' + result.assets[0].uri)
 
@@ -141,11 +146,11 @@ const getImage = async () => {
       <ScrollView style={styles.container}>
         <View style={styles.settingContainer}>
           <MaterialIcons name="vpn-key" size={24} color="black" />
-          <Text style={styles.objectName}>Key: <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
+          <Text style={styles.objectName}>   {t("Key")} <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
         </View>
         <View style={styles.settingContainer}>
           <MaterialCommunityIcons name="account" size={24} color="black" />
-          <Text style={styles.objectName}>  Members</Text>
+          <Text style={styles.objectName}>  {t("Members")}</Text>
         </View>
       </ScrollView>
     </View>

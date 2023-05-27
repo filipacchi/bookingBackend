@@ -101,6 +101,9 @@
     "AddBookableObject": "Lägg till bokningsbart objekt",
     "ObjectName": "Objektets namn",
 
-    "Avboka": "Avboka"
+    "Avboka": "Avboka",
+
+    "Key": "Nyckel",
+    "Members": "Medlemmar"
     
 }

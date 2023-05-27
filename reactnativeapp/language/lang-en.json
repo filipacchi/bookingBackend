@@ -100,5 +100,8 @@
     "AddBookableObject": "Add Bookable Object",
     "ObjectName": "Object Name",
 
-    "Avboka": "Delete"
+    "Avboka": "Delete",
+
+    "Key": "Key",
+    "Members": "Members"
 }
