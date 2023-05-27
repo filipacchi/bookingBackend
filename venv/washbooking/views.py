@@ -27,23 +27,6 @@ import pandas
 from PIL import Image
 import io
 
-
-def save_image(file):
-    filename = file.name
-    path = os.path.join(settings.MEDIA_ROOT, 'images', filename)
-
-    image = Image.open(file)
-    quality = 70
-
-    save_options = {
-        'quality': quality,
-    }
-    image.save(path, **save_options)
-
-    # with open(path, 'wb+') as destination:
-    #     for chunk in file.chunks():
-    #         destination.write(chunk)
-
 class DeleteImage(APIView):
     permission_classes = []
 
@@ -65,8 +48,6 @@ class UpdateAssociationImage(APIView):
         association = get_object_or_404(Association, pk=pk)
         form = UpdateAssociationImageForm(request.data, instance=association)
         if form.is_valid():
-            save_image(request.FILES['profile_image'])
-            form.save(commit=False)
             association.profile_image = request.FILES['profile_image']
             association.save()
             return Response(status=status.HTTP_200_OK)
