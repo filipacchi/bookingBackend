@@ -26,7 +26,7 @@ from django.conf import settings
 import pandas
 from PIL import Image
 import io
-
+import time
 class DeleteImage(APIView):
     permission_classes = []
 
@@ -295,10 +295,13 @@ class GetBookingsFromDay(APIView):
         bookings = BookedTime.objects.filter(booking_object=bookable_object,date=date)
         bookedSerializer = BookedTimeSerializer(bookings, many=True)
         bookableSeralizer = BookableObjectSerializer(bookable_object)
+        format = "%Y-%m-%d"
+        sdate = datetime.strptime(date, format)
         
         print(bookings)
         print(json.dumps(bookedSerializer.data))
-        return Response([bookableSeralizer.data,bookedSerializer.data] )
+        time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate)
+        return Response(time_slot_array)
 
 class GetBookableObject(APIView):
     permission_classes = []

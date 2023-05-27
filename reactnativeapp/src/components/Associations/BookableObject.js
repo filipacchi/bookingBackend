@@ -37,27 +37,33 @@ export default function BookableObject({ route }) {
     const [popupVisible, setPopupVisible] = useState(false);
 
     const delBookingAxios = async () => {
+
+
+        console.log("SELECTEDCANCEL: " + selectedCancelTime)
         let data = {
             booking_object: route.params.id,
-            date: selectedDate,
+            date: selectedDay.format().slice(0, 10),
             start_time: selectedCancelTime.slice(0, 5),
             end_time: selectedCancelTime.slice(8, 13)
         }
-        axios.delete('book/delete/',
-            { data }
-        )
-            .then(response => {
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.log(error);
-            });
+
+        try {
+            let response = await axios.delete('book/delete/', { data })
+            setBookedSlot([])
+            setSelectedCancelTime(null)
+            setSelectedTime(null)
+            loadData()
+        } catch (e) {
+            console.log(e)
+        }
+        console.log("Avbokar")
+
     }
+
 
     const handleButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
             bookTime()
-            setPopupVisible(false);
         }
 
         console.log('Button Pressed:', index);
@@ -67,12 +73,11 @@ export default function BookableObject({ route }) {
 
     const handleDeleteButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
-            setPopupVisible(false);
             delBookingAxios()
         }
 
         console.log('Button Pressed:', index);
-        console.log('Popup Cancelled: ' + selectedCancelTime.slice(8, 13));
+        //console.log('Popup Cancelled: ' + selectedCancelTime.slice(8, 13));
         setPopupVisible(false);
     };
 
@@ -92,17 +97,19 @@ export default function BookableObject({ route }) {
     };
 
     useEffect(() => {
-        setSelectedTime(null)
         opacityAnimation.setValue(0)
         animateElement()
     }, [selectedDay])
 
 
 
-    const loadData = async (objectId, sdate, edate) => {
+    const loadData = async () => {
+        let objectId = route.params.id
+        let sdate = selectedDay.format().slice(0, 10)
         try {
-            const { data: response } = await axios.get('association/bookableobject/bookedtimes/get/' + objectId + "/" + sdate)
-            return response
+            const { data: response } = await axios.get('book/get/object/' + objectId + "/" + sdate)
+            setTimeSlots(response)
+            setLoading(false)
         }
 
         catch (error) {
@@ -110,34 +117,26 @@ export default function BookableObject({ route }) {
         }
     }
 
-    const loadWeek = async (objectid, startDate) => {
-
-        let sdate = startDate.format().slice(0, 10)
-        let edate = startDate.add(1, "months").format().slice(0, 10)
-        let returnValue = await loadData(objectid, sdate, edate)
-        setTimeSlots(returnValue)
-        /* for (let index = 0; index < updatedWeekDates.length; index++) {
-
-            let returnValue = await loadData(objectid, updatedWeekDates[index].format().slice(0, 10))
-
-            tempBookArray.push(returnValue[0])
-            tempTimeSlotArray.push(returnValue[1])
-        } */
-        /* setTimeSlotsWeekArray(tempTimeSlotArray) */
-        setLoading(false)
-    }
-
     React.useEffect(() => {
         //loadData(1, selectedDate)
-        if (route.params.id) {
-            loadWeek(route.params.id, selectedDate)
-        }
         if (route.params.token) {
             let decoded = jwt_decode(route.params.token)
             setUser(decoded["user_id"])
         }
 
     }, [])
+
+    useEffect(() => {
+        setLoading(true)
+        setBookedSlot([])
+        setSelectedCancelTime(null)
+        setSelectedTime(null)
+        console.log("Inne i UseEFFECT")
+        if (route.params.id) {
+            console.log("Inne i if")
+            loadData()
+        }
+    }, [selectedDay])
 
 
     /*  useEffect(() => {
@@ -161,16 +160,14 @@ export default function BookableObject({ route }) {
          setSelectedDate(selectedDay.clone().format().slice(0, 10))
      }, [selectedDay]) */
 
-    const addBookableObject = async (bodyParameters) => {
-        axios.post('book/add/',
-            bodyParameters
-        )
-            .then(response => {
-                console.log("Responses är: "+response.data)
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    const bookTimeRequest = async (bodyParameters) => {
+        try {
+            let response = await axios.post('book/add/', bodyParameters)
+            loadData()
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 
     const bookTime = () => {
@@ -187,25 +184,18 @@ export default function BookableObject({ route }) {
                 booking_object: bookingObject
             }
 
-            addBookableObject(bodyParameters)
+            bookTimeRequest(bodyParameters)
 
         }
     }
 
-    if (loading) {
-        return (
-            <View style={{ flex: 1 }}>
-                <ActivityIndicator />
-            </View>
-        )
-    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
                 <SwipeableCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} bookAhead={route.params.bookAhead} />
-                <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                <Animated.View style={[opacityStyle, { flex: 1, justifyContent: "center" }]}>
+                    {loading ? <ActivityIndicator size={"large"} color={colorTheme.firstColor} /> : <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}
                 </Animated.View>
                 {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
@@ -232,7 +222,7 @@ export default function BookableObject({ route }) {
 
                 </Swiper> */}
                 <View style={Style.viewBookButton}>
-                    <Pressable onPress={() => { if (selectedTime != null) { setPopupVisible(true) } }} style={[Style.pressableBook, { opacity: selectedCancelTime == null ? 1 : 0.5 }]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
+                    <Pressable onPress={() => { if (selectedTime != null) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: colorTheme.firstColor, opacity: selectedCancelTime == null ? 1 : 0.5 }]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
                     <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
                 <IOSPopup

@@ -22,6 +22,7 @@
     "BookTime": "Do you want to book: ",
     "CancelBookTime": "Do you want to cancel booking: ",
     "ResetPassword": "Forgotten Password?",
+    "HintSchedule": "Pull down to update",
 
     "BookingPage": "Booking",
     "Date": "Date",

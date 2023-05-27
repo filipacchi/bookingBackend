@@ -195,7 +195,7 @@ export default function Schedule() {
                 <MaterialCommunityIcons name="calendar-month-outline" size={24} color={"grey"} />
                 <View style={Style.emptyFlatInner}>
                     <Text style={{fontWeight: 500, marginBottom: 5}}>{t('NoBookings')}</Text>
-                    <Text style={{color: "grey"}}>{t('NoBookingsMsg')}</Text>
+                    <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>
                 </View>
 
             </View>
@@ -224,6 +224,8 @@ export default function Schedule() {
 
                 }
                 ListEmptyComponent={emptyFlatComp}
+                ListFooterComponent={bookedTimes.length == 0 ? null : <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>}
+                ListFooterComponentStyle={{justifyContent: "center", alignItems: "center"}}
             >
 
             </FlatList>
