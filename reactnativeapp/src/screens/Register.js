@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
+import { StyleSheet, View, Text, Pressable, PermissionsAndroid, TouchableOpacity, Linking } from "react-native"
 import { Card } from "react-native-paper"
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Style from "./Style";
+import Checkbox from 'expo-checkbox';
 
 
 export default function Register() {
@@ -22,7 +23,16 @@ export default function Register() {
     const [passwordCheck, onChangePasswordCheck] = useState("");
     const [firstname, onChangeFirstname] = useState("");
     const [lastname, onChangeLastname] = useState("");
-
+    const [isChecked, setIsChecked] = useState(false);
+      
+        const handleCheckboxChange = () => {
+          setIsChecked(!isChecked);
+        };
+      
+        const handleTermsLinkPress = () => {
+          const termsURL = 'https://bookease.se/'; 
+          Linking.openURL(termsURL);
+        };
 
     function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "") {
@@ -93,7 +103,16 @@ export default function Register() {
                                 autoCorrect={false}
                             />
                         </View>
-                        <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>Register</Text></Pressable>
+                        <View style={{flexDirection: 'row',}}>
+      <Checkbox
+        value={isChecked}
+        onValueChange={handleCheckboxChange}
+      />
+      <Text style={{ color: '#000000', flexDirection: 'row' }} onPress={handleCheckboxChange}> {t("IAgreeToThe")} </Text><TouchableOpacity onPress={handleTermsLinkPress}>
+        <Text style={{ color: 'blue'}}>{t("TermsOfService")}</Text>
+      </TouchableOpacity>
+    </View>
+                        <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></Pressable>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
