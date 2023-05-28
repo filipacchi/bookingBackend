@@ -23,6 +23,10 @@
     "CancelBookTime": "Do you want to cancel booking: ",
     "ResetPassword": "Forgotten Password?",
     "HintSchedule": "Pull down to update",
+    "IAgreeToThe": "I agree to the",
+    "TermsOfService": "Terms of Service",
+    "Register": "Register",
+    "NativeLanguage": "Native Language",
 
     "BookingPage": "Booking",
     "Date": "Date",
