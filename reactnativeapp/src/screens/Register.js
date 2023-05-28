@@ -35,7 +35,7 @@ export default function Register() {
         };
 
     function handleSignUp() {
-        if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "") {
+        if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "" || !isChecked) {
             console.log("Nåt är tomt")
         } else if (password === passwordCheck) {
             let data = { email: username, firstname: firstname, lastname: lastname, password: password }
