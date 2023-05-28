@@ -35,6 +35,7 @@ export default function BookableObject({ route }) {
     const { colorTheme, authContext } = useContext(AuthContext)
     const { t } = authContext
     const [popupVisible, setPopupVisible] = useState(false);
+    const [buttonBooked, setButtonBooked] = useState(false)
 
     const delBookingAxios = async () => {
 
@@ -138,7 +139,9 @@ export default function BookableObject({ route }) {
         }
     }, [selectedDay])
 
-
+    useEffect(()=>{
+        setButtonBooked(false)
+    }, [selectedTime])
     /*  useEffect(() => {
          if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
              setNoSwipe(true)
@@ -171,6 +174,7 @@ export default function BookableObject({ route }) {
     }
 
     const bookTime = () => {
+        setButtonBooked(true)
         if (selectedTime != null) {
             let startTime = selectedTime.slice(0, 5)
             let endTime = selectedTime.slice(8, 13)
@@ -222,14 +226,14 @@ export default function BookableObject({ route }) {
 
                 </Swiper> */}
                 <View style={[Style.viewBookButton]}>
-                    <Pressable onPress={() => { if (selectedTime != null) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: colorTheme.firstColor, opacity: selectedCancelTime == null ? 1 : 0.5 }]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
+                    <Pressable onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}><Text style={Style.pressableText}>{buttonBooked ? t("Booked") : t("Book")}</Text></Pressable>
                     <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
                 <IOSPopup
                     visible={popupVisible}
-                    title={<Text style={{ fontWeight: 200 }}>{selectedCancelTime == null ? t("BookTime") : t("CancelBookTime")}<Text style={{ textDecorationLine: "underline", textAlign: "center", fontWeight: 500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></Text>}
+                    title={<View><Text style={{fontSize: 18, fontWeight: 200, textAlign: "center", marginBottom: 5 }}>{selectedCancelTime == null ? t("BookTime") : t("CancelBookTime")}</Text><Text style={{fontSize: 18, textDecorationLine: "underline", textAlign: "center", fontWeight: 500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></View>}
                     hasInput={false}
-                    buttonTexts={['Yes', 'No']}
+                    buttonTexts={[t('Yes'), t('No')]}
                     buttonColor={colorTheme.firstColor}
                     onButtonPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
                     onCancelPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}

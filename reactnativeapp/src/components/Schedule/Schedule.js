@@ -192,7 +192,7 @@ export default function Schedule() {
     const emptyFlatComp = () => {
         return (
             <View style={[Style.emptyFlatOuter]}>
-                <MaterialCommunityIcons name="calendar-month-outline" size={24} color={"grey"} />
+                <MaterialCommunityIcons name="calendar-month-outline" size={24} color={colorTheme.firstColor} />
                 <View style={Style.emptyFlatInner}>
                     <Text style={{fontWeight: 500, marginBottom: 5}}>{t('NoBookings')}</Text>
                     <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>
@@ -205,8 +205,8 @@ export default function Schedule() {
 
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles1.text}></Text>
             <FlatList
+            contentContainerStyle={{marginTop:10}}
                 data={bookedTimes}
                 onRefresh={() => { console.log("från onRefresh i FlatList"); loadData() }}
                 refreshing={isRefreshing}

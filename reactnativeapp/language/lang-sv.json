@@ -8,6 +8,7 @@
     "TryAgain": "Något gick fel, vill du prova igen?",
     "YouHaveNotJoined": "Du har inte gått med i någon förening ännu. Klicka på knappen nedan för att gå med.",
     "Bookings": "Mina bokningar",
+    "Booked": "Bokad!",
     
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",
@@ -36,6 +37,8 @@
     "Book": "Boka",
     "NoBookings": "Inga bokningar hittades",
     "NoBookingsMsg": "Gå till Mina föreningar för att boka!",
+    "NoAssociations": "Du har inte gått med i någon förening",
+    "NoAssociationsMsg": "Klicka på knappen nedan för att gå med!",
 
     "Monday": "Måndag",
     "Mon": "Mån",

@@ -45,9 +45,10 @@ const IOSPopup = ({
               {hasInput ? (
                 <TextInput
                   style={styles.input}
-                  placeholder={placeholder}
                   value={inputValue}
                   onChangeText={handleInputChange}
+                  placeholder={placeholder}
+                  placeholderTextColor={"black"}
                 />
               ) : ( bodyText ? 
               <View style={styles.bodyTextContainer}>
@@ -98,6 +99,7 @@ const styles = {
     borderRadius: 5,
     marginBottom: 10,
     paddingHorizontal: 10,
+    textAlign:"center",
   },
 
   bodyTextContainer: {

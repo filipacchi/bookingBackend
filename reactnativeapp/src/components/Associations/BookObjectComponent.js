@@ -11,6 +11,7 @@ import { BookItem } from "./BookItem";
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
+import { Entypo } from '@expo/vector-icons';
 
 export default function BookObjectComponent({ selectedCancelTime, setSelectedCancelTime, booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
     const {colorTheme} = useContext(AuthContext)
@@ -20,6 +21,12 @@ export default function BookObjectComponent({ selectedCancelTime, setSelectedCan
         let grey = "#080808"
         let color = selectedCancelTime == item.title ? red :  booked[1] == selectedDay ? booked[0] == item.title ? green : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey
         console.log("SELECTEDCANDEL "+selectedCancelTime)
+        let icon = "unselected"
+        if(selectedTime == item.title || selectedCancelTime == item.title){
+            icon = "selected"
+        } else if(item.booked){
+            icon = "booked"
+        }
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -40,7 +47,7 @@ export default function BookObjectComponent({ selectedCancelTime, setSelectedCan
 
                     </View>
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        {selectedTime == item.title ? <AntDesign name="checkcircle" size={24} color={color} /> : selectedCancelTime == item.title ? <AntDesign name="checkcircle" size={24} color={color}/> : <AntDesign name="checkcircleo" size={24} color={color} />}
+                        { icon == "selected" ? <AntDesign name="checkcircle" size={24} color={color} /> : icon == "booked" ? <AntDesign name="checkcircleo" size={24} color={color} /> : <Entypo name="circle" size={24} color={color} />}
                     </View>
                 </View>
             </TouchableOpacity>

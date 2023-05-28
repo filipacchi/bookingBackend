@@ -8,7 +8,7 @@
     "TryAgain": "Something went wrong, do you want to try again?",
     "YouHaveNotJoined": "You have not joined any associations yet, press the button below to join an association",
     "Bookings": "My Bookings",
-
+    "Booked": "Booked!",
     "CreateAccountPage": "Create Account",
     "Username": "Username",
     "Password": "Password",
@@ -36,6 +36,8 @@
     "Book": "Book",
     "NoBookings": "No bookings found",
     "NoBookingsMsg": "Go to My Associations to book!",
+    "NoAssociations": "You have not joined any associations",
+    "NoAssociationsMsg": "Press the button below to join an association!",
 
     "Monday": "Monday",
     "Mon": "Mon",
