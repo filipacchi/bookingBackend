@@ -242,8 +242,8 @@ export default StyleSheet.create({
         alignSelf: "center",
         padding: 15,
         flexDirection: "row",
-        gap: 10,
-        backgroundColor: "#22992e"
+        backgroundColor: "#22992e",
+        marginRight: 20
     },
     pressableCancelBook: {
         flexGrow: 1,
@@ -294,9 +294,11 @@ export default StyleSheet.create({
     },
     viewBookButton: {
         flexDirection: "row",
-        padding: 20,
-        backgroundColor: "white",
-        gap: 20
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        borderTopWidth: 2,
+        borderTopColor: "grey",
+        marginHorizontal: 10,
     },
     containerSettings: {
         flexDirection: 'row',

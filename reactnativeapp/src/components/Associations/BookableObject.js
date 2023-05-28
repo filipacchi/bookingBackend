@@ -221,7 +221,7 @@ export default function BookableObject({ route }) {
 
 
                 </Swiper> */}
-                <View style={Style.viewBookButton}>
+                <View style={[Style.viewBookButton]}>
                     <Pressable onPress={() => { if (selectedTime != null) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: colorTheme.firstColor, opacity: selectedCancelTime == null ? 1 : 0.5 }]}><Text style={Style.pressableText}>{t("Book")}</Text></Pressable>
                     <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
