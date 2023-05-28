@@ -8,6 +8,8 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import MainNav from "./src/screens/MainNav";
 import AppStack from "./navigation/Stack";
+import 'react-native-reanimated'
+import 'react-native-gesture-handler'
 
 
 

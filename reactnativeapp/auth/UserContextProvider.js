@@ -60,6 +60,17 @@ function UserContextProvider({ children }) {
             lastName: null,
             isAssociation: null,
           };
+          case 'NO_AUTH':
+          return {
+            ...prevState,
+            isLoading: false,
+            isSignout: true,
+            userToken: null,
+            userRefreshToken: null,
+            firstName: null,
+            lastName: null,
+            isAssociation: null,
+          };
       }
     },
     {
@@ -115,6 +126,7 @@ function UserContextProvider({ children }) {
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
           })
           .catch(error => {
+            dispatch({ type: 'NO_AUTH'});
             console.log(error);
             console.log("TOKEN NOT OKAY")
           });

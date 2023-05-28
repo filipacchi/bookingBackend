@@ -53,16 +53,15 @@ export default function AppStack() {
   const [loadingState, setLoadingState] = React.useState(true);
   //return isLoading ? <Splash setIsLoading={setIsLoading}/> : <Home/> 
   const Stack = createNativeStackNavigator();
-  const { state } = useContext(AuthContext)
+  const { state, colorTheme } = useContext(AuthContext)
 
-  if (loadingState || !fontsLoaded) {
-    return (
-      // <View style={{flex: 1, justifyContent: 'center', alignItems:'center'}}>
-      //   <ActivityIndicator/>
-      // </View>
-      <Splash setLoadingState={setLoadingState}></Splash>
+  if(loadingState){
+    return(
+      <Splash setLoadingState={setLoadingState}/>
     )
   }
+  else
+
   return (
     <NavigationContainer>
 
