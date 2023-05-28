@@ -10,6 +10,9 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, P
 import { useNavigation } from "@react-navigation/native";
 import Style from "./Style";
 import Checkbox from 'expo-checkbox';
+import { getAllCodes, getName } from 'iso-639-1';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { Entypo } from '@expo/vector-icons';
 
 
 export default function Register() {
@@ -24,6 +27,18 @@ export default function Register() {
     const [firstname, onChangeFirstname] = useState("");
     const [lastname, onChangeLastname] = useState("");
     const [isChecked, setIsChecked] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState(null);
+
+    const languageOptions = getAllCodes().map((code) => ({
+        label: code,
+        value: code.toUpperCase() + '   ' + getName(code),
+        flag: '',
+      }));
+
+      const handleLanguageChange = (value) => {
+        setSelectedLanguage(value);
+        console.log(selectedLanguage)
+      };
       
         const handleCheckboxChange = () => {
           setIsChecked(!isChecked);
@@ -103,6 +118,19 @@ export default function Register() {
                                 autoCorrect={false}
                             />
                         </View>
+                        <SelectList
+                            //dropdownStyles
+                            arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
+                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
+                            search={true}
+                            dropdownShown={false}
+                            placeholder={t("NativeLanguage")}
+                            setSelected={(val) => {
+                                handleLanguageChange(val)
+                            }}
+                            data={languageOptions}
+                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
+                        />
                         <View style={{flexDirection: 'row',}}>
       <Checkbox
         value={isChecked}
