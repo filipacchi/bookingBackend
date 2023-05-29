@@ -19,7 +19,7 @@ import base64 from 'react-native-base64'
 export default function Associations() {
 
     const navigation = useNavigation()
-    const { state, colorTheme, authContext  } = useContext(AuthContext)
+    const { state, colorTheme, authContext } = useContext(AuthContext)
     const {t} = authContext
 
     /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)

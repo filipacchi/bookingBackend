@@ -188,7 +188,14 @@ export default function BookableObject({ route }) {
             <View style={{ flex: 1 }}>
                 <WeekCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
                 <Animated.View style={[opacityStyle, { flex: 1 }]}>
-                    <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDate]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />
+                    <BookObjectComponent 
+                    selectedCancelTime={selectedCancelTime} 
+                    setSelectedCancelTime={setSelectedCancelTime} 
+                    booked={bookedSlot} 
+                    selectedDay={selectedDay.format().slice(0, 10)} 
+                    user={user} timeSlots={timeSlots[selectedDate]} 
+                    selectedTime={selectedTime} 
+                    setSelectedTime={setSelectedTime}/>
                 </Animated.View>
                 {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
                     console.log(noSwipe)
