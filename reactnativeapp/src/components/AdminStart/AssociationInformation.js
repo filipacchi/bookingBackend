@@ -12,10 +12,12 @@ import FormData from 'form-data'
 import { ActivityIndicator } from "react-native-paper";
 
 export default function AssociationInformation({ route }) {
-  const { associationId, associationName, associationKey } = route.params
+  const { associationId, associationName, associationKey,associationImage } = route.params
   const [image, setImage] = useState(null);
-  const { state } = React.useContext(AuthContext)
   const [isLoaded, setIsLoaded] = React.useState(false)
+  const { state, colorTheme, authContext  } = React.useContext(AuthContext)
+  const {t} = authContext
+
 
 
   const postPhotoToServer = (formData) => {
@@ -50,6 +52,9 @@ export default function AssociationInformation({ route }) {
     console.log('RESULT: ' + result.assets[0].uri);
 
     if (!result.canceled) {
+      if(associationImage != null){
+        axios.delete(`association/delete/${associationId}`)
+      }
       setImage(result.assets[0].uri);
       console.log('NÅGOT: ' + result.assets[0].uri)
 
@@ -70,42 +75,47 @@ export default function AssociationInformation({ route }) {
   };
 
   React.useEffect(() => {
-    const getImage = async () => {
-        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
-        )
-            .then(response => {
-              let uintArray = new Uint8Array(response.data);
-        
-              let chunkSize = 65536; 
-              let chunks = Math.ceil(uintArray.length / chunkSize);
-        
-              let chunkArray = [];
-               for (let i = 0; i < chunks; i++) {
-                 let start = i * chunkSize;
-                 let end = start + chunkSize;
-                 let chunk = Array.from(uintArray.slice(start, end));
-                 chunkArray.push(chunk);
-               }
-        
-               let base64Chunks = chunkArray.map((chunk) =>
-               base64.encode(String.fromCharCode(...chunk))
-               );
-               let base64string = base64Chunks.join('');
-        
-
-              //base64string = base64.encode(String.fromCharCode(...uintArray))
-                contentType = response.headers['content-type']
-                url = "data:" + contentType + ";base64," + base64string
-                setImage(url)
-                console.log("URL: "+url)
-
-            })
-            .catch(error => {
-                console.log(error);
-            }).finally(()=>setIsLoaded(true))
+    if(associationImage != null){
+      getImage()
+    } else {
+      setIsLoaded(true)
     }
-    getImage()
 }, [])
+
+const getImage = async () => {
+  axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+  )
+      .then(response => {
+        let uintArray = new Uint8Array(response.data);
+  
+        let chunkSize = 65536; 
+        let chunks = Math.ceil(uintArray.length / chunkSize);
+  
+        let chunkArray = [];
+         for (let i = 0; i < chunks; i++) {
+           let start = i * chunkSize;
+           let end = start + chunkSize;
+           let chunk = Array.from(uintArray.slice(start, end));
+           chunkArray.push(chunk);
+         }
+  
+         let base64Chunks = chunkArray.map((chunk) =>
+         base64.encode(String.fromCharCode(...chunk))
+         );
+         let base64string = base64Chunks.join('');
+  
+
+        //base64string = base64.encode(String.fromCharCode(...uintArray))
+          contentType = response.headers['content-type']
+          url = "data:" + contentType + ";base64," + base64string
+          setImage(url)
+          console.log("URL: "+url)
+
+      })
+      .catch(error => {
+          console.log(error);
+      }).finally(()=>setIsLoaded(true))
+}
   
 
 
@@ -136,11 +146,11 @@ export default function AssociationInformation({ route }) {
       <ScrollView style={styles.container}>
         <View style={styles.settingContainer}>
           <MaterialIcons name="vpn-key" size={24} color="black" />
-          <Text style={styles.objectName}>Key: <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
+          <Text style={styles.objectName}>   {t("Key")} <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
         </View>
         <View style={styles.settingContainer}>
           <MaterialCommunityIcons name="account" size={24} color="black" />
-          <Text style={styles.objectName}>  Members</Text>
+          <Text style={styles.objectName}>  {t("Members")}</Text>
         </View>
       </ScrollView>
     </View>

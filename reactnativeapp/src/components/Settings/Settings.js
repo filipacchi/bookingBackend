@@ -6,16 +6,21 @@ import styles from "../../screens/Style";
 import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
 import * as SecureStore from 'expo-secure-store';
 import axios from "../../../axios/axios";
+import { Entypo } from '@expo/vector-icons';
 
 async function save(key, value) {
     await SecureStore.setItemAsync(key, value);
 }
 
 export default function Settings() {
+    const langMatch = {
+        en: "English",
+        sv: "Svenska"
+    }
     const { authContext } = React.useContext(AuthContext);
-    const { colorTheme, setColorTheme } = React.useContext(AuthContext);
-    const { signOut, t, setLang, getLang } = authContext
-    const [selectedLang, setSelectedLang] = React.useState("English");
+    const { i18n, colorTheme, setColorTheme } = React.useContext(AuthContext);
+    const { signOut, t, setLang, getLanguage } = authContext
+    const [selectedLang, setSelectedLang] = React.useState(getLanguage);
     const [selectedTheme, setSelectedTheme] = React.useState(colorTheme.name);
 
 
@@ -31,7 +36,6 @@ export default function Settings() {
         { key: 'en', value: 'English' },
         { key: 'sv', value: 'Svenska' },
     ]
-
     const supportedColorThemes = [
         { key: 'blue', value: "The Original" },
         { key: 'black', value: "Midnight" },
@@ -50,35 +54,43 @@ export default function Settings() {
     }
 
     return (
-        <View style={{ width: '100%', height: '100%' }}>
-            <ScrollView style={styles.container}>
-                <View style={styles.settingContainer}>
+            <View style={styles.container}>
+                <View style={[styles.settingContainer]}>
                     <Text style={styles.settingLabel}>{t("Language")}</Text>
-                    <SelectList
-                        //dropdownStyles
-                        placeholder={selectedLang}
-                        setSelected={(val) => {
-                            changeLang(val)
-                        }}
-                        data={suportedLanguages}
-                    />
+                    <View style={{ width: "40%" }}>
+                        <SelectList
+                            //dropdownStyles
+                            arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
+                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
+                            search={false}
+                            dropdownShown={false}
+                            placeholder={selectedLang}
+                            setSelected={(val) => {
+                                changeLang(val)
+                            }}
+                            data={suportedLanguages}
+                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
+                        />
+                    </View>
                 </View>
-                <View style={styles.settingContainer}>
+                <View style={[styles.settingContainer, { zIndex: 1 }]}>
                     <Text style={styles.settingLabel}>{t("ColorTheme")}</Text>
-                    <SelectList
-                        //dropdownStyles
-                        placeholder={selectedTheme}
-                        setSelected={(val) => {
-                            changeTheme(val)
-                        }}
-                        data={supportedColorThemes}
-                    />
+                    <View style={{ width: "40%" }}>
+                        <SelectList
+                            //dropdownStyles
+                            arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
+                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
+                            search={false}
+                            placeholder={selectedTheme}
+                            setSelected={(val) => {
+                                changeTheme(val)
+                            }}
+                            data={supportedColorThemes}
+                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45 }}
+                        />
+                    </View>
                 </View>
-            </ScrollView>
-            <View>
-                <Pressable onPress={() => signOut()} style={[styles.button, { position: 'absolute', bottom: '2%', backgroundColor: 'red' }]}><Text style={styles.buttonText}>{t("LogOut")}</Text></Pressable>
             </View>
-            
-        </View>
+
     )
 }

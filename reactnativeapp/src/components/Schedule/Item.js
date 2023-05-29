@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import { Swipeable } from "react-native-gesture-handler";
+import { Swipeable, GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthContext } from "../../../auth/UserContextProvider";
 
 
@@ -37,6 +37,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
         }
     })
     return (
+        <GestureHandlerRootView>
         <Swipeable ref={ref} renderRightActions={rigthSwipe} onSwipeableOpen={() => {
             console.log("OPEN")
             onComponentOpen(index)
@@ -44,7 +45,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
         >
             <View style={Style.bookedTimesView}>
                 <View style={Style.assoView}>
-                <View style={{alignSelf: 'left', width: 45, height: 45}}>
+                <View style={{ width: 45, height: 45, justifyContent: "center", alignItems: "center"}}>
                 {item.profile_image != null ?
                                                 (<Image
                                                     style={{
@@ -75,5 +76,6 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
                 </View>
             </View >
         </Swipeable>
+        </GestureHandlerRootView>
     )
 }

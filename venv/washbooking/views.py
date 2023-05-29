@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 import base64
 import math
 import pprint
@@ -26,23 +26,19 @@ from django.conf import settings
 import pandas
 from PIL import Image
 import io
+import time
+class DeleteImage(APIView):
+    permission_classes = []
 
-
-def save_image(file):
-    filename = file.name
-    path = os.path.join(settings.MEDIA_ROOT, 'images', filename)
-
-    image = Image.open(file)
-    quality = 70
-
-    save_options = {
-        'quality': quality,
-    }
-    image.save(path, **save_options)
-
-    # with open(path, 'wb+') as destination:
-    #     for chunk in file.chunks():
-    #         destination.write(chunk)
+    def delete(self, request, pk):
+        association = get_object_or_404(Association, pk=pk)
+        if association.profile_image:
+            image_path = association.profile_image.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+                association.profile_image.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     
 class UpdateAssociationImage(APIView):
@@ -52,8 +48,6 @@ class UpdateAssociationImage(APIView):
         association = get_object_or_404(Association, pk=pk)
         form = UpdateAssociationImageForm(request.data, instance=association)
         if form.is_valid():
-            save_image(request.FILES['profile_image'])
-            form.save(commit=False)
             association.profile_image = request.FILES['profile_image']
             association.save()
             return Response(status=status.HTTP_200_OK)
@@ -204,15 +198,20 @@ class AdminGetBookedTimes(APIView):
     authentication_classes = [Association]
 
     
-
+class GetUserAccount(APIView):
+    authentication_classes = [IsAuthenticated]
+    def get(self, request):
+        return Response(self.request.user.first_name)
 
 class GetBookingsAPIVIEW(APIView):
-    permission_classes= [isAssociation]#[checkGroup]
+    permission_classes= [AllowAny]#[checkGroup]
     def get(self,request):
         print(self.request.data)
         bookings = BookedTime.objects.all()
         serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
+    def put(self, request):
+        return Response("PUT")
 
 class GetBookingsFromDateRange(APIView):
     authentication_classes = []
@@ -256,6 +255,25 @@ class GetBookingsFromAssociationAndDateRange(APIView):
         print("skickar från GetBookingsFromAssociationAndDateRange")
         print(sorted_bookings)
         return Response(sorted_bookings)
+    
+class GetBookingsFromBookableObject(APIView):
+    authentication_classes = []
+    def get(self, request, bookableid, startdate):
+        bookable_object = BookableObject.objects.get(objectId=bookableid)
+        book_ahead_weeks = int(bookable_object.bookAheadWeeks)
+        format = "%Y-%m-%d"
+        sdate = datetime.strptime(startdate, format)
+        weeks = timedelta(weeks = book_ahead_weeks)
+        edate = sdate + weeks
+        enddate = datetime.strftime(edate, format)
+
+        bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
+        serializer = BookedTimeSerializer(bookings, many=True)
+        print(startdate)
+        print(bookable_object)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object).data, sdate, edate)
+
+        return Response(time_slot_array)
 
     
 class GetBookingsFromObject(APIView):
@@ -277,10 +295,13 @@ class GetBookingsFromDay(APIView):
         bookings = BookedTime.objects.filter(booking_object=bookable_object,date=date)
         bookedSerializer = BookedTimeSerializer(bookings, many=True)
         bookableSeralizer = BookableObjectSerializer(bookable_object)
+        format = "%Y-%m-%d"
+        sdate = datetime.strptime(date, format)
         
         print(bookings)
         print(json.dumps(bookedSerializer.data))
-        return Response([bookableSeralizer.data,bookedSerializer.data] )
+        time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate)
+        return Response(time_slot_array)
 
 class GetBookableObject(APIView):
     permission_classes = []
@@ -301,7 +322,7 @@ class CreateBookingAPIVIEW(APIView):
         slots_per_week = object.slotsPerWeek
         
         serializer = BookedTimeSerializer(data=request.data)
-
+        pprint.pprint(serializer)
         if serializer.is_valid():
             #return checkBooking(serializer, object_pk)
             serializer.save()
@@ -374,8 +395,18 @@ class GetImage(APIView):
     permission_classes = []
     def get(self, request, pk):
         image = Association.objects.get(pk=pk).profile_image
-        return HttpResponse(image, content_type="image/png")
-
+        if image == "": 
+            print("FEL")
+            return HttpResponse(status=404)
+        else:
+            return HttpResponse(image, content_type="image/png")
+        """ try:
+            
+            return HttpResponse(image, content_type="image/png")
+        except:
+            return Response()
+        else:
+            return HttpResponse(image, content_type="image/png") """
 
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]

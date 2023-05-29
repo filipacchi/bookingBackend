@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Platform,StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
@@ -12,7 +12,6 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
     settingContainer: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -20,7 +19,11 @@ export default StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 5,
-        marginTop: 5
+        marginTop: 5,
+        zIndex: 2
+    },
+    settingLabelOverhead:{
+        width: '50%'
     },
     settingLabel: {
         fontSize: 16,
@@ -82,11 +85,12 @@ export default StyleSheet.create({
         alignSelf: "center",
     },
     expandFlatlist: {
-
+        
     },
     assoText: {
         color: "#222222",
         fontSize: 15,
+        fontWeight: 500
     },
     assoView: {
         flexDirection: "row",
@@ -108,14 +112,14 @@ export default StyleSheet.create({
     },
     assoDarkView: {
         backgroundColor: "#ededed",
-        padding: 15
+        padding: 5
     },
     bookObject: {
         backgroundColor: "white",
         borderRadius: 10,
         borderColor: "white",
         borderWidth: 1,
-        padding: 8,
+        padding: 15,
         margin: 5
     },
     modalWindow: {
@@ -207,6 +211,15 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+    noBookablesContainer: {
+        justifyContent: "center",
+        height: 90,
+    },
+    noBookablesText: {
+        fontWeight: "500",
+        fontSize: 17,
+        textAlign: "center"
+    },
     langText: {
         color: "white",
         fontWeight: "400",
@@ -229,8 +242,8 @@ export default StyleSheet.create({
         alignSelf: "center",
         padding: 15,
         flexDirection: "row",
-        gap: 10,
-        backgroundColor: "#22992e"
+        backgroundColor: "#22992e",
+        marginRight: 20
     },
     pressableCancelBook: {
         flexGrow: 1,
@@ -268,7 +281,7 @@ export default StyleSheet.create({
     },
     assoViewInner: {
         flex: 1,
-        gap: 5
+        //gap: 5
     },
     bookedTimesView: {
         backgroundColor: "white",
@@ -281,8 +294,75 @@ export default StyleSheet.create({
     },
     viewBookButton: {
         flexDirection: "row",
-        padding: 20,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        borderTopWidth: 2,
+        borderTopColor: "grey",
+        marginHorizontal: 10,
+    },
+    containerSettings: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginVertical: "5%"
+      },
+      innerContainerSettings: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        //gap: "5%"
+      },
+      settingsView: {
+        padding: "5%",
+        //gap: "30%"
+      },
+      nameTextLarge: {
+        fontSize: 20,
+        fontWeight: 500
+      },
+      nameHeader: {
+        justifyContent: "center",
+        alignItems: "center"
+      },
+      iconContainer: {
+        height: 30,
+        width: 30,
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      settingNameText: {
+        fontSize: 20
+      },
+      calendarOuterItemBox: {
         backgroundColor: "white",
-        gap: 20
-    }
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        justifyContent: "center",
+        alignItems: "center",
+        borderBottomWidth: 3
+      },
+      textMonth: {
+        textTransform: 'uppercase',
+        fontSize: 12,
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Medium" : "normal"
+      },
+      textWeekDay: {
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Medium" : "normal"
+      },
+      textDayNum: {
+        fontFamily: Platform.OS === 'ios' ? "Avenir-Heavy" : "normal"
+      },
+      emptyFlatOuter: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        borderColor: "white",
+        borderWidth: 1,
+        padding: 15,
+        margin: 10,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center"
+      },
+      emptyFlatInner: {
+        marginHorizontal: 20
+      }
 });

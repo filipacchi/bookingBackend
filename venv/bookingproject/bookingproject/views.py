@@ -18,6 +18,8 @@ class MyTokenRefreshPairSerializer(TokenRefreshSerializer):
         user_id = decoded_token.get('user_id')
         user = UserData.objects.get(id=user_id)
         data['isAssociation'] = user.is_association
+        data['firstName'] = user.first_name
+        data['lastName'] = user.last_name
         
         if api_settings.ROTATE_REFRESH_TOKENS:
             if api_settings.BLACKLIST_AFTER_ROTATION:
@@ -49,8 +51,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add extra responses here
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
-        data['firstname'] = self.user.first_name
-        data['lastname'] = self.user.last_name
+        data['firstName'] = self.user.first_name
+        data['lastName'] = self.user.last_name
         data['isAssociation'] = self.user.is_association
         return data
 

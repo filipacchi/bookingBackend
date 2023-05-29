@@ -12,13 +12,14 @@ import { ActivityIndicator } from "react-native-paper";
 import { Ionicons, AntDesign } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { Animated } from "react-native";
+import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
 
 
 export default function ScheduleAdmin() {
 
-    const { state, colorTheme } = useContext(AuthContext)
+    const { colorTheme } = useContext(AuthContext)
     const [token, setToken] = useState("")
 
     /* datum */
@@ -30,11 +31,15 @@ export default function ScheduleAdmin() {
     const [associationsLoading, setAssociationsLoading] = useState(true)
     const [bookingsLoading, setBookingsLoading] = useState(true) /* sätt true */
     const [isRefreshing, setIsRefreshing] = useState(true)
+    const [bookableObjectsExist, setBookableObjectsExist] = useState(true)
 
     /* Kalle */
     const [currentAssoIndex, setcurrentAssoIndex] = useState(0)
     const [myAssociationsWithBO, setMyAssociationsWithBO] = useState([])
     const [allBookings, setAllBookings] = useState()
+
+    const [errorText, setErrorText] = useState()
+    const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
     const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
@@ -44,8 +49,9 @@ export default function ScheduleAdmin() {
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
     const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
-    const { authContext  } = useContext(AuthContext)
+    const { authContext } = useContext(AuthContext)
     const {t} = authContext
+
 
     const animateElement = () => {
 
@@ -94,6 +100,10 @@ export default function ScheduleAdmin() {
         console.log("allBookings updated: ");
         console.log(allBookings);
         
+        if (allBookings) {
+            allBookings.length == 0 ? setBookableObjectsExist(false) : setBookableObjectsExist(true)
+        }
+
         /* if (allBookings) {
             console.log(allBookings[0]["bookedTimes"][selectedDate])
         } */
@@ -112,6 +122,11 @@ React.useEffect(() => {
     getData()
     
 }, [])
+
+const handlePopupCancelPress = () => {
+    console.log("Popup cancel button pressed (Schedule)")
+    setErrorPopUpVisible(false)
+}
 
 const loadVariableData = async () => {
     if (myAssociationsWithBO && myAssociationsWithBO.length > 0) {
@@ -134,13 +149,16 @@ const loadAssociations = async (token) => {
         setMyAssociationsWithBO(response)
     }
         
-        catch (error) {
-            console.log("från catch i loadAssociations: ")
-            console.log(error)
-        }
+    catch (error) {
+        console.log("ERROR CATCHAT I loadAssociations")
+        console.log(error);
+        setErrorText(t('RequestFailed') + error.response.status.toString())
+        setErrorPopUpVisible(true)
+    }
 
         finally {
             setAssociationsLoading(false)
+            setIsRefreshing(false)
         }
     }
     
@@ -159,6 +177,8 @@ const loadAssociations = async (token) => {
         catch (error) {
             console.log("ERROR CATCHAT I loadBookings")
             console.log(error);
+            setErrorText(t('RequestFailed') + error.response.status.toString())
+            setErrorPopUpVisible(true)
         }
         finally {
             setBookingsLoading(false)
@@ -267,9 +287,12 @@ const loadAssociations = async (token) => {
             .then(response => {
                 console.log(response.data)
             })
-            .catch(error => {
+            .catch( (error) => {
+                console.log("ERROR CATCHAT I loadBookings")
                 console.log(error);
-            });
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
+            })
     }
 
     const bookTime = () => {
@@ -337,7 +360,7 @@ const loadAssociations = async (token) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={ {flex: 1}}>
+            <View>
                 <SelectList 
                 /* placeholder={myAssociationsWithBO[currentAssoIndex].name} */
                 placeholder={myAssociationsWithBO[currentAssoIndex].name}
@@ -373,8 +396,8 @@ const loadAssociations = async (token) => {
                     }}>
                         <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
                     <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
-                </View> :
-
+                </View> : 
+                bookableObjectsExist ? 
                 <FlatList
                 data={allBookings}
                     style={Style.expandFlatlist}
@@ -421,9 +444,15 @@ const loadAssociations = async (token) => {
                             </View>)}}
                 >
                 </FlatList>
+                :
+                <View style={Style.noBookablesContainer}>
+                    <Text style={Style.noBookablesText}>
+                        {t("AssoNoBookables")}
+                    </Text>
+                </View> 
             }
 
-            <View style={{ padding: 20 }}>
+            <View style={{ padding: 10 }}>
                 <Pressable onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
                     <Text style={Style.pressableText}>{t("Book")}</Text>
                 </Pressable>
@@ -441,7 +470,18 @@ const loadAssociations = async (token) => {
             })}>
                 <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
                 {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
-    
+                
+            <IOSPopup
+            visible={errorPopUpVisible}
+            title={t("Error")}
+            hasInput={false}
+            /* bodyText={errorText} */
+            bodyText={""}
+            buttonTexts={[t('PopupCancel')]}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handlePopupCancelPress}
+            onCancelPress={handlePopupCancelPress}/>
+
         </View>
         </SafeAreaView>
     )
