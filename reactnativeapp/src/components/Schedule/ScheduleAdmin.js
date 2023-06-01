@@ -328,8 +328,8 @@ const loadAssociations = async (token) => {
                             <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
                             <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => {/* bookTime(),  */ setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
-                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
+                                <TouchableOpacity onPress={() => {/* bookTime(),  */ setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -395,7 +395,7 @@ const loadAssociations = async (token) => {
                         margin: 20
                     }}>
                         <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
-                    <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                    <TouchableOpacity onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></TouchableOpacity>
                 </View> : 
                 bookableObjectsExist ? 
                 <FlatList
@@ -428,12 +428,12 @@ const loadAssociations = async (token) => {
                                             ({ item }) => (
                                                 
                                                 
-                                                <Pressable 
+                                                <TouchableOpacity 
                                                 onPress={() => {}} 
                                                 style={Style.bookObject}>
                                                     <Text>{item['title']}</Text>
                                                     {/* <Text>{item}</Text> */}
-                                                </Pressable>
+                                                </TouchableOpacity>
                                             )
                                         }
                                         
@@ -453,13 +453,13 @@ const loadAssociations = async (token) => {
             }
 
             <View style={{ padding: 10 }}>
-                <Pressable onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
+                <TouchableOpacity onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
                     <Text style={Style.pressableText}>{t("Book")}</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
             <PopUpModalConfirm />
 
-            {/* <Pressable 
+            {/* <TouchableOpacity 
             style={Style.addAssociation}
             onPress={( () => {
                 console.log(
@@ -468,8 +468,8 @@ const loadAssociations = async (token) => {
             : NativeModules.I18nManager.localeIdentifier
             )
             })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
-                {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity> */}
+                {/* {Associations.length == 0 ? null : <TouchableOpacity onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></TouchableOpacity>} */}
                 
             <IOSPopup
             visible={errorPopUpVisible}

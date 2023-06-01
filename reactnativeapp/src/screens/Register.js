@@ -140,7 +140,7 @@ export default function Register() {
         <Text style={{ color: 'blue'}}>{t("TermsOfService")}</Text>
       </TouchableOpacity>
     </View>
-                        <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></Pressable>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

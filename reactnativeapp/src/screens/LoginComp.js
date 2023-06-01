@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
+import { StyleSheet, View, Text, Pressable, PermissionsAndroid, TouchableOpacity } from "react-native"
 import { Card } from "react-native-paper"
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ export default function LoginComp() {
 
 
     function handleRequest() {
+        console.log('KLICKAD')
         signIn({ username, password })
     }
 
@@ -62,7 +63,7 @@ export default function LoginComp() {
                 autoCorrect={false}
             />
             </View>
-            <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></Pressable>
+            <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></TouchableOpacity>
             </Animated.View>
     )
 

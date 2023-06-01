@@ -123,7 +123,7 @@ export default function BookablesView() {
                     borderWidth: 3,
                     margin: 20
                 }}><Text style={[Style.assoText, Style.noAssoText]}>You have not joined any associations yet, press the button below to join an association</Text></View>
-                <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable>
+                <TouchableOpacity style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity>
             </View>
         )
     }
@@ -168,7 +168,7 @@ export default function BookablesView() {
                         </View>}
             >
             </FlatList>
-            {/* <Pressable style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
+            {/* <TouchableOpacity style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity> */}
         </View>
     )
 }

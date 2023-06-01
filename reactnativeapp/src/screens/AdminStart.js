@@ -145,7 +145,7 @@ export default function Associations() {
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
-                            <Pressable onPress={() => {
+                            <TouchableOpacity onPress={() => {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key'], associationImage: item['profile_image']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
@@ -169,29 +169,29 @@ export default function Associations() {
                                         style={Style.assoText}>
                                         {item.name}</Text>
                                     <Text style={{ color: "#767676" }}>{item.region}</Text></View>
-                            </Pressable>
+                            </TouchableOpacity>
                             <View style={Style.assoDarkView}>
                                 <FlatList
                                     data={item['bookobjects']}
                                     style={{}}
                                     horizontal={true}
                                     ListFooterComponent={
-                                        <Pressable onPress={() => {
+                                        <TouchableOpacity onPress={() => {
                                             console.log('HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
                                             navigation.navigate("AddBookableObject", {associationId: item['id']})
                                             console.log(item.id)
                                         }} style={Style.addObject}>
                                             <Ionicons name="ios-add-circle-outline" size={25} color="black" />
-                                            </Pressable>
+                                            </TouchableOpacity>
                                       }
                                     renderItem={
                                         ({item}) => (
-                                            <Pressable onPress={() => {
+                                            <TouchableOpacity onPress={() => {
                                                 console.log('HÄR HAR VI OBJECT ID: ' + item['objectId'] + ' HÄR HAR VI ASSOCIATIONS NAMNET: ' + item['name'] + ' HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
                                                 navigation.navigate("EditBookableObject",{objectId: item['objectId'], associationName: item['name'], associationId: item['id']})
                                             }} style={Style.bookObject}>
                                                 <Text>{item['objectName']}</Text>
-                                            </Pressable>
+                                            </TouchableOpacity>
                                         )
                                     }
                                 >
@@ -200,7 +200,7 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            {/* <Pressable 
+            {/* <TouchableOpacity 
             style={Style.addAssociation}
             onPress={( () => {
                 console.log(
@@ -209,7 +209,7 @@ export default function Associations() {
             : NativeModules.I18nManager.localeIdentifier
             )
             })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
+                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity> */}
         </View>
     )
 }

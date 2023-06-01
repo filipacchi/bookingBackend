@@ -250,7 +250,7 @@ export default function Associations() {
                         margin: 20
                     }}>
                         <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
-                    <Pressable onPress={() => setPopupVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                    <TouchableOpacity onPress={() => setPopupVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></TouchableOpacity>
                 </View> : */
                 <FlatList
                     contentContainerStyle={{ marginTop: 10 }}
@@ -260,7 +260,7 @@ export default function Associations() {
                     refreshing={isRefreshing}
                     ListEmptyComponent={emptyFlatComp}
                     ListFooterComponent={
-                        <Pressable onPress={() => setPopupVisible(true)} style={Style.addAssociation}><MaterialCommunityIcons name="home-group-plus" size={50} color={colorTheme.firstColor}/>{/* <Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor}/> */}</Pressable>
+                        <TouchableOpacity onPress={() => setPopupVisible(true)} style={Style.addAssociation}><MaterialCommunityIcons name="home-group-plus" size={50} color={colorTheme.firstColor}/>{/* <Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor}/> */}</TouchableOpacity>
                     }
                     renderItem={
                         ({ item }) => {

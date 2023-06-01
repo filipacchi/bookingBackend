@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
+import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
 import LottieView from "lottie-react-native";
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
@@ -226,8 +226,8 @@ export default function BookableObject({ route }) {
 
                 </Swiper> */}
                 <View style={[Style.viewBookButton]}>
-                    <Pressable onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}><Text style={Style.pressableText}>{buttonBooked ? t("Booked") : t("Book")}</Text></Pressable>
-                    <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
+                    <TouchableOpacity onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}><Text style={Style.pressableText}>{buttonBooked ? t("Booked") : t("Book")}</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></TouchableOpacity>
                 </View>
                 <IOSPopup
                     visible={popupVisible}

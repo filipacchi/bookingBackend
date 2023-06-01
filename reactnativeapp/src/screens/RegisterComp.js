@@ -85,7 +85,7 @@ export default function RegisterComp() {
                 autoCorrect={false}
             />
             </View>
-            <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>Register</Text></Pressable>
+            <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>Register</Text></TouchableOpacity>
         </View>
     )
 

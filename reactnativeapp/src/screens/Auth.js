@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
+import { StyleSheet, View, Text, Pressable, PermissionsAndroid,TouchableOpacity } from "react-native"
 import { Card } from "react-native-paper"
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ export default function Auth() {
             >
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1, alignItems: 'center' }}>
-                    <Pressable style={Style.langSwitchBox} onPress={() => changeLang()}><Text style={Style.langText}>{lang.toUpperCase()}</Text></Pressable>
+                    <TouchableOpacity style={Style.langSwitchBox} onPress={() => changeLang()}><Text style={Style.langText}>{lang.toUpperCase()}</Text></TouchableOpacity>
                     <View style={{ marginTop: "50%" }}><Logo></Logo></View>
                     <View style={{
                         position: "absolute",
@@ -55,19 +55,19 @@ export default function Auth() {
                         {isLoginDisplayed ?
                             <View>
                                 <LoginComp />
-                                <Pressable style={[styles.back]} onPress={() => { Linking.openURL(resetUrl) }}><Text style={[styles.inputText, styles.login]}>{t("ResetPassword")}</Text></Pressable>
-                                <Pressable style={[styles.back]} onPress={() => { setIsLoginDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></Pressable>
+                                <TouchableOpacity style={[styles.back]} onPress={() => { Linking.openURL(resetUrl) }}><Text style={[styles.inputText, styles.login]}>{t("ResetPassword")}</Text></TouchableOpacity>
+                                <TouchableOpacity style={[styles.back]} onPress={() => { setIsLoginDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></TouchableOpacity>
                             </View>
                             :
                             <View style={{gap: 10}}>
-                                <Pressable style={[styles.input, styles.presslogin]} onPress={() => { setIsLoginDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></Pressable>
-                                <Pressable style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></Pressable>
+                                <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { setIsLoginDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></TouchableOpacity>
+                                <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>
                             </View>
                         }
                         {/* {isToasterDisplayed && <LoginComp />}
-                        {isToasterDisplayed && <Pressable style={[styles.back]} onPress={() => { setIsToasterDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></Pressable>}
-                        {!isToasterDisplayed && <Pressable style={[styles.input, styles.presslogin]} onPress={() => { setIsToasterDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></Pressable>}
-                        {!isToasterDisplayed && <Pressable style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></Pressable>} */}
+                        {isToasterDisplayed && <TouchableOpacity style={[styles.back]} onPress={() => { setIsToasterDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></TouchableOpacity>}
+                        {!isToasterDisplayed && <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { setIsToasterDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></TouchableOpacity>}
+                        {!isToasterDisplayed && <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>} */}
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
