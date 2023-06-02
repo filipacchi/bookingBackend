@@ -23,7 +23,6 @@ function UserContextProvider({ children }) {
 
   const [colorTheme, setColorTheme] = useState({ name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff" })
   const [tabTitles, setTabTitles] = useState({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return")})
-  const [loadingState, setLoadingState] = React.useState(true)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -94,15 +93,12 @@ function UserContextProvider({ children }) {
         if (selectedColor != null) {
           setColorTheme(JSON.parse(selectedColor))
         }
-        //setColorTheme(selectedColor)
       } catch (e) {
         console.log(e)
       }
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
-        //console.log("LOGGAR " + userRefreshToken),
         validateToken(userRefreshToken)
-        //console.log("THEN")
       } catch (e) {
         // Restoring token failed
       }
@@ -117,7 +113,6 @@ function UserContextProvider({ children }) {
           bodyParameters
         )
           .then(response => {
-            //console.log("TOKEN OKAY")
             /* response.data innehåller data från databasen */
             console.log("isSTAFF? : " + response.data.firstName)
             save("userToken", response.data.access)
@@ -144,7 +139,6 @@ function UserContextProvider({ children }) {
           password: data.password
         })
           .then(response => {
-            //console.log(response.data.access);
             axios.defaults.headers.common = { 'Authorization': `Bearer ${response.data.access}` }
             save("userRefreshToken", response.data.refresh)
             save("userToken", response.data.access).then(() => {
@@ -185,8 +179,6 @@ function UserContextProvider({ children }) {
           .catch(error => {
             console.log(error);
           });
-
-        //dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       t: (translate) => {
         return i18n.t(translate)

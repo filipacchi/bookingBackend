@@ -1,20 +1,13 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid, TouchableOpacity } from "react-native"
-import { Card } from "react-native-paper"
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from "expo-linear-gradient";
-import { useState, setState } from "react";
+import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Animated,{FadeInLeft, FadeInUp,FadeOut,FadeOutUp} from 'react-native-reanimated'
+import Animated,{FadeInUp,FadeOut} from 'react-native-reanimated'
 
 
 
 export default function LoginComp() {
-
-    const navigation = useNavigation()
 
     const { authContext } = React.useContext(AuthContext);
     const { signIn, t, setLang } = authContext

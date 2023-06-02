@@ -59,7 +59,7 @@ export default function Login() {
                             autoComplete="off"
                             autoCorrect={false}
                         />
-                        <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

@@ -1,14 +1,10 @@
 import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet, View, Text, Pressable, ScrollView, Image } from "react-native"
+import { View, Text } from "react-native"
 import React from 'react';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import styles from "../../screens/Style";
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
-import * as SecureStore from 'expo-secure-store';
-import axios from "../../../axios/axios";
-import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import IOSPopup from "../Misc/PopUp";
 import { useState } from "react";
@@ -21,13 +17,10 @@ export default function SettingsNav() {
     const { colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
     const { signOut, t, setLang, getLang } = authContext
     const navigation = useNavigation()
-    const [confirmPopupVisible, setConfirmPopupVisible] = React.useState(false)
 
     const [errorText, setErrorText] = useState()
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
     const [logoutPopupVisible, setLogoutPopupVisible] = useState(false)
-
-    const [isLoading, setisLoading] = useState(true)
 
     const handleErrorCancelPress = () => {
         console.log("Error popup cancel pressed")
@@ -50,11 +43,6 @@ export default function SettingsNav() {
             setLogoutPopupVisible(false)
         }
 
-    };
-
-    const handleCancelPress = () => {
-        console.log('Popup Cancelled');
-        setConfirmPopupVisible(false);
     };
 
 
@@ -82,7 +70,7 @@ export default function SettingsNav() {
             <TouchableOpacity style={styles.containerSettings}>
                 <View style={styles.innerContainerSettings}>
                     <View style={styles.iconContainer}><MaterialIcons name="feedback" size={24} color="black" /></View>
-                    <Text style={styles.settingNameText}>Feedback / Support</Text>
+                    <Text style={styles.settingNameText}>{t("FeedbackSupport")}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
             </TouchableOpacity>

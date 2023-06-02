@@ -11,13 +11,6 @@ export default function AllLanguages () {
     setUserLanguage(userLanguage.slice(0, 2))
     console.log(userLanguage)
 
-/*     if (lang == "sv") {
-        return sweLang
-    } else if (lang == "en") {
-        return engLang
-    }
- */
-
     const allLangs = [
         {
         lang: "sv",

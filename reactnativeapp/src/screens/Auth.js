@@ -1,21 +1,16 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid,TouchableOpacity } from "react-native"
-import { Card } from "react-native-paper"
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
-import { useState, setState, useContext } from "react";
-import { TextInput } from "react-native-paper";
+import { useState, useContext } from "react";
 import { AuthContext } from "../../auth/UserContextProvider";
 import Logo from "../components/assets/Logo";
 import Style from "./Style";
 import LoginComp from "./LoginComp";
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import { Linking } from "react-native";
 import axios from "../../axios/axios";
-
-
 import { useNavigation } from "@react-navigation/native";
-import { color } from "react-native-reanimated";
 
 export default function Auth() {
     const navigation = useNavigation()
@@ -23,7 +18,6 @@ export default function Auth() {
     const { t, setLang, getLang } = authContext
     const [lang, setLanguage] = useState(getLang())
     const [isLoginDisplayed, setIsLoginDisplayed] = React.useState(false);
-    const [isRegisterDisplayed, setIsDisplayed] = React.useState(false);
     const resetUrl = axios.defaults.baseURL + "/accounts/password-reset/"
     function changeLang() {
         console.log("KlickarBenim")
@@ -64,10 +58,6 @@ export default function Auth() {
                                 <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>
                             </View>
                         }
-                        {/* {isToasterDisplayed && <LoginComp />}
-                        {isToasterDisplayed && <TouchableOpacity style={[styles.back]} onPress={() => { setIsToasterDisplayed(false) }}><Text style={[styles.inputText, styles.login]}>{t("Return")}</Text></TouchableOpacity>}
-                        {!isToasterDisplayed && <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { setIsToasterDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></TouchableOpacity>}
-                        {!isToasterDisplayed && <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>} */}
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

@@ -1,9 +1,6 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { TextInput }from "react-native-paper";
-import { StyleSheet, SafeAreaView, View, Text, Pressable, PermissionsAndroid } from "react-native"
-import LottieView from "lottie-react-native";
-import { Button } from "react-native-paper";
+import { StyleSheet, SafeAreaView, View, Text } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 
 const NavButtonScreen = (langText) => {

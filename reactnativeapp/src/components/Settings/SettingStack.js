@@ -1,5 +1,4 @@
 import * as React from "react"
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from "./Settings";
 import SettingsNav from "./SettingsNav";
@@ -7,19 +6,12 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 import { Text } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-
-
-
-import * as SecureStore from 'expo-secure-store';
-
-import { useContext } from "react";
-import { color } from "react-native-reanimated";
 import { TouchableOpacity } from "react-native";
 
 
 export default function SettingStack() {
     const nav = useNavigation()
-    const { tabTitles, colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
+    const { tabTitles, colorTheme, authContext } = React.useContext(AuthContext);
     const {t} = authContext
     const SettingStack = createNativeStackNavigator();
     return (

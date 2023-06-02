@@ -1,16 +1,12 @@
 
-import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
-import { useState, useContext } from "react";
-import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
-import { NativeModules, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native"
+import { useState } from "react";
 import React from 'react';
 import axios from "reactnativeapp/axios/axios.js";
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import Style from "reactnativeapp/src/screens/Style.js";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-//import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import { ActivityIndicator } from "react-native-paper";
 import base64 from 'react-native-base64'
 
@@ -21,14 +17,7 @@ export default function Associations() {
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
-    const [image, setImage] = useState(null);
     const [isImageLoaded, setIsImageLoaded] = React.useState(false)
-
-    //  this.focusListener = navigation.addListener('focus', () => {
-    //      let access_token = SecureStore.getItemAsync('userToken')
-    //      loadData(access_token)
-    // });
-    // DETTA REFRECHAR NÄR DU GÅR TBX TILL SIDAN MEN VERKAR SKAPA EN LOOP... INTE BRA!
 
       const loadData = () => {
         async function getUserAssociation() {
@@ -95,8 +84,6 @@ export default function Associations() {
                );
                let base64string = base64Chunks.join('');
         
-
-              //base64string = base64.encode(String.fromCharCode(...uintArray))
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
                 resolve(url);
@@ -130,7 +117,7 @@ export default function Associations() {
                     borderWidth: 3,
                     margin: 20
                 }}>
-                    <Text style={[Style.assoText, Style.noAssoText]}>You are not admin for any associations, if this is incorrect contact the bookease team</Text></View>
+                    <Text style={[Style.assoText, Style.noAssoText]}>{t("NotAdminYet")}</Text></View>
                 </View>
         )
     }
@@ -149,7 +136,7 @@ export default function Associations() {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key'], associationImage: item['profile_image']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                            <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
+                                            <View style={{width: 45, height: 45}}>
                                             {item.profile_image != null ?
                                                 (<Image
                                                     style={{
@@ -200,23 +187,6 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            {/* <TouchableOpacity 
-            style={Style.addAssociation}
-            onPress={( () => {
-                console.log(
-            Platform.OS === 'ios'
-            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
-            : NativeModules.I18nManager.localeIdentifier
-            )
-            })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity> */}
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        marginTop: 100,
-        backgroundColor: "red"
-    }
-});
