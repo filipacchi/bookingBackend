@@ -30,7 +30,7 @@ export default function AddBookableObject({ route }) {
   const scrollViewRef = useRef(null);
   const [selectListPosition, setSelectListPosition] = useState(0);
 
-  const { authContext } = React.useContext(AuthContext);
+  const { authContext, colorTheme } = useContext(AuthContext);
   const { signOut, t, setLang, getLang } = authContext
 
   const { state } = React.useContext(AuthContext)
@@ -234,7 +234,7 @@ export default function AddBookableObject({ route }) {
         <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
         </View>
         <Switch
-          trackColor={{ false: '#767577', true: '#53d5d5' }}
+          trackColor={{ false: '#767577', true: colorTheme.firstColor }}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
       </View>
       <View>
@@ -340,7 +340,7 @@ export default function AddBookableObject({ route }) {
           />
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => {
+      <TouchableOpacity style={[styles.button, {backgroundColor: colorTheme.firstColor}]} onPress={() => {
         if (allDayEnabled) {
           if (objectName == '') {
             setBackgroundColor('#F88379', 'white', 'white', 'white', 'white', 'white', 'white')

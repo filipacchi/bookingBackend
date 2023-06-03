@@ -265,7 +265,7 @@ export default function EditBookableObject({ route }) {
         <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
         </View>
         <Switch
-          trackColor={{ false: '#767577', true: '#53d5d5' }}
+          trackColor={{ false: '#767577', true: colorTheme.firstColor}}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
       </View>
       <View>
@@ -361,7 +361,7 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         />
       </View>
-      <TouchableOpacity style={styles.button}
+      <TouchableOpacity style={[styles.button, {backgroundColor: colorTheme.firstColor}]}
         onPress={() => {
           editBookableObject()
           navigation.goBack()
