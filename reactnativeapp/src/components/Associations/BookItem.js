@@ -1,6 +1,6 @@
 
 import { View, Text, TouchableOpacity } from "react-native"
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';

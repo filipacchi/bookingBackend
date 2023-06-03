@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
-import React from 'react';
+import React, {useContext} from 'react';
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";

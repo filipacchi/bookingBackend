@@ -1,6 +1,6 @@
 
 import { StyleSheet, View, Text, Pressable } from "react-native"
-import React from 'react';
+import React, {useContext} from 'react';
 
 export default function User() {
 

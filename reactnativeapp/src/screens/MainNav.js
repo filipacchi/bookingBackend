@@ -1,6 +1,6 @@
 
 import { StyleSheet } from "react-native"
-import React from 'react';
+import React, {useContext} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AssociationStack from "../components/Associations/AssociationStack";
 import ScheduleStack from "../components/Schedule/ScheduleStack"

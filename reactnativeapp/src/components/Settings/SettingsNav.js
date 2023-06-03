@@ -2,7 +2,7 @@ import { TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { View, Text } from "react-native"
-import React from 'react';
+import React, {useContext} from 'react';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import styles from "../../screens/Style";
 import { useNavigation } from "@react-navigation/native";

@@ -1,7 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Logo from "../components/assets/Logo";
-import {  useContext } from "react"
 import { AuthContext } from "../../auth/UserContextProvider";
 import { MotiView } from "moti"
 export default function Splash({setLoadingState}) {

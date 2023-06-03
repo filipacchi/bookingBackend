@@ -1,7 +1,7 @@
 
 import { View, Text, TouchableOpacity, Image, FlatList } from "react-native"
 import { useState } from "react";
-import React from 'react';
+import React, {useContext} from 'react';
 import axios from "reactnativeapp/axios/axios.js";
 import { Ionicons } from '@expo/vector-icons';
 import Style from "reactnativeapp/src/screens/Style.js";

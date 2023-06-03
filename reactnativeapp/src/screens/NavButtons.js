@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, SafeAreaView, View, Text } from "react-native"
 import { useNavigation } from "@react-navigation/native";

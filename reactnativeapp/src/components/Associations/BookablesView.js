@@ -1,7 +1,7 @@
 
 import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native"
 import { useState } from 'react';
-import React from 'react';
+import React, {useContext} from 'react';
 import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';

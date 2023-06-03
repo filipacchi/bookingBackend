@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native"
-import React from 'react';
+import React, {useContext} from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { TextInput } from "react-native-paper";
