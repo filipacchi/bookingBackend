@@ -269,15 +269,7 @@ const loadAssociations = async (token) => {
                 setSelected={ (key) => {
                     setcurrentAssoIndex(key)
                 }}
-
-
-                data={getAssociationNames(myAssociationsWithBO)}>
-
-                /* dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
-                arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
-                search={false}
-                dropdownShown={false}
-                boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }} */
+                data={getAssociationNames(myAssociationsWithBO)}
                 >
                 </SelectList>
 
