@@ -13,6 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 //import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import { ActivityIndicator } from "react-native-paper";
 import base64 from 'react-native-base64'
+import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
+import { AuthContext } from "../../auth/UserContextProvider";
 
 
 export default function Associations() {
@@ -23,6 +25,13 @@ export default function Associations() {
     const [Associations, setAssociation] = useState([])
     const [image, setImage] = useState(null);
     const [isImageLoaded, setIsImageLoaded] = React.useState(false)
+
+
+    const { authContext, colorTheme } = useContext(AuthContext)
+    const { t } = authContext
+    
+    const [errorText, setErrorText] = useState()
+    const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
     //  this.focusListener = navigation.addListener('focus', () => {
     //      let access_token = SecureStore.getItemAsync('userToken')
@@ -35,39 +44,41 @@ export default function Associations() {
 
             axios.get('user/association/get'
             )
-                .then(async (response) => {
+            .then(async (response) => {
                     const updatedData = [];
                     for (let i = 0; i < response.data.length; i++) {
-                      console.log('INUTI FOR LOOP');
-                      console.log(response.data[i].profile_image);
-                      console.log(response.data[i].id);
+                        console.log('INUTI FOR LOOP');
+                        console.log(response.data[i].profile_image);
+                        console.log(response.data[i].id);
             
-                      let item = response.data[i];
-                      if (item.profile_image != null){
-                      try {
+                        let item = response.data[i];
+                        if (item.profile_image != null){
+                    try {
                         let profileImage = await getImage(item.id);
             
                         item.profile_image = profileImage;
             
                         console.log(item.profile_image);
-                      } catch (error) {
+                    } catch (error) {
                         console.log(error);
-                      }}
-            
-                      updatedData.push(item);
-                    }
-            
-                    console.log('UTANFÖR FOR LOOP');
-
-                    setAssociation(updatedData);
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  })
-                  .finally(() => {
-                    setIsLoading(false);
-                    setIsRefreshing(false);
-                  });
+                    }}
+                    
+                    updatedData.push(item);
+                }
+                
+                console.log('UTANFÖR FOR LOOP');
+                
+                setAssociation(updatedData);
+            })
+            .catch(error => {
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
+                console.log(error);
+            })
+            .finally(() => {
+            setIsLoading(false);
+            setIsRefreshing(false);
+            });
               }
         getUserAssociation()
     }
@@ -105,7 +116,8 @@ export default function Associations() {
             .catch(error => {
                 console.log(error);
                 reject(error);
-            }).finally(()=>setIsImageLoaded(true))
+            })
+            .finally(()=>setIsImageLoaded(true))
         });
     }
 
@@ -113,9 +125,17 @@ export default function Associations() {
         loadData()
     }, [])
 
+    const handlePopupClosePress = () => {
+        console.log("Popup cancel button pressed (Schedule)")
+        setErrorPopUpVisible(false)
+    }
+
+
     if(isLoading) {
         return(
-            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <ActivityIndicator/>
+            </View>
             
         )
     }
@@ -200,16 +220,15 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            {/* <TouchableOpacity 
-            style={Style.addAssociation}
-            onPress={( () => {
-                console.log(
-            Platform.OS === 'ios'
-            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
-            : NativeModules.I18nManager.localeIdentifier
-            )
-            })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></TouchableOpacity> */}
+            <IOSPopup
+            visible={errorPopUpVisible}
+            title={t("Error")}
+            hasInput={false}
+            bodyText={errorText}
+            buttonTexts={[t('PopupCancel')]}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handlePopupClosePress}
+            onCancelPress={handlePopupClosePress} />
         </View>
     )
 }

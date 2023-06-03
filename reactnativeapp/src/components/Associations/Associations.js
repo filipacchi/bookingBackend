@@ -70,6 +70,8 @@ export default function Associations() {
     const handleErrorButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
             setPopupVisible(true);
+        } else {
+            setInputValue("")
         }
         console.log('Button Pressed:', index);
         setErrorPopupVisible(false);
@@ -234,7 +236,6 @@ export default function Associations() {
     if (isLoading) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}><ActivityIndicator /></View>
-
         )
     }
 
