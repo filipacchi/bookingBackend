@@ -1,18 +1,11 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
-import { Card } from "react-native-paper"
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
 import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from "expo-linear-gradient";
-import { useState, setState } from "react";
+import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 
 export default function RegisterComp() {
-
-    const navigation = useNavigation()
 
     const { authContext } = React.useContext(AuthContext);
     const { signUp, t, setLang } = authContext

@@ -1,16 +1,10 @@
 
-import { StyleSheet, View, Text, Pressable, FlatList, TouchableOpacity, TextComponent, Modal } from "react-native"
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import * as styles1 from "reactnativeapp/src/screens/Style.js"
+import { StyleSheet, View, Text, FlatList } from "react-native"
+import React, { useEffect, useState, useContext } from 'react';
 import axios from "../../../axios/axios";
-import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import Style from "../../screens/Style";
 import { ActivityIndicator } from "react-native-paper";
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { Swipeable } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
@@ -22,14 +16,12 @@ import base64 from 'react-native-base64'
 export default function Schedule() {
 
     myBookings = {}
-    const [ConfirmModalVisible, setConfirmModalVisible] = useState(true)
     const navigation = useNavigation()
     const [isRefreshing, setIsRefreshing] = useState(true)
     const { colorTheme } = useContext(AuthContext)
     const { authContext } = useContext(AuthContext)
     const { t, signOut } = authContext
     const [bookedTimes, setBookedTimes] = useState([])
-    const [selectedTime, setSelectedTime] = useState("")
 
     const [errorText, setErrorText] = useState()
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
@@ -56,8 +48,7 @@ export default function Schedule() {
                 console.log(item.associationId)
                 let profileImage = await getImage(item.associationId);
                 item.profile_image = profileImage;
-
-                //console.log(item.profile_image);
+                
             } catch (error) {
                 console.log(error);
                 /* behöver inte ha pop-up för error på bilderna */
@@ -105,8 +96,6 @@ export default function Schedule() {
             );
             let base64string = base64Chunks.join('');
 
-
-            //base64string = base64.encode(String.fromCharCode(...uintArray))
             contentType = response.headers['content-type']
             url = "data:" + contentType + ";base64," + base64string
             return url

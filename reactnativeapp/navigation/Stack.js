@@ -25,12 +25,6 @@ import {
 
 
 
-
-
-
-
-import * as SecureStore from 'expo-secure-store';
-
 import { useContext } from "react";
 
 

@@ -1,11 +1,8 @@
 
-import { StyleSheet, View, Text, Pressable, TextInput, TouchableOpacity, SafeAreaView, Image, FlatList, Modal, Button } from "react-native"
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native"
 import { useState, useContext, useEffect } from "react";
-import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
-import { NativeModules, Platform } from 'react-native';
 import React from 'react';
 import axios from "../../../axios/axios";
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
@@ -13,7 +10,6 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { ActivityIndicator } from "react-native-paper";
 import base64 from 'react-native-base64'
-//import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import IOSPopup from 'reactnativeapp/src/components/Misc/PopUp.js';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -23,16 +19,10 @@ export default function Associations() {
     const navigation = useNavigation()
     const { state, colorTheme, authContext } = useContext(AuthContext)
     const { t } = authContext
-
-    /* const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
-    const [languagePackage, setLanguagePackage] = useContext(userLanguageContext) */
-
-    const [isFocused, setIsFocused] = useState(false)
     const [inputText, setInputText] = useState("")
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [joinAssociationName, setJoinAssociationName] = useState("No Association")
     const [isLoading, setIsLoading] = useState(true)
-    const [image, setImage] = useState(null);
     const [isImageLoaded, setIsImageLoaded] = React.useState(false)
     const [Associations, setAssociation] = useState([])
     const [popupVisible, setPopupVisible] = useState(false);
@@ -105,8 +95,6 @@ export default function Associations() {
                     );
                     let base64string = base64Chunks.join('');
 
-
-                    //base64string = base64.encode(String.fromCharCode(...uintArray))
                     contentType = response.headers['content-type']
                     url = "data:" + contentType + ";base64," + base64string
                     resolve(url);
@@ -241,18 +229,7 @@ export default function Associations() {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* Associations.length == 0 ?
-                <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={{
-                        borderStyle: "solid",
-                        borderRadius: 10,
-                        borderColor: "#999999",
-                        borderWidth: 3,
-                        margin: 20
-                    }}>
-                        <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
-                    <TouchableOpacity onPress={() => setPopupVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></TouchableOpacity>
-                </View> : */
+            {
                 <FlatList
                     contentContainerStyle={{ marginTop: 10 }}
                     data={Associations}

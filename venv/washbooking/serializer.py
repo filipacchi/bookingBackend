@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from .models import *
-from django.contrib.auth import get_user_model;
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 """ serializers översätter från SQL till json och vice versa. nycklarna till json-objekten är attributes i entityn """

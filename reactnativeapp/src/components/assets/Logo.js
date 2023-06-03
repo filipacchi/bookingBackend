@@ -1,7 +1,6 @@
 import * as React from "react"
 import Svg, { Path } from "react-native-svg"
-import { StyleSheet, Animated } from "react-native"
-import { useEffect, useRef } from "react"
+import { StyleSheet } from "react-native"
 
 const Logo = () => {
 

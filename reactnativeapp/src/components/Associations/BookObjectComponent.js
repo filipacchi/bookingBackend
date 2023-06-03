@@ -1,13 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, TouchableOpacity } from "react-native";
-import LottieView from "lottie-react-native";
-import { useEffect, useState } from "react";
-import axios from "../../../axios/axios";
-//import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
-import WeekCalendar from "./WeekCalendar";
-import BookablesView from "./BookablesView";
-import Swiper from 'react-native-swiper'
-import { BookItem } from "./BookItem";
+import { View, Text, StyleSheet, FlatList, StatusBar, TouchableOpacity } from "react-native";
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
@@ -77,23 +69,6 @@ export default function BookObjectComponent({ selectedCancelTime, setSelectedCan
         </View>
     )
 }
-
-{/* <View style={{width: timeSlots.length >= 10 ? "40%" : "90%", borderRadius: 10, overflow: 'hidden', margin: selectedCancelTime == item.title ? 6 : 8 }}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            if (!item.booked) {
-                                                setSelectedCancelTime(null)
-                                                setSelectedTime(item.title)
-                                                console.log("TOKEN ÄR: " + user)
-                                                console.log("Bookedbt ÄR: " + item.booked_by)
-                                            } else{
-                                                setSelectedTime(null)
-                                                setSelectedCancelTime(item.title)
-                                            }
-                                        }}
-                                        style={{ borderColor: "black", borderWidth: selectedCancelTime == item.title ? 2 : 0, borderRadius: 10, padding: 15, backgroundColor: booked[1] == selectedDay ? booked[0] == item.title ? "rgba(0,0,0,0.1)" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5" : selectedTime == null ? item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5"  : selectedTime == item.title ? "#22992e" : item.booked ? "rgba(0,0,0,0.1)" : "#8AAAE5"}}><Text style={{color: "white"}}>{item.title}</Text>
-                                        </TouchableOpacity>
-                                        </View> */}
 
 const styles = StyleSheet.create({
     input: {
