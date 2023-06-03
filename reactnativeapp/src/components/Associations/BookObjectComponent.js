@@ -12,21 +12,78 @@ import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Entypo } from '@expo/vector-icons';
+import { ActivityIndicator } from "react-native-paper";
+import { MotiView } from "moti";
+import { Image as MotiImage } from "moti"
+import CustomLoadIcon from "../Misc/customLoadIcon";
+import { AnimatePresence } from "moti";
 
-export default function BookObjectComponent({ selectedCancelTime, setSelectedCancelTime, booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
-    const {colorTheme} = useContext(AuthContext)
+export default function BookObjectComponent({ isLoading, setIsLoading, bookingLoading, selectedCancelTime, setSelectedCancelTime, booked, user, selectedDay, timeSlots, selectedTime, setSelectedTime }) {
+    const { colorTheme } = useContext(AuthContext)
+
+
+    useEffect(() => {
+        if (bookingLoading) {
+            setIsLoading(true)
+        }
+    }, [bookingLoading])
+
+    /* const customLoadIcon = (color) => {
+        return (
+            <MotiView
+                style={{
+        
+                }}
+                from={{
+                    rotate: "0deg",
+                }}
+                animate={{
+                    rotate: "360deg",
+                }}
+                transition={{
+                    loop: true,
+                    repeatReverse: true,
+                    type: "timing",
+                    duration: 1000,
+                }}
+
+            >
+                <AntDesign name="checkcircle" size={24} color={color} />
+            </MotiView>
+        )
+    } */
+
     const Item = (item) => {
         let red = "#ff2b2b"
         let green = "#39e336"
         let grey = "#080808"
-        let color = selectedCancelTime == item.title ? red :  booked[1] == selectedDay ? booked[0] == item.title ? green : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey
-        console.log("SELECTEDCANDEL "+selectedCancelTime)
+        /* let color
+        if (selectedCancelTime == item.title){
+            color = red
+        } else if(booked[1] == selectedDay){
+            if(booked[0] == item.title){
+                if(bookingLoading){
+                    color = colorTheme.firstColor
+                } else {
+                    color = green
+                }
+            } else if(selectedTime == null){
+                if(item.booked){
+                    color = green
+                } else {
+                    color = grey
+                }
+            }
+        } */
+        //let color = selectedCancelTime == item.title ? red : booked[1] == selectedDay ? booked[0] == item.title ? bookingLoading ? colorTheme.firstColor : green : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey
+        console.log("SELECTEDCANDEL " + selectedCancelTime)
         let icon = "unselected"
-        if(selectedTime == item.title || selectedCancelTime == item.title){
+        if (selectedTime == item.title || selectedCancelTime == item.title) {
             icon = "selected"
-        } else if(item.booked){
+        } else if (item.booked) {
             icon = "booked"
         }
+        {/* <ActivityIndicator size={24} color={colorTheme.firstColor} /> */ }
         return (
             <TouchableOpacity
                 onPress={() => {
@@ -39,15 +96,15 @@ export default function BookObjectComponent({ selectedCancelTime, setSelectedCan
                         setSelectedTime(null)
                         setSelectedCancelTime(item.title)
                     }
-                }} 
+                }}
                 style={[Style.bookedTimesView, { width: timeSlots.length >= 10 ? "41%" : "90%" }]}>
                 <View style={Style.assoView}>
                     <View style={Style.assoViewInner}>
-                        <Text style={{fontWeight: 500, color: color}}>{item.title}</Text>
+                        <Text style={{ fontWeight: 500, color: color }}>{item.title}</Text>
 
                     </View>
                     <View style={{ justifyContent: "center", alignItems: "center" }}>
-                        { icon == "selected" ? <AntDesign name="checkcircle" size={24} color={color} /> : icon == "booked" ? <AntDesign name="checkcircleo" size={24} color={color} /> : <Entypo name="circle" size={24} color={color} />}
+                        {icon == "selected" ? bookingLoading ? <ActivityIndicator/>/* CustomLoadIcon(color, 24, bookingLoading, setIsLoading) */ : <AntDesign name="checkcircle" size={24} color={color} /> : icon == "booked" ? <AntDesign name="checkcircleo" size={24} color={color} /> : <Entypo name="circle" size={24} color={color} />}
                     </View>
                 </View>
             </TouchableOpacity>

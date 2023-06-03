@@ -95,7 +95,8 @@ export default StyleSheet.create({
     assoView: {
         flexDirection: "row",
         alignItems: "center",
-        padding: 15,
+        paddingHorizontal: 15,
+        height: 55,
         gap: 10
     },
     assoFlatView: {
@@ -240,7 +241,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         alignSelf: "center",
-        padding: 15,
+        height: 50,
         flexDirection: "row",
         backgroundColor: "#22992e",
         marginRight: 20
@@ -254,7 +255,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         alignSelf: "center",
-        padding: 15,
+        height: 50,
         flexDirection: "row",
         gap: 10,
         backgroundColor: "#Be2525",

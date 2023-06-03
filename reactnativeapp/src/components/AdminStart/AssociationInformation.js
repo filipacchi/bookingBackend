@@ -30,7 +30,7 @@ export default function AssociationInformation({ route }) {
     };
   
     axios
-      .put(`association/image/${associationId}/update`, formData, config)
+      .put(`association/image/update/${associationId}`, formData, config)
       .then((response) => {
         console.log(response.data);
       })
@@ -53,7 +53,7 @@ export default function AssociationInformation({ route }) {
 
     if (!result.canceled) {
       if(associationImage != null){
-        axios.delete(`association/delete/${associationId}`)
+        axios.delete(`association/image/delete/${associationId}`)
       }
       setImage(result.assets[0].uri);
       console.log('NÅGOT: ' + result.assets[0].uri)
@@ -83,7 +83,7 @@ export default function AssociationInformation({ route }) {
 }, [])
 
 const getImage = async () => {
-  axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+  axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" }
   )
       .then(response => {
         let uintArray = new Uint8Array(response.data);

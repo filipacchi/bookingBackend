@@ -15,6 +15,7 @@ import { Animated } from "react-native";
 import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import SwipeableCalendar from "../Misc/SwipeableCalendar";
 
 
 export default function ScheduleAdmin() {
@@ -142,7 +143,7 @@ const loadAssociations = async (token) => {
     console.log("---- Inuti loadAssociations (ScheduleAdmin.js), token = " + token)
     
     try {
-        const { data: response } = await axios.get('user/association/get')
+        const { data: response } = await axios.get('user/association/with/bookableobjects/get')
         console.log("response from loadAssociations: ")
         console.log(response)
         
@@ -185,7 +186,7 @@ const loadAssociations = async (token) => {
         }
     }
 
-        /* axios.get('user/association/get')
+        /* axios.get('user/association/with/bookableobjects/get')
         .then(response => {
             console.log("mina associations och bokningsbara objekt:")
             console.log(response.data)
@@ -281,7 +282,7 @@ const loadAssociations = async (token) => {
 
 
     const addBookableObject = async (bodyParameters) => {
-        axios.post('book/add/',
+        axios.post('user/booking/create/',
             bodyParameters
         )
             .then(response => {

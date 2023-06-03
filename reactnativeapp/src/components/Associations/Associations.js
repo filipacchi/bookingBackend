@@ -82,7 +82,7 @@ export default function Associations() {
 
     const getImage = async (associationId) => {
         return new Promise((resolve, reject) => {
-            axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+            axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" }
             )
                 .then(response => {
                     let uintArray = new Uint8Array(response.data);
@@ -125,7 +125,7 @@ export default function Associations() {
             const bodyParameters = {
                 key: "value"
             };
-            axios.get('user/association/get'
+            axios.get('user/association/with/bookableobjects/get'
             )
                 .then(async (response) => {
                     const updatedData = [];
@@ -173,7 +173,7 @@ export default function Associations() {
         const bodyParameters = {
             key: "value"
         };
-        axios.post('join/association/add/' + inputText
+        axios.post('user/association/join/add/' + inputText
         )
             .then(response => {
                 console.log("" + response.data)
@@ -189,7 +189,7 @@ export default function Associations() {
         const bodyParameters = {
             key: "value"
         };
-        axios.get('join/association/get/' + tI
+        axios.get('user/association/join/get/' + tI
         )
             .then(response => {
                 console.log("" + response.data)

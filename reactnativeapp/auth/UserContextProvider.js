@@ -164,7 +164,7 @@ function UserContextProvider({ children }) {
       },
       signUp: async (data) => {
         console.log("SIGNAR UPP!")
-        axios.post('auth/register/', {
+        axios.post('user/account/register/', {
           email: data.email,
           first_name: data.firstname,
           last_name: data.lastname,

@@ -113,7 +113,7 @@ export default function Schedule() {
     }
     const getImage = async (associationId) => {
         try {
-            const response = await axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" })
+            const response = await axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" })
             return loadImages(response)
         } catch (error) {
             let errorCode = error.response.status.toString()
@@ -158,7 +158,7 @@ export default function Schedule() {
             start_time: booking["startTime"],
             end_time: booking["endTime"]
         }
-        axios.delete('book/delete/',
+        axios.delete('user/booking/delete/',
             { data }
         )
             .then(response => {

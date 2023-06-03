@@ -17,6 +17,7 @@ import { AuthContext } from "../../auth/UserContextProvider";
 import SettingStack from "../components/Settings/SettingStack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { Platform } from "react-native";
 
 
 const Tab = createBottomTabNavigator();
@@ -32,7 +33,8 @@ export default function MainNav() {
                 tabBarActiveTintColor: colorTheme.firstColor,//"#577ac2",
                 tabBarStyle: {
                     height: 90,
-                    padding: 10
+                    padding: 10,
+                    justifyContent: "center"
                 },
                 headerStyle: {
                     backgroundColor: colorTheme.firstColor//"#8AAAE5"
@@ -44,7 +46,7 @@ export default function MainNav() {
             }}>
             <Tab.Screen name="AssociationNav" component={AssociationStack} options={{
                 headerShown: false,
-                tabBarLabel: tabTitles.AssociationsPage,
+                tabBarLabel: (Platform.OS === 'ios') ? tabTitles.AssociationsPage : "",
                 tabBarIcon: ({ focused, color }) => {
                     if (focused) {
                         return <Ionicons name="ios-home" size={24} color={color} />
@@ -61,8 +63,9 @@ export default function MainNav() {
             }} /> */}
 
             <Tab.Screen name="ScheduleNav" component={ScheduleStack} options={{
-                tabBarLabel: tabTitles.Bookings,
+                //tabBarLabel: tabTitles.Bookings,
                 headerTitle:tabTitles.Bookings,
+                tabBarLabel: (Platform.OS === 'ios') ? tabTitles.Bookings : "",
                 tabBarIcon: ({ focused, color }) => {
                     if (focused) {
                         return <MaterialCommunityIcons name="calendar-month" size={24} color={color} />
@@ -73,7 +76,8 @@ export default function MainNav() {
             }} />
 
             <Tab.Screen name="Profile" component={SettingStack} options={{
-                tabBarLabel: tabTitles.Profile,
+                tabBarLabel: (Platform.OS === 'ios') ? tabTitles.Profile : "",
+                showLabel: false,
                 tabBarIcon: ({ focused, color }) => {
                     if (focused) {
                         return <FontAwesome name="user" size={27} color={color} />

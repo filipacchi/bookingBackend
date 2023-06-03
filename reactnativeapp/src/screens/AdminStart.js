@@ -33,7 +33,7 @@ export default function Associations() {
       const loadData = () => {
         async function getUserAssociation() {
 
-            axios.get('user/association/get'
+            axios.get('user/association/with/bookableobjects/get'
             )
                 .then(async (response) => {
                     const updatedData = [];
@@ -74,7 +74,7 @@ export default function Associations() {
 
     const getImage = async (associationId) => {
         return new Promise((resolve, reject) => {
-        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" }
         )
             .then(response => {
               let uintArray = new Uint8Array(response.data);

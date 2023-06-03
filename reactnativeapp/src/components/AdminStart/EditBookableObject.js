@@ -62,7 +62,7 @@ export default function EditBookableObject({ route }) {
       slotsPerWeek: slotsBookablePerWeek,
       bookAheadWeeks: selectedWeeksBookable
     }
-    axios.put(`association/bookableobject/${objectId}/update`,
+    axios.put(`association/bookableobject/update/${objectId}`,
       bodyParameters,
       config
     )
@@ -80,7 +80,7 @@ export default function EditBookableObject({ route }) {
       headers: { Authorization: `Bearer ${state.userToken}` }
     };
 
-    axios.delete(`association/bookableobject/${objectId}/delete`, config)
+    axios.delete(`association/bookableobject/delete/${objectId}`, config)
       .then(response => {
         console.log(response.data)
       })
@@ -90,7 +90,7 @@ export default function EditBookableObject({ route }) {
   }
 
   async function GetObjectData(objectId) {
-    axios.get('object/get/' + objectId)
+    axios.get('association/bookableobject/get/' + objectId)
       .then(response => {
         console.log("OBJECT DATAN HÄR: " + response.data)
         setObjectData(response.data)
