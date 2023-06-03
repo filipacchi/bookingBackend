@@ -1,18 +1,10 @@
 
-import { StyleSheet, View, Text, Pressable } from "react-native"
-import React, { useContext } from 'react';
+import { StyleSheet } from "react-native"
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AssociationStack from "../components/Associations/AssociationStack";
-import Settings from "../components/Settings/Settings";
 import ScheduleStack from "../components/Schedule/ScheduleStack"
-import Info from "..//components/Information/Info"
-import { TabRouter } from "@react-navigation/native";
-import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import NavButtons from "../screens/NavButtons"
-import { LinearGradient } from "expo-linear-gradient";
-import { Header } from "@react-navigation/native";
-import AdminStart from "./AdminStart";
 import { AuthContext } from "../../auth/UserContextProvider";
 import SettingStack from "../components/Settings/SettingStack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -55,12 +47,6 @@ export default function MainNav() {
                     }
                 }
             }} />
-            {/*  <Tab.Screen name="Info" component={NavButtons} options={{
-                tabBarIcon: ({ focused, color }) => (
-                    <Ionicons focused={focused} name="chatbubble-outline" size={28} color={color} />
-                )
-<<<<<<< HEAD
-            }} /> */}
 
             <Tab.Screen name="ScheduleNav" component={ScheduleStack} options={{
                 //tabBarLabel: tabTitles.Bookings,

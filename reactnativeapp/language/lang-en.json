@@ -112,5 +112,11 @@
     "Avboka": "Delete",
 
     "Key": "Key",
-    "Members": "Members"
+    "Members": "Members",
+
+    "NotAdminYet": "You are not admin for any associations, if this is incorrect contact the bookease team",
+
+    "FeedbackSupport": "Feedback / Support",
+
+    "NotJoinedAssociationYet": "You have not joined any associations yet, press the button below to join an association"
 }

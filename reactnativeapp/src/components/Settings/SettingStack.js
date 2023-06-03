@@ -1,5 +1,4 @@
 import * as React from "react"
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from "./Settings";
 import SettingsNav from "./SettingsNav";
@@ -20,7 +19,7 @@ import { TouchableOpacity } from "react-native";
 
 export default function SettingStack() {
     const nav = useNavigation()
-    const { tabTitles, colorTheme, setColorTheme, state, authContext } = React.useContext(AuthContext);
+    const { tabTitles, colorTheme, authContext } = React.useContext(AuthContext);
     const {t} = authContext
     const SettingStack = createNativeStackNavigator();
     return (

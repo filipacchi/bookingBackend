@@ -1,15 +1,12 @@
-import Style from "../../screens/Style";
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Pressable } from 'react-native';
+import { Text, View, Switch, TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput } from "react-native-paper";
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { ActivityIndicator } from "react-native-paper";
-import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../../../auth/UserContextProvider";
-import { AntDesign } from '@expo/vector-icons';
 import IOSPopup from "../Misc/PopUp";
 
 export default function EditBookableObject({ route }) {
@@ -254,7 +251,6 @@ export default function EditBookableObject({ route }) {
         placeholder={selectedWeeksBookable}
             setSelected={(val) => {
               setSelected(val)
-              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
 
               lengthInWeeks = maxprebookValues[val - 1].value.substring(0, 2)
               lengthInWeeksInt = parseInt(lengthInWeeks)
@@ -282,7 +278,6 @@ export default function EditBookableObject({ route }) {
               placeholder={firstStartTime}
               setSelected={(val) => {
                 setSelected(val)
-                //this.firstStartTime = bookableTimes[val - 1].value
                 setFirstStartTime(bookableTimes[val - 1].value)
 
                 console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' första start tid: ' + firstStartTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
@@ -319,7 +314,6 @@ export default function EditBookableObject({ route }) {
                 placeholder={earliestBookableTime}
                 setSelected={(val) => {
                   setSelected(val)
-                  // this.earliestBookableTime = bookableTimes[val - 1].value
                   setEarliestBookableTime(bookableTimes[val - 1].value)
                 }}
                 data={bookableTimes}
@@ -333,7 +327,6 @@ export default function EditBookableObject({ route }) {
                 placeholder={latestBookableTime}
                 setSelected={(val) => {
                   setSelected(val)
-                  // this.latestBookableTime = bookableTimes[val - 1].value
                   setLatestBookableTime(bookableTimes[val - 1].value)
                 }}
                 data={bookableTimes}
@@ -350,7 +343,6 @@ export default function EditBookableObject({ route }) {
           placeholder={slotsBookablePerDay}
           setSelected={(val) => {
             setSelected(val)
-            // this.slotsBookablePerDay = lengthPerBooking[val - 1].value
             setSlotsBookablePerDay(amountOfTimes[val - 1].value)
           }}
           data={amountOfTimes}
@@ -364,7 +356,6 @@ export default function EditBookableObject({ route }) {
           placeholder={slotsBookablePerWeek}
           setSelected={(val) => {
             setSelected(val)
-            //this.slotsBookablePerWeek = lengthPerBooking[val - 1].value
             setSlotsBookablePerWeek(amountOfTimes[val - 1].value)
           }}
           data={amountOfTimes}

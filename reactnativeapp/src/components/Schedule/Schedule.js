@@ -1,16 +1,10 @@
 
-import { StyleSheet, View, Text, Pressable, FlatList, TouchableOpacity, TextComponent, Modal } from "react-native"
-import React, { useEffect, useRef, useState, useContext } from 'react';
-import * as styles1 from "reactnativeapp/src/screens/Style.js"
+import { StyleSheet, View, Text, FlatList } from "react-native"
+import React, { useEffect, useState, useContext } from 'react';
 import axios from "../../../axios/axios";
-import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import Style from "../../screens/Style";
 import { ActivityIndicator } from "react-native-paper";
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaFrame } from "react-native-safe-area-context";
-import { Swipeable } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
@@ -22,14 +16,12 @@ import base64 from 'react-native-base64'
 export default function Schedule() {
 
     myBookings = {}
-    const [ConfirmModalVisible, setConfirmModalVisible] = useState(true)
     const navigation = useNavigation()
     const [isRefreshing, setIsRefreshing] = useState(true)
     const { colorTheme } = useContext(AuthContext)
     const { authContext } = useContext(AuthContext)
     const { t, signOut } = authContext
     const [bookedTimes, setBookedTimes] = useState([])
-    const [selectedTime, setSelectedTime] = useState("")
 
     const [errorText, setErrorText] = useState()
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
@@ -56,10 +48,10 @@ export default function Schedule() {
                 console.log(item.associationId)
                 let profileImage = await getImage(item.associationId);
                 item.profile_image = profileImage;
-
-                //console.log(item.profile_image);
+                
             } catch (error) {
                 console.log(error);
+                /* behöver inte ha pop-up för error på bilderna */
             }
 
             updatedData.push(item);
@@ -73,12 +65,14 @@ export default function Schedule() {
     const loadData = (() => {
         async function getUserBookings() {
             axios.get('user/bookedtimes/get')
-                .then(response => {
-                    loadBookingsAndImages(response.data)
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            .then(response => {
+                loadBookingsAndImages(response.data)
+            })
+            .catch(error => {
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
+                console.log(error);
+            });
         }
         getUserBookings()
     })
@@ -102,8 +96,6 @@ export default function Schedule() {
             );
             let base64string = base64Chunks.join('');
 
-
-            //base64string = base64.encode(String.fromCharCode(...uintArray))
             contentType = response.headers['content-type']
             url = "data:" + contentType + ";base64," + base64string
             return url
@@ -116,22 +108,22 @@ export default function Schedule() {
             const response = await axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" })
             return loadImages(response)
         } catch (error) {
-            let errorCode = error.response.status.toString()
-            if (errorCode != "404") {
-                setErrorText(t('RequestFailed') + error.response.status.toString())
-                setErrorPopUpVisible(true)
-            }
+            console.log(error)
+            /* behöver inte ha pop-up för error på bilderna */
         } finally {
             setisLoading(false)
         }
     }
 
 
-    /* useEffect(()=>{
-     
-    }) */
-
-
+    const handleRefresh = async () => {
+        try {
+            loadData()
+        } catch (error) {
+            setErrorText(t('RequestFailed') + error.response.status.toString())
+            setErrorPopUpVisible(true)
+        }
+    }
 
     const openComp = (ind) => {
         //OM BARA EN SKA KUNNA VARA ÖPPEN SAMTIDIGT
@@ -207,25 +199,25 @@ export default function Schedule() {
         <View style={{ flex: 1 }}>
             <FlatList
             contentContainerStyle={{marginTop:10}}
-                data={bookedTimes}
-                onRefresh={() => { console.log("från onRefresh i FlatList"); loadData() }}
-                refreshing={isRefreshing}
-                renderItem={
-                    ({ item, index }) => {
-                        return (<Item item={item} index={index} onComponentOpen={(x) => {
-                            console.log("aiosdjioas");
-                            openComp(x)
+            data={bookedTimes}
+            onRefresh={() => { handleRefresh() }}
+            refreshing={isRefreshing}
+            renderItem={
+                ({ item, index }) => {
+                    return (<Item item={item} index={index} onComponentOpen={(x) => {
+                        console.log("aiosdjioas");
+                        openComp(x)
+                    }}
+                        onDelete={(x, y) => {
+                            deleteBooking(x)
                         }}
-                            onDelete={(x, y) => {
-                                deleteBooking(x)
-                            }}
-                        />)
-                    }
-
+                    />)
                 }
-                ListEmptyComponent={emptyFlatComp}
-                ListFooterComponent={bookedTimes.length == 0 ? null : <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>}
-                ListFooterComponentStyle={{justifyContent: "center", alignItems: "center"}}
+
+            }
+            ListEmptyComponent={emptyFlatComp}
+            ListFooterComponent={bookedTimes.length == 0 ? null : <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>}
+            ListFooterComponentStyle={{justifyContent: "center", alignItems: "center"}}
             >
 
             </FlatList>

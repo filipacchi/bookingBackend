@@ -1,8 +1,7 @@
-import Style from "../../screens/Style";
 import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, InteractionManager } from 'react-native';
+import { Text, View, Switch, TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput } from "react-native-paper";
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { AuthContext } from "../../../auth/UserContextProvider";
@@ -34,12 +33,6 @@ export default function AddBookableObject({ route }) {
   const { authContext } = React.useContext(AuthContext);
   const { signOut, t, setLang, getLang } = authContext
 
-  // var selectedHoursBookable
-  // var earliestBookableTime
-  // var latestBookableTime = '';
-  // var firstStartTime = '';
-  // var slotsBookablePerDay = '';
-  // var slotsBookablePerWeek = '';
   const { state } = React.useContext(AuthContext)
 
   const setBackgroundColor = (oNBackgroundColor, lPBookingBackgroundColor, eBTimeBackgroundColor, lBTimeBackgroundColor, fSTimeBackgroundColor, sBPerDayBackgroundColor, sBPerWeekBackgroundColor) => {
@@ -208,7 +201,6 @@ export default function AddBookableObject({ route }) {
           <SelectList
             setSelected={(val) => {
               setSelected(val)
-              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
 
               lengthInHours = lengthPerBooking[val - 1].value.substring(0, 2)
               lengthInHoursInt = parseInt(lengthInHours)
@@ -227,7 +219,6 @@ export default function AddBookableObject({ route }) {
           <SelectList
             setSelected={(val) => {
               setSelected(val)
-              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
 
               lengthInWeeks = maxprebookValues[val - 1].value.substring(0, 2)
               lengthInWeeksInt = parseInt(lengthInWeeks)
@@ -257,7 +248,6 @@ export default function AddBookableObject({ route }) {
               <SelectList
                 setSelected={(val) => {
                   setSelected(val)
-                  //this.firstStartTime = bookableTimes[val - 1].value
                   setFirstStartTime(bookableTimes[val - 1].value)
 
                   console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' första start tid: ' + firstStartTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
@@ -296,7 +286,6 @@ export default function AddBookableObject({ route }) {
                 <SelectList
                   setSelected={(val) => {
                     setSelected(val)
-                    // this.earliestBookableTime = bookableTimes[val - 1].value
                     setEarliestBookableTime(bookableTimes[val - 1].value)
                   }}
                   data={bookableTimes}
@@ -312,7 +301,6 @@ export default function AddBookableObject({ route }) {
                 <SelectList
                   setSelected={(val) => {
                     setSelected(val)
-                    // this.latestBookableTime = bookableTimes[val - 1].value
                     setLatestBookableTime(bookableTimes[val - 1].value)
                   }}
                   data={bookableTimes}
@@ -331,7 +319,6 @@ export default function AddBookableObject({ route }) {
           <SelectList
             setSelected={(val) => {
               setSelected(val)
-              // this.slotsBookablePerDay = lengthPerBooking[val - 1].value
               setSlotsBookablePerDay(amountOfTimes[val - 1].value)
             }}
             data={amountOfTimes}
@@ -347,7 +334,6 @@ export default function AddBookableObject({ route }) {
           <SelectList
             setSelected={(val) => {
               setSelected(val)
-              //this.slotsBookablePerWeek = lengthPerBooking[val - 1].value
               setSlotsBookablePerWeek(amountOfTimes[val - 1].value)
             }}
             data={amountOfTimes}

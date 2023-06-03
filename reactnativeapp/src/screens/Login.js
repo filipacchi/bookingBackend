@@ -23,6 +23,7 @@ export default function Login() {
 
 
     function handleRequest() {
+        console.log('KLICKAD')
         signIn({ username, password }) 
     }
 
@@ -58,7 +59,7 @@ export default function Login() {
                             autoComplete="off"
                             autoCorrect={false}
                         />
-                        <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

@@ -1,12 +1,8 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar } from "react-native";
-import LottieView from "lottie-react-native";
+import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
-//import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import SwipeableCalendar from "../Misc/SwipeableCalendar";
-import BookablesView from "./BookablesView";
-import Swiper from 'react-native-swiper'
 import BookObjectComponent from "./BookObjectComponent";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
@@ -23,14 +19,11 @@ import { MotiView } from "moti";
 export default function BookableObject({ route }) {
 
     const [timeSlots, setTimeSlots] = useState([])
-    const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedDay, setSelectedDay] = useState(moment())
     const [selectedTime, setSelectedTime] = useState()
     const [selectedCancelTime, setSelectedCancelTime] = useState()
     const [loading, setLoading] = useState(true)
-    const [swiperIndex, setSwiperIndex] = useState(0)
     const swiper = useRef(null)
-    const [noSwipe, setNoSwipe] = useState(false)
     const opacityAnimation = useRef(new Animated.Value(0)).current;
     const opacityStyle = { opacity: opacityAnimation };
     const [user, setUser] = useState()
@@ -84,7 +77,6 @@ export default function BookableObject({ route }) {
         }
 
         console.log('Button Pressed:', index);
-        //console.log('Popup Cancelled: ' + selectedCancelTime.slice(8, 13));
         setPopupVisible(false);
     };
 
@@ -125,7 +117,6 @@ export default function BookableObject({ route }) {
     }
 
     React.useEffect(() => {
-        //loadData(1, selectedDate)
         if (route.params.token) {
             let decoded = jwt_decode(route.params.token)
             setUser(decoded["user_id"])
@@ -153,26 +144,6 @@ export default function BookableObject({ route }) {
             setTimeBooked(false)
         }
     }, [selectedTime])
-    /*  useEffect(() => {
-         if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
-             setNoSwipe(true)
-             let diff = selectedDayCalendar.diff(selectedDay, 'days')
-             console.log(diff)
-             //swiper.current.scrollBy(diff)
-             setSelectedDay(selectedDayCalendar)
-             setSwipe()
-         }
-     }, [selectedDayCalendar]) */
-
-    /* const markDate = () => {
-        console.log(selectedDay.diff(selectedDayCalendar, 'days'))
-    }
- */
-
-    /*  useEffect(() => {
-         console.log("BOOKAHEAD: "+route.params.bookAhead)
-         setSelectedDate(selectedDay.clone().format().slice(0, 10))
-     }, [selectedDay]) */
 
     const bookTimeRequest = async (bodyParameters) => {
         try {
@@ -248,30 +219,6 @@ export default function BookableObject({ route }) {
                 <Animated.View style={[opacityStyle, { flex: 1, justifyContent: "center" }]}>
                     {loading ? slotSkeleton() : <BookObjectComponent isLoading={isLoading} setIsLoading={setIsLoading} bookingLoading={bookingLoading} selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}
                 </Animated.View>
-                {/* <Swiper showsPagination={false} ref={swiper} index={0} loop={false} onIndexChanged={(i) => {
-                    console.log(noSwipe)
-                    if (!noSwipe) {
-                        if (i > swiperIndex) {
-                            setSelectedDay(moment(selectedDay).add(1, 'days'))
-                            setSelectedDayCalendar(moment(selectedDay).add(1, 'days'))
-                        } else {
-                            setSelectedDay(moment(selectedDay).subtract(1, 'days'))
-                            setSelectedDayCalendar(moment(selectedDay).subtract(1, 'days'))
-                        }
-                    }
-                    setSwiperIndex(i)
-                    console.log("Indexet är: " + i)
-
-                }
-                }>
-                    {
-                        timeSlotsWeekArray.map((timeSlot, index) => (
-                            <BookObjectComponent timeSlots={timeSlot} key={index} />
-                        ))
-                    }
-
-
-                </Swiper> */}
                 <View style={[Style.viewBookButton]}>
                     <Pressable onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, { backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}>
                         {bookingLoading ? <ActivityIndicator /> : <Text style={Style.pressableText}>{buttonBooked ? t("Booked") : timeBooked ? t("Booked") : t("Book")}</Text>}</Pressable>
@@ -290,52 +237,3 @@ export default function BookableObject({ route }) {
         </SafeAreaView>
     )
 }
-
-
-const styles = StyleSheet.create({
-    input: {
-        width: "70%",
-        borderRadius: 10,
-        borderColor: "#27a5a5",
-        borderStyle: "solid",
-        justifyContent: "center",
-        borderWidth: 2,
-        alignItems: "center",
-        alignSelf: "center",
-        padding: 15,
-        flexDirection: "row",
-        gap: 10,
-        margin: 10
-    },
-    inputText: {
-        color: "#27a5a5",
-        fontWeight: 600
-    },
-    inputCredentials: {
-        width: "70%",
-        height: 30,
-        borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
-        alignSelf: "center",
-        padding: 15,
-        flexDirection: "row",
-        gap: 10
-    }, calendarStyle: {
-        marginTop: 20,
-        flex: 1,
-    },
-    container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
-    title: {
-        fontSize: 32,
-    },
-
-})

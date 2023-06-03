@@ -1,6 +1,5 @@
-import Style from "../../screens/Style";
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useState} from 'react';
+import { Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from "../../screens/Style";
@@ -103,9 +102,6 @@ const getImage = async () => {
          base64.encode(String.fromCharCode(...chunk))
          );
          let base64string = base64Chunks.join('');
-  
-
-        //base64string = base64.encode(String.fromCharCode(...uintArray))
           contentType = response.headers['content-type']
           url = "data:" + contentType + ";base64," + base64string
           setImage(url)

@@ -114,6 +114,12 @@
     "Avboka": "Avboka",
 
     "Key": "Nyckel",
-    "Members": "Medlemmar"
+    "Members": "Medlemmar",
+
+    "NotAdminYet": "Du är inte admin för någon förrening än, ifall detta är fel kontakta bookease teamet",
+
+    "FeedbackSupport": "Feedback / Support",
+
+    "NotJoinedAssociationYet": "Du har ännu inte anslutigt dig till en förening, klicka på knappen nedan för att gå med i en förening"
     
 }

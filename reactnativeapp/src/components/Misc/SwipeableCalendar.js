@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, TouchableWithoutFeedback, PanResponder, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import moment from 'moment';
-import { Feather } from '@expo/vector-icons';
 import { FlatList } from 'react-native-gesture-handler';
 import Style from '../../screens/Style';
 import { AuthContext } from '../../../auth/UserContextProvider';

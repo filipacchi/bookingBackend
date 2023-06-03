@@ -1,9 +1,6 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { TextInput }from "react-native-paper";
-import { StyleSheet, SafeAreaView, View, Text, Pressable, PermissionsAndroid } from "react-native"
-import LottieView from "lottie-react-native";
-import { Button } from "react-native-paper";
+import { StyleSheet, SafeAreaView, View, Text } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 
 const NavButtonScreen = (langText) => {
@@ -19,12 +16,12 @@ const NavButtonScreen = (langText) => {
                 gap: 20
             }}>
             <SafeAreaView>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Book')}}><Text style={styles.inputText}>{langText.booking}</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Associations')}}><Text style={styles.inputText}>Associations</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Login')}}><Text style={styles.inputText}>Log in</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('BookableObject')}}><Text style={styles.inputText}>Bookable</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('JoinAssociations')}}><Text style={styles.inputText}>JoinAssociations</Text></Pressable>
-                <Pressable style={styles.input} onPress={() => {navigation.navigate('Nav')}}><Text style={styles.inputText}>Nav</Text></Pressable>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('Book')}}><Text style={styles.inputText}>{langText.booking}</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('Associations')}}><Text style={styles.inputText}>Associations</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('Login')}}><Text style={styles.inputText}>Log in</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('BookableObject')}}><Text style={styles.inputText}>Bookable</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('JoinAssociations')}}><Text style={styles.inputText}>JoinAssociations</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.input} onPress={() => {navigation.navigate('Nav')}}><Text style={styles.inputText}>Nav</Text></TouchableOpacity>
             </SafeAreaView>
             </View>
         </LinearGradient>

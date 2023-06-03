@@ -1,32 +1,21 @@
-from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from .models import *
-from .serializer import BookingSerializer
-from django.http import Http404
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import *
-from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from .serializer import *
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from .permissions import *
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.http import HttpResponse, HttpResponseBadRequest
-import base64
-import math
+from django.http import HttpResponse
 import pprint
 from datetime import datetime, timedelta
 from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
 import pandas
-from PIL import Image
-import io
-import time
+
 class DeleteImage(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -101,27 +90,6 @@ class RegisterView(APIView):
         return Response(data)
     
 
-#####
-#Inte min egna kod, ett exempel som vi kan jobba utifrån
-# class CreateUserAPIView(CreateAPIView):
-#     serializer_class = CreateUserSerializer
-#     permission_classes = [AllowAny]
-
-#     def create(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         self.perform_create(serializer)
-#         headers = self.get_success_headers(serializer.data)
-#         # We create a token than will be used for future auth
-#         token = Token.objects.create(user=serializer.instance)
-#         token_data = {"token": token.key}
-#         return Response(
-#             {**serializer.data, **token_data},
-#             status=status.HTTP_201_CREATED,
-#             headers=headers
-#         )
-
-
 class LogoutUserAPIView(APIView):
     queryset = get_user_model().objects.all()
 
@@ -129,7 +97,7 @@ class LogoutUserAPIView(APIView):
         # simply delete the token to force a login
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
-    #####
+
 
 class GetUserAssociationsAPIVIEW(APIView):
     permission_classes = [IsAuthenticated]#[checkGroup]
@@ -382,14 +350,7 @@ class GetUserAssociationWithBookableObjects(APIView):
         for index in range(len(asso)):
             print(asso[index]['name'])
             bookable_objects = BookableObject.objects.filter(inAssociation=asso[index]['id'])
-            ####print(BookableObjectSerializer(bookable_objects, many=True))
             asso[index]['bookobjects'] = json.loads(json.dumps(BookableObjectSerializer(bookable_objects, many=True).data))
-            
-            #print(bookable_objects)
-        #bookable_objects_serializer = BookableObjectSerializer(bookable_objects, many=True)
-        #asso = json.loads(json.dumps(serializer.data))
-        #asso['bookobjects'] = json.loads(json.dumps(bookable_objects_serializer.data))
-        time.sleep(2)
         return Response(asso)
 
 class GetJoinAssociation(APIView):
@@ -466,15 +427,12 @@ def calculateTimeDifference(t1, t2):
 def populateTimeSlots(booked_times, bookable_object, sdate, edate):
     time_slot_dict = {}
     format = "%Y-%m-%d"
-    #print(sdate)
     date_array = pandas.date_range(sdate,edate,freq='d')
     for date in date_array:
     
         currentdate = datetime.strftime(date, format)
         time_slot_dict[currentdate] = createTimeSlots(bookable_object)
     
-    #pprint.pprint(time_slot_dict)
-    #pprint.pprint(booked_times)
     for booking in booked_times:
         for slot in time_slot_dict[booking["date"]]:
             if int(booking["start_time"][0:2]) == slot["id"]:
@@ -484,18 +442,14 @@ def populateTimeSlots(booked_times, bookable_object, sdate, edate):
 
 
 def createTimeSlots(bookable_object):
-    #print(bookable_object["timeSlotEndTime"].value)
     """ print("type and value of bookableobject")
     print(type(bookable_object))
     print(bookable_object) """
 
     start_time = int(bookable_object["timeSlotStartTime"][0:2])
     end_time = int(bookable_object["timeSlotEndTime"][0:2])
-    #print(startTime)
     slot_length = int(bookable_object["timeSlotLength"])
     loop_range = int((24-slot_length)/slot_length)
-    #print("SlotLength: "+str(slot_length))
-    #print("loopRange "+ str(loop_range))
     time_slot_array = []
 
     if(start_time == end_time):
@@ -516,7 +470,6 @@ def createTimeSlots(bookable_object):
         if (index+slot_length) <= end_range:
             title_temp = prettyDate(index % 24, next_index)
             time_slot_array.append({ "id": index % 24, "title": title_temp, "booked": False, "booked_by": "" })
-            #print(title_temp)
         """  timeSlotArray.append({"id": index, "title": titleTemp, "booked": False}) """
         index = index + slot_length
     return time_slot_array
