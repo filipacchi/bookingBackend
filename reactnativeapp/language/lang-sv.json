@@ -25,7 +25,7 @@
     "ResetPassword": "Glömt lösenord?",
     "HintSchedule": "Dra ner för att uppdatera",
     "IAgreeToThe": "Jag accepterar",
-    "TermsOfService": "Användarvilkoren",
+    "TermsOfService": "Användarvillkor",
     "Register": "Registrera",
     "NativeLanguage": "Modersmål",
 
@@ -75,8 +75,10 @@
     "LogOut": "Logga ut",
     "Language": "Språk",
     "ChangePassword": "Ändra lösenord",
-    "Information": "Information",
+    "Information": "Information / Feedback",
     "SureLogOut?": "Vill du logga ut?",
+    "BookeaseInfoTitle": "är en app utvecklad av bookease AB.",
+    "Feedback": "Om du har några åsikter om appen får du gärna lämna feedback till: ",
     
 
     "AssociationsPage": "Mina föreningar",

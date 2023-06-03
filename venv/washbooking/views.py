@@ -17,7 +17,7 @@ from django.conf import settings
 import pandas
 
 class DeleteImage(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         association = get_object_or_404(Association, pk=pk)
@@ -31,7 +31,7 @@ class DeleteImage(APIView):
 
     
 class UpdateAssociationImage(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, pk):
         association = get_object_or_404(Association, pk=pk)
@@ -45,7 +45,7 @@ class UpdateAssociationImage(APIView):
 
 
 class AddBookableObject(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         serializer = AddBookableObjectSerializer(data=request.data)
         if serializer.is_valid():
@@ -55,7 +55,7 @@ class AddBookableObject(APIView):
             return Response("An error occured, please try again later")
         
 class UpdateBookableObject(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, pk):
         bookable_object = get_object_or_404(BookableObject, pk=pk)
@@ -67,7 +67,7 @@ class UpdateBookableObject(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class DeleteBookableObject(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         try:
@@ -102,7 +102,7 @@ class LogoutUserAPIView(APIView):
 
 
 class GetUserAssociationsAPIVIEW(APIView):
-    """ permission_classes = [IsAuthenticated] """#[checkGroup]
+    permission_classes = [IsAuthenticated]#[checkGroup]
 
     def get(self, request):
         user = self.request.user
@@ -174,7 +174,7 @@ class GetUserAccount(APIView):
         return Response(self.request.user.first_name)
 
 class GetBookingsAPIVIEW(APIView):
-    permission_classes= [AllowAny]#[checkGroup]
+    permission_classes= [IsAuthenticated]#[checkGroup]
     def get(self,request):
         print(self.request.data)
         bookings = BookedTime.objects.all()
@@ -184,7 +184,7 @@ class GetBookingsAPIVIEW(APIView):
         return Response("PUT")
 
 class GetBookingsFromDateRange(APIView):
-    authentication_classes = []
+    authentication_classes = [IsAuthenticated]
     def get(self, request, bookid, startdate, enddate):
 
         bookable_object = BookableObject.objects.get(objectId=bookid)
@@ -200,7 +200,7 @@ class GetBookingsFromDateRange(APIView):
         return Response(time_slot_array)
     
 class GetBookingsFromAssociationAndDateRange(APIView):
-    authentication_classes = []
+    authentication_classes = [IsAuthenticated]
     def get(self, request, associationid, startdate, enddate):
         sorted_bookings = []
 
@@ -227,7 +227,7 @@ class GetBookingsFromAssociationAndDateRange(APIView):
         return Response(sorted_bookings)
     
 class GetBookingsFromBookableObject(APIView):
-    authentication_classes = []
+    authentication_classes = [IsAuthenticated]
     def get(self, request, bookableid, startdate):
         bookable_object = BookableObject.objects.get(objectId=bookableid)
         book_ahead_weeks = int(bookable_object.bookAheadWeeks)
@@ -247,7 +247,7 @@ class GetBookingsFromBookableObject(APIView):
 
     
 class GetBookingsFromObject(APIView):
-    permission_classes=[]
+    permission_classes=[IsAuthenticated]
     def get(self,request,object_pk):
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         bookings = BookedTime.objects.filter(booking_object=bookable_object)
@@ -259,7 +259,7 @@ class GetBookingsFromObject(APIView):
 
 
 class GetBookingsFromDay(APIView):
-    permission_classes=[]
+    permission_classes=[IsAuthenticated]
     def get(self,request,object_pk,date):
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         bookings = BookedTime.objects.filter(booking_object=bookable_object,date=date)
@@ -271,10 +271,11 @@ class GetBookingsFromDay(APIView):
         print(bookings)
         print(json.dumps(bookedSerializer.data))
         time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate)
+        #time.sleep(2)
         return Response(time_slot_array)
 
 class GetBookableObject(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     def get(self, request, object_pk):
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         serializer = BookableObjectSerializer(bookable_object)
@@ -282,22 +283,40 @@ class GetBookableObject(APIView):
     
 class CreateBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]
-    def post(self,request) : 
-        request.data["booked_by"] = self.request.user.id
+    def post(self,request): 
+        user = self.request.user
         object = BookableObject.objects.get(objectId=request.data["booking_object"])
+
+        request.data["booked_by"] = user.id
         date_str = request.data["date"]
         date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
-        pprint.pprint(date_object.weekday())
+        start_date = date_object - timedelta(days=date_object.weekday())
+        end_date = start_date + timedelta(days=6)
+        user_bookings_week = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).count()
+        user_bookings_day = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date=date_object).count()
+        print(user_bookings_day)
+        #pprint.pprint(date_object.weekday())
+        #print(user_bookings_amount)
         slots_per_day = object.slotsPerDay
         slots_per_week = object.slotsPerWeek
+        #print(slots_per_day)
+        #print(slots_per_week)
+        if user_bookings_week < slots_per_week:
+            if user_bookings_day < slots_per_day:
+                print("OK DAG")
+                serializer = BookedTimeSerializer(data=request.data)
+                if serializer.is_valid():
+                #return checkBooking(serializer, object_pk)
+                    serializer.save()
+                #time.sleep(2)
+                    return Response("Bokar")
+                return Response("An error occured, this time might not be available")
+            else:
+                return Response("ToManyBookingsPerDay")
+        else:
+            return Response("ToManyBookingsPerWeek")
         
-        serializer = BookedTimeSerializer(data=request.data)
-        pprint.pprint(serializer)
-        if serializer.is_valid():
-            serializer.save()
-            return Response("Bokar")
-        return Response("An error occured, this time might not be available")
-    
+
 class DeleteBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]
     def delete(self,request) : 
@@ -355,7 +374,7 @@ class UserJoinAssociation(APIView):
         return Response(join_key)
 
 class GetImage(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk):
         image = Association.objects.get(pk=pk).profile_image
         if image == "": 

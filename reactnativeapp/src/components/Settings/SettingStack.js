@@ -6,6 +6,14 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 import { Text } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import Information from "./Information";
+
+
+
+import * as SecureStore from 'expo-secure-store';
+
+import { useContext } from "react";
+import { color } from "react-native-reanimated";
 import { TouchableOpacity } from "react-native";
 
 
@@ -37,7 +45,7 @@ export default function SettingStack() {
                 headerTitleAlign: "center",
             }} />
             <SettingStack.Screen name="Settings" component={Settings} options={{headerBackTitle: "TILLBAKA", headerTitle: "", headerStyle: { backgroundColor: colorTheme.firstColor }, headerTintColor: "white", headerLeft: () => <TouchableOpacity onPress={()=> nav.navigate("SettingsNav")} style={{flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 10}}><AntDesign name="left" size={20} color="white" /><Text style={{color: "white"}}>{tabTitles.Return}</Text></TouchableOpacity>,}} />
-
+            <SettingStack.Screen name="Information" component={Information} options={{headerBackTitle: "TILLBAKA", headerTitle: "", headerStyle: { backgroundColor: colorTheme.firstColor }, headerTintColor: "white", headerLeft: () => <TouchableOpacity onPress={()=> nav.navigate("SettingsNav")} style={{flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 10}}><AntDesign name="left" size={20} color="white" /><Text style={{color: "white"}}>{tabTitles.Return}</Text></TouchableOpacity>,}} />
         </SettingStack.Navigator>
 
     )

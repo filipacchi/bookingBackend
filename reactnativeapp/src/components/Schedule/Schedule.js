@@ -51,6 +51,7 @@ export default function Schedule() {
                 
             } catch (error) {
                 console.log(error);
+                /* behöver inte ha pop-up för error på bilderna */
             }
 
             updatedData.push(item);
@@ -64,12 +65,14 @@ export default function Schedule() {
     const loadData = (() => {
         async function getUserBookings() {
             axios.get('user/bookedtimes/get')
-                .then(response => {
-                    loadBookingsAndImages(response.data)
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            .then(response => {
+                loadBookingsAndImages(response.data)
+            })
+            .catch(error => {
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
+                console.log(error);
+            });
         }
         getUserBookings()
     })
@@ -102,20 +105,25 @@ export default function Schedule() {
     }
     const getImage = async (associationId) => {
         try {
-            const response = await axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" })
+            const response = await axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" })
             return loadImages(response)
         } catch (error) {
-            let errorCode = error.response.status.toString()
-            if (errorCode != "404") {
-                setErrorText(t('RequestFailed') + error.response.status.toString())
-                setErrorPopUpVisible(true)
-            }
+            console.log(error)
+            /* behöver inte ha pop-up för error på bilderna */
         } finally {
             setisLoading(false)
         }
     }
 
 
+    const handleRefresh = async () => {
+        try {
+            loadData()
+        } catch (error) {
+            setErrorText(t('RequestFailed') + error.response.status.toString())
+            setErrorPopUpVisible(true)
+        }
+    }
 
     const openComp = (ind) => {
         //OM BARA EN SKA KUNNA VARA ÖPPEN SAMTIDIGT
@@ -142,7 +150,7 @@ export default function Schedule() {
             start_time: booking["startTime"],
             end_time: booking["endTime"]
         }
-        axios.delete('book/delete/',
+        axios.delete('user/booking/delete/',
             { data }
         )
             .then(response => {
@@ -191,25 +199,25 @@ export default function Schedule() {
         <View style={{ flex: 1 }}>
             <FlatList
             contentContainerStyle={{marginTop:10}}
-                data={bookedTimes}
-                onRefresh={() => { console.log("från onRefresh i FlatList"); loadData() }}
-                refreshing={isRefreshing}
-                renderItem={
-                    ({ item, index }) => {
-                        return (<Item item={item} index={index} onComponentOpen={(x) => {
-                            console.log("aiosdjioas");
-                            openComp(x)
+            data={bookedTimes}
+            onRefresh={() => { handleRefresh() }}
+            refreshing={isRefreshing}
+            renderItem={
+                ({ item, index }) => {
+                    return (<Item item={item} index={index} onComponentOpen={(x) => {
+                        console.log("aiosdjioas");
+                        openComp(x)
+                    }}
+                        onDelete={(x, y) => {
+                            deleteBooking(x)
                         }}
-                            onDelete={(x, y) => {
-                                deleteBooking(x)
-                            }}
-                        />)
-                    }
-
+                    />)
                 }
-                ListEmptyComponent={emptyFlatComp}
-                ListFooterComponent={bookedTimes.length == 0 ? null : <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>}
-                ListFooterComponentStyle={{justifyContent: "center", alignItems: "center"}}
+
+            }
+            ListEmptyComponent={emptyFlatComp}
+            ListFooterComponent={bookedTimes.length == 0 ? null : <Text style={{color: "grey"}}>{t("HintSchedule")}</Text>}
+            ListFooterComponentStyle={{justifyContent: "center", alignItems: "center"}}
             >
 
             </FlatList>

@@ -60,21 +60,21 @@ export default function SettingsNav() {
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.containerSettings}>
-                <View style={styles.innerContainerSettings}>
-                    <View style={styles.iconContainer}><Ionicons name="md-lock-closed-outline" size={24} color="black" /></View>
-                    <Text style={styles.settingNameText}>{t('ChangePassword')}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.containerSettings}>
+                {/* <TouchableOpacity style={styles.containerSettings}>
+                    <View style={styles.innerContainerSettings}>
+                        <View style={styles.iconContainer}><Ionicons name="md-lock-closed-outline" size={24} color="black" /></View>
+                        <Text style={styles.settingNameText}>{t('ChangePassword')}</Text>
+                    </View>
+                    <Ionicons name="chevron-forward" size={24} color="black" />
+                </TouchableOpacity> */}
+            {/* <TouchableOpacity style={styles.containerSettings}>
                 <View style={styles.innerContainerSettings}>
                     <View style={styles.iconContainer}><MaterialIcons name="feedback" size={24} color="black" /></View>
                     <Text style={styles.settingNameText}>{t("FeedbackSupport")}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.containerSettings}>
+            </TouchableOpacity> */}
+            <TouchableOpacity style={styles.containerSettings} onPress={() => { navigation.navigate('Information') }}>
                 <View style={styles.innerContainerSettings}>
                     <View style={styles.iconContainer}><MaterialIcons name="perm-device-information" size={24} color="black" /></View>
                     <Text style={styles.settingNameText}>{t('Information')}</Text>

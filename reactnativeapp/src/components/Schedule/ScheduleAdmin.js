@@ -7,11 +7,12 @@ import * as SecureStore from 'expo-secure-store';
 import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { Animated } from "react-native";
 import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import SwipeableCalendar from "../Misc/SwipeableCalendar";
 
 
 export default function ScheduleAdmin() {
@@ -27,6 +28,7 @@ export default function ScheduleAdmin() {
     /* loading */
     const [associationsLoading, setAssociationsLoading] = useState(true)
     const [bookingsLoading, setBookingsLoading] = useState(true) /* sätt true */
+    const [refreshLoading, setRefreshLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [bookableObjectsExist, setBookableObjectsExist] = useState(true)
 
@@ -96,7 +98,7 @@ export default function ScheduleAdmin() {
             allBookings.length == 0 ? setBookableObjectsExist(false) : setBookableObjectsExist(true)
         }
 
-}, [allBookings])
+    }, [allBookings])
 
 
 React.useEffect(() => {
@@ -128,9 +130,10 @@ const loadVariableData = async () => {
 const loadAssociations = async (token) => {
     
     console.log("---- Inuti loadAssociations (ScheduleAdmin.js), token = " + token)
-    
+    setRefreshLoading(true)
+
     try {
-        const { data: response } = await axios.get('user/association/get')
+        const { data: response } = await axios.get('user/association/with/bookableobjects/get')
         console.log("response from loadAssociations: ")
         console.log(response)
         
@@ -138,8 +141,6 @@ const loadAssociations = async (token) => {
     }
         
     catch (error) {
-        console.log("ERROR CATCHAT I loadAssociations")
-        console.log(error);
         setErrorText(t('RequestFailed') + error.response.status.toString())
         setErrorPopUpVisible(true)
     }
@@ -168,6 +169,7 @@ const loadAssociations = async (token) => {
         }
         finally {
             setBookingsLoading(false)
+            setRefreshLoading(false)
         }
     }
 
@@ -252,7 +254,7 @@ const loadAssociations = async (token) => {
 
     if (associationsLoading || bookingsLoading) {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <ActivityIndicator />
             </View>
         )
@@ -260,20 +262,19 @@ const loadAssociations = async (token) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View>
+            <View style={{justifyContent: "center"}}>
+
                 <SelectList 
                 placeholder={myAssociationsWithBO[currentAssoIndex].name}
-                editable={false}
-
+                /* editable={false} */
                 setSelected={ (key) => {
                     setcurrentAssoIndex(key)
                 }}
-
-
-                data={getAssociationNames(myAssociationsWithBO)}>
-
-
+                data={getAssociationNames(myAssociationsWithBO)}
+                >
                 </SelectList>
+
+
                 <WeekCalendar 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} />
@@ -281,7 +282,8 @@ const loadAssociations = async (token) => {
             </View>
 
             <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
-            {myAssociationsWithBO.length == 0 ?
+
+                {myAssociationsWithBO.length == 0 ?
                 <View style={{ flex: 1, justifyContent: "center" }}>
                     <View style={{
                         borderStyle: "solid",
@@ -293,6 +295,15 @@ const loadAssociations = async (token) => {
                         <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
                     <TouchableOpacity onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></TouchableOpacity>
                 </View> : 
+
+                refreshLoading ? 
+
+                <View style={{ flex: 1, marginTop: 20}}>
+                    <ActivityIndicator />
+                </View>
+
+                :
+
                 bookableObjectsExist ? 
                 <FlatList
                 data={allBookings}
@@ -338,7 +349,9 @@ const loadAssociations = async (token) => {
                             </View>)}}
                 >
                 </FlatList>
+
                 :
+
                 <View style={Style.noBookablesContainer}>
                     <Text style={Style.noBookablesText}>
                         {t("AssoNoBookables")}

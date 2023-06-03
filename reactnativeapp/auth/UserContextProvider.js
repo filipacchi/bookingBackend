@@ -158,8 +158,7 @@ function UserContextProvider({ children }) {
       },
       signUp: async (data) => {
         console.log("SIGNAR UPP!")
-        console.log('Kolla hät också!' + data.email + data.nativeLang) //Fungerar hit, men av någon anledning läggs det inte till???
-        axios.post('auth/register/', {
+        axios.post('user/account/register/', {
           email: data.email,
           first_name: data.firstname,
           last_name: data.lastname,

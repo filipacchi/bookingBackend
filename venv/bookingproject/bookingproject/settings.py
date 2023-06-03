@@ -128,7 +128,7 @@ DATABASES = {
         'HOST': 'bookease.se',  
         'PORT': '3306',  
     }  
-}   """
+}    """
 
 
 # Password validation

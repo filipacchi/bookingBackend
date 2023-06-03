@@ -11,6 +11,9 @@ import { Animated } from "react-native"
 import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
 import IOSPopup from "../Misc/PopUp";
+import customLoadIcon from "../Misc/customLoadIcon";
+import { Skeleton } from "moti/skeleton";
+import { MotiView } from "moti";
 
 
 export default function BookableObject({ route }) {
@@ -29,6 +32,9 @@ export default function BookableObject({ route }) {
     const { t } = authContext
     const [popupVisible, setPopupVisible] = useState(false);
     const [buttonBooked, setButtonBooked] = useState(false)
+    const [timeBooked, setTimeBooked] = useState(false)
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const delBookingAxios = async () => {
 
@@ -42,7 +48,7 @@ export default function BookableObject({ route }) {
         }
 
         try {
-            let response = await axios.delete('book/delete/', { data })
+            let response = await axios.delete('user/booking/delete/', { data })
             setBookedSlot([])
             setSelectedCancelTime(null)
             setSelectedTime(null)
@@ -100,7 +106,7 @@ export default function BookableObject({ route }) {
         let objectId = route.params.id
         let sdate = selectedDay.format().slice(0, 10)
         try {
-            const { data: response } = await axios.get('book/get/object/' + objectId + "/" + sdate)
+            const { data: response } = await axios.get('association/bookableobject/bookedtimes/get/' + objectId + "/" + sdate)
             setTimeSlots(response)
             setLoading(false)
         }
@@ -130,28 +136,36 @@ export default function BookableObject({ route }) {
         }
     }, [selectedDay])
 
-    useEffect(()=>{
+    useEffect(() => {
         setButtonBooked(false)
+        if (selectedCancelTime != null) {
+            setTimeBooked(true)
+        } else {
+            setTimeBooked(false)
+        }
     }, [selectedTime])
 
     const bookTimeRequest = async (bodyParameters) => {
         try {
-            let response = await axios.post('book/add/', bodyParameters)
+            let response = await axios.post('user/booking/create/', bodyParameters)
+            setButtonBooked(true)
+            setBookedSlot([selectedTime, bodyParameters.date])
             loadData()
+            setBookingLoading(false)
         } catch (e) {
             console.log(e)
+            setBookingLoading(false)
         }
 
     }
 
     const bookTime = () => {
-        setButtonBooked(true)
+        setBookingLoading(true)
         if (selectedTime != null) {
             let startTime = selectedTime.slice(0, 5)
             let endTime = selectedTime.slice(8, 13)
             let bookDate = selectedDay.clone().format().slice(0, 10)
             let bookingObject = route.params.id
-            setBookedSlot([selectedTime, bookDate])
             let bodyParameters = {
                 start_time: startTime,
                 end_time: endTime,
@@ -164,21 +178,55 @@ export default function BookableObject({ route }) {
         }
     }
 
+    const slotSkeleton = () => {
+        return (
+            <MotiView
+                transition={{
+                    type: 'timing',
+                }}
+                style={{ flex: 1, justifyContent: "flex-start", paddingHorizontal: 15, }}
+                animate={{ backgroundColor: '#ffffff' }}
+            >
+                <Spacer />
+                <Skeleton transition={{
+                    translateX: {
+                        // defaults to a 3000ms timing function
+                        type: 'timing',
+                    },
+                        }} 
+                        colorMode="light" height={55} width={'100%'} />
+                <Spacer height={10} />
+                <Skeleton colorMode="light" height={55} width={'100%'} />
+                <Spacer height={10} />
+                <Skeleton colorMode="light" height={55} width={'100%'} />
+                <Spacer />
+                <Skeleton colorMode="light" height={55} width={'100%'} />
+                <Spacer height={10} />
+                <Skeleton colorMode="light" height={55} width={'100%'} />
+                <Spacer height={10} />
+                <Skeleton colorMode="light" height={55} width={'100%'} />
+            </MotiView>
+        )
+    }
+
+    const Spacer = ({ height = 16 }) => <View style={{ height }} />;
+    {/* <ActivityIndicator size={"large"} color={colorTheme.firstColor} /> */ }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
                 <SwipeableCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} bookAhead={route.params.bookAhead} />
                 <Animated.View style={[opacityStyle, { flex: 1, justifyContent: "center" }]}>
-                    {loading ? <ActivityIndicator size={"large"} color={colorTheme.firstColor} /> : <BookObjectComponent selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}
+                    {loading ? slotSkeleton() : <BookObjectComponent isLoading={isLoading} setIsLoading={setIsLoading} bookingLoading={bookingLoading} selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}
                 </Animated.View>
                 <View style={[Style.viewBookButton]}>
-                    <TouchableOpacity onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, {backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}><Text style={Style.pressableText}>{buttonBooked ? t("Booked") : t("Book")}</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></TouchableOpacity>
+                    <Pressable onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, { backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}>
+                        {bookingLoading ? <ActivityIndicator /> : <Text style={Style.pressableText}>{buttonBooked ? t("Booked") : timeBooked ? t("Booked") : t("Book")}</Text>}</Pressable>
+                    <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
                 </View>
                 <IOSPopup
                     visible={popupVisible}
-                    title={<View><Text style={{fontSize: 18, fontWeight: 200, textAlign: "center", marginBottom: 5 }}>{selectedCancelTime == null ? t("BookTime") : t("CancelBookTime")}</Text><Text style={{fontSize: 18, textDecorationLine: "underline", textAlign: "center", fontWeight: 500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></View>}
+                    title={<View><Text style={{ fontSize: 18, fontWeight: 200, textAlign: "center", marginBottom: 5 }}>{selectedCancelTime == null ? t("BookTime") : t("CancelBookTime")}</Text><Text style={{ fontSize: 18, textDecorationLine: "underline", textAlign: "center", fontWeight: 500 }}>{selectedCancelTime == null ? selectedTime : selectedCancelTime}</Text></View>}
                     hasInput={false}
                     buttonTexts={[t('Yes'), t('No')]}
                     buttonColor={colorTheme.firstColor}

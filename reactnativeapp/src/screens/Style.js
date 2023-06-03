@@ -79,6 +79,53 @@ export default StyleSheet.create({
         backgroundColor: '#F0F0F0',
         padding: 20,
     },
+    Text: {
+        color: "black",
+        fontWeight: 600,
+        marginTop: 100,
+    },
+    Title: {
+        textAlign: 'left',
+        color: "black",
+        fontWeight: 600,
+        marginTop: 100,
+    },
+    addAssociation: {
+        alignItems: "center",
+        alignSelf: "center",
+    },
+    expandFlatlist: {
+        
+    },
+    assoText: {
+        color: "#222222",
+        fontSize: 15,
+        fontWeight: 500
+    },
+    assoView: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 15,
+        height: 55,
+        gap: 10
+    },
+    assoFlatView: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        //borderColor: "#999999",
+        overflow: 'hidden',
+        margin: 10,
+        //borderWidth: 1
+    },
+    noAssoText: {
+        textAlign: "center",
+        padding: 10
+    },
+    assoDarkView: {
+        backgroundColor: "#ededed",
+        padding: 5
+    },
+    bookObject: {
     containerSettings: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -213,7 +260,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         alignSelf: "center",
-        padding: 15,
+        height: 50,
         flexDirection: "row",
         backgroundColor: "#22992e",
         marginRight: 20
@@ -227,7 +274,7 @@ export default StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         alignSelf: "center",
-        padding: 15,
+        height: 50,
         flexDirection: "row",
         gap: 10,
         backgroundColor: "#Be2525",
