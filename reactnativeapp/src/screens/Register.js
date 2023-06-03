@@ -114,7 +114,7 @@ export default function Register() {
                         <SelectList
                             //dropdownStyles
                             arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
-                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
+                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly", width:'50%' }}
                             search={true}
                             dropdownShown={false}
                             placeholder={t("NativeLanguage")}
@@ -122,9 +122,9 @@ export default function Register() {
                                 setSelectedLanguage(val);
                             }}
                             data={languageOptions}
-                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
+                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "50%", top: 45, zIndex: 2 }}
                         />
-                        <View style={{flexDirection: 'row',}}>
+                        <View style={{flexDirection: 'row'}}>
       <Checkbox
         value={isChecked}
         onValueChange={handleCheckboxChange}
