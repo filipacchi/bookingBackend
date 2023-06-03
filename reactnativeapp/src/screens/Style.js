@@ -125,7 +125,6 @@ export default StyleSheet.create({
         backgroundColor: "#ededed",
         padding: 5
     },
-    bookObject: {
     containerSettings: {
         flexDirection: 'row',
         justifyContent: 'space-between',

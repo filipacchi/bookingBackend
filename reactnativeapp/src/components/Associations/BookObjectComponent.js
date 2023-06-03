@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, StatusBar, TouchableOpacity } from "react-native";
 import Style from "../../screens/Style";
 import { AntDesign } from '@expo/vector-icons';
@@ -67,7 +67,7 @@ export default function BookObjectComponent({ isLoading, setIsLoading, bookingLo
                 }
             }
         } */
-        //let color = selectedCancelTime == item.title ? red : booked[1] == selectedDay ? booked[0] == item.title ? bookingLoading ? colorTheme.firstColor : green : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey
+        let color = selectedCancelTime == item.title ? red : booked[1] == selectedDay ? booked[0] == item.title ? bookingLoading ? colorTheme.firstColor : green : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey : selectedTime == null ? item.booked ? green : grey : selectedTime == item.title ? colorTheme.firstColor : item.booked ? green : grey
         console.log("SELECTEDCANDEL " + selectedCancelTime)
         let icon = "unselected"
         if (selectedTime == item.title || selectedCancelTime == item.title) {

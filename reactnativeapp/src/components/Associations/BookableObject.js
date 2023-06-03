@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
-import { useEffect, useState, useRef, useContext } from "react";
+import {useState, useRef, useContext } from "react";
+import { useEffect } from "react";
 import axios from "../../../axios/axios";
 import SwipeableCalendar from "../Misc/SwipeableCalendar";
 import BookObjectComponent from "./BookObjectComponent";
@@ -14,6 +15,7 @@ import IOSPopup from "../Misc/PopUp";
 import customLoadIcon from "../Misc/customLoadIcon";
 import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
+
 
 
 export default function BookableObject({ route }) {
@@ -95,7 +97,7 @@ export default function BookableObject({ route }) {
         })
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         opacityAnimation.setValue(0)
         animateElement()
     }, [selectedDay])
@@ -124,7 +126,7 @@ export default function BookableObject({ route }) {
 
     }, [])
 
-    useEffect(() => {
+    React.useEffect(() => {
         setLoading(true)
         setBookedSlot([])
         setSelectedCancelTime(null)
@@ -220,9 +222,9 @@ export default function BookableObject({ route }) {
                     {loading ? slotSkeleton() : <BookObjectComponent isLoading={isLoading} setIsLoading={setIsLoading} bookingLoading={bookingLoading} selectedCancelTime={selectedCancelTime} setSelectedCancelTime={setSelectedCancelTime} booked={bookedSlot} selectedDay={selectedDay.clone().format().slice(0, 10)} user={user} timeSlots={timeSlots[selectedDay.clone().format().slice(0, 10)]} selectedTime={selectedTime} setSelectedTime={setSelectedTime} />}
                 </Animated.View>
                 <View style={[Style.viewBookButton]}>
-                    <Pressable onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, { backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}>
-                        {bookingLoading ? <ActivityIndicator /> : <Text style={Style.pressableText}>{buttonBooked ? t("Booked") : timeBooked ? t("Booked") : t("Book")}</Text>}</Pressable>
-                    <Pressable onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></Pressable>
+                    <TouchableOpacity onPress={() => { if (selectedTime != null && !buttonBooked) { setPopupVisible(true) } }} style={[Style.pressableBook, { backgroundColor: buttonBooked ? "#39e336" : colorTheme.firstColor, opacity: selectedCancelTime == null ? selectedTime == null ? 0.5 : 1 : 0.5 }]}>
+                        {bookingLoading ? <ActivityIndicator /> : <Text style={Style.pressableText}>{buttonBooked ? t("Booked") : timeBooked ? t("Booked") : t("Book")}</Text>}</TouchableOpacity>
+                    <TouchableOpacity onPress={() => { if (selectedCancelTime != null) { setPopupVisible(true) } }} style={[Style.pressableCancelBook, { opacity: selectedCancelTime == null ? 0.5 : 1 }]}><Text style={Style.pressableText}>{t("Avboka")}</Text></TouchableOpacity>
                 </View>
                 <IOSPopup
                     visible={popupVisible}
