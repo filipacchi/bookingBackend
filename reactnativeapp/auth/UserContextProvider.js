@@ -163,6 +163,7 @@ function UserContextProvider({ children }) {
           first_name: data.firstname,
           last_name: data.lastname,
           password: data.password,
+          native_lang: data.nativeLang,
           is_association: false
         })
           .then(response => {

@@ -81,6 +81,8 @@ class DeleteBookableObject(APIView):
 class RegisterView(APIView):
     authentication_classes = []
     def post(self, request):
+        print('I serializern: ')
+        print(request.data)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

@@ -22,18 +22,14 @@ export default function Register() {
     const [firstname, onChangeFirstname] = useState("");
     const [lastname, onChangeLastname] = useState("");
     const [isChecked, setIsChecked] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState(null);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+
 
     const languageOptions = getAllCodes().map((code) => ({
         label: code,
         value: code.toUpperCase() + '   ' + getName(code),
         flag: '',
       }));
-
-      const handleLanguageChange = (value) => {
-        setSelectedLanguage(value);
-        console.log(selectedLanguage)
-      };
       
         const handleCheckboxChange = () => {
           setIsChecked(!isChecked);
@@ -46,10 +42,12 @@ export default function Register() {
 
     function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "" || !isChecked) {
+            console.log(selectedLanguage)
             console.log("Nåt är tomt")
         } else if (password === passwordCheck) {
-            let data = { email: username, firstname: firstname, lastname: lastname, password: password }
+            let data = { email: username, firstname: firstname, lastname: lastname, password: password, nativeLang: selectedLanguage }
             signUp(data)
+            console.log(selectedLanguage)
             console.log("Lösenord ok också")
 
         } else {
@@ -121,7 +119,7 @@ export default function Register() {
                             dropdownShown={false}
                             placeholder={t("NativeLanguage")}
                             setSelected={(val) => {
-                                handleLanguageChange(val)
+                                setSelectedLanguage(val);
                             }}
                             data={languageOptions}
                             dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
