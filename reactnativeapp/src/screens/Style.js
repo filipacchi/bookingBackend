@@ -10,6 +10,17 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
     },
+    adminSelectListBoxStyle:{
+        height: 45, 
+        alignItems: "center"
+    },
+    adminSelectListDropdownStyle:{
+        position: "absolute", 
+        backgroundColor: "white", 
+        width: "100%", 
+        top: 45, 
+        zIndex: 2
+    },
     assoDarkView: {
         backgroundColor: "#ededed",
         padding: 5
@@ -297,7 +308,7 @@ export default StyleSheet.create({
         fontSize: 16,
     },
     settingLabelOverhead:{
-        width: '50%'
+        width: '48%'
     },
     settingNameText: {
         fontSize: 20

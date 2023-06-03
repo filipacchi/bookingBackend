@@ -107,6 +107,10 @@
     "Save": "Spara",
     "RemoveThisObject": "Radera objekt",
     "BookAhead": "Max förbokning",
+    "hour": "timme",
+    "hours": "timmar",
+    "week": "vecka",
+    "weeks": "veckor",
 
     "AddBookableObject": "Lägg till bokningsbart objekt",
     "ObjectName": "Objektets namn",

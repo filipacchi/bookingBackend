@@ -105,6 +105,10 @@
     "Save": "Save",
     "RemoveThisObject": "Remove this object",
     "BookAhead": "Max prebooking",
+    "hour": "hour",
+    "hours": "hours",
+    "week": "week",
+    "weeks": "weeks",
 
     "AddBookableObject": "Add Bookable Object",
     "ObjectName": "Object Name",
