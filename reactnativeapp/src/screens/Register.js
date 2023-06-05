@@ -36,7 +36,7 @@ export default function Register() {
         };
       
         const handleTermsLinkPress = () => {
-          const termsURL = 'https://bookease.se/'; 
+          const termsURL = 'https://bookease.se/app/termsofservice'; 
           Linking.openURL(termsURL);
         };
 
