@@ -109,7 +109,7 @@ export default function Schedule() {
             return loadImages(response)
         } catch (error) {
             
-            /* behöver inte ha pop-up för error på bilderna */
+            
         } finally {
             setisLoading(false)
         }

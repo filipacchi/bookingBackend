@@ -163,8 +163,6 @@ const loadAssociations = async (token) => {
             return(response)
         }
         catch (error) {
-            
-            
             setErrorText(t('RequestFailed') + error.response.status.toString())
             setErrorPopUpVisible(true)
         }
