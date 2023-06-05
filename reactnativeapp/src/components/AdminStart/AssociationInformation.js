@@ -1,6 +1,5 @@
-import Style from "../../screens/Style";
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, Image } from 'react-native';
+import React, { useContext, useState} from 'react';
+import { Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from "../../screens/Style";
@@ -30,7 +29,7 @@ export default function AssociationInformation({ route }) {
     };
   
     axios
-      .put(`association/image/${associationId}/update`, formData, config)
+      .put(`association/image/update/${associationId}`, formData, config)
       .then((response) => {
         console.log(response.data);
       })
@@ -53,7 +52,7 @@ export default function AssociationInformation({ route }) {
 
     if (!result.canceled) {
       if(associationImage != null){
-        axios.delete(`association/delete/${associationId}`)
+        axios.delete(`association/image/delete/${associationId}`)
       }
       setImage(result.assets[0].uri);
       console.log('NÅGOT: ' + result.assets[0].uri)
@@ -83,7 +82,7 @@ export default function AssociationInformation({ route }) {
 }, [])
 
 const getImage = async () => {
-  axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+  axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" }
   )
       .then(response => {
         let uintArray = new Uint8Array(response.data);
@@ -103,9 +102,6 @@ const getImage = async () => {
          base64.encode(String.fromCharCode(...chunk))
          );
          let base64string = base64Chunks.join('');
-  
-
-        //base64string = base64.encode(String.fromCharCode(...uintArray))
           contentType = response.headers['content-type']
           url = "data:" + contentType + ";base64," + base64string
           setImage(url)

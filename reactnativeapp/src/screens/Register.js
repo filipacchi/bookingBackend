@@ -1,13 +1,10 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid, TouchableOpacity, Linking } from "react-native"
-import { Card } from "react-native-paper"
-import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native"
+import React, {useContext} from 'react';
 import { LinearGradient } from "expo-linear-gradient";
-import { useState, setState } from "react";
+import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import Style from "./Style";
 import Checkbox from 'expo-checkbox';
 import { getAllCodes, getName } from 'iso-639-1';
@@ -17,8 +14,6 @@ import { Entypo } from '@expo/vector-icons';
 
 export default function Register() {
 
-    const navigation = useNavigation()
-
     const {colorTheme, authContext } = React.useContext(AuthContext);
     const { signUp, t, setLang } = authContext
     const [username, onChangeUsername] = useState("");
@@ -27,18 +22,14 @@ export default function Register() {
     const [firstname, onChangeFirstname] = useState("");
     const [lastname, onChangeLastname] = useState("");
     const [isChecked, setIsChecked] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState(null);
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+
 
     const languageOptions = getAllCodes().map((code) => ({
         label: code,
         value: code.toUpperCase() + '   ' + getName(code),
         flag: '',
       }));
-
-      const handleLanguageChange = (value) => {
-        setSelectedLanguage(value);
-        console.log(selectedLanguage)
-      };
       
         const handleCheckboxChange = () => {
           setIsChecked(!isChecked);
@@ -51,10 +42,12 @@ export default function Register() {
 
     function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "" || !isChecked) {
+            console.log(selectedLanguage)
             console.log("Nåt är tomt")
         } else if (password === passwordCheck) {
-            let data = { email: username, firstname: firstname, lastname: lastname, password: password }
+            let data = { email: username, firstname: firstname, lastname: lastname, password: password, nativeLang: selectedLanguage }
             signUp(data)
+            console.log(selectedLanguage)
             console.log("Lösenord ok också")
 
         } else {
@@ -121,17 +114,17 @@ export default function Register() {
                         <SelectList
                             //dropdownStyles
                             arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
-                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
+                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly", width:'50%' }}
                             search={true}
                             dropdownShown={false}
                             placeholder={t("NativeLanguage")}
                             setSelected={(val) => {
-                                handleLanguageChange(val)
+                                setSelectedLanguage(val);
                             }}
                             data={languageOptions}
-                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 2 }}
+                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "50%", top: 45, zIndex: 2 }}
                         />
-                        <View style={{flexDirection: 'row',}}>
+                        <View style={{flexDirection: 'row'}}>
       <Checkbox
         value={isChecked}
         onValueChange={handleCheckboxChange}
@@ -140,7 +133,7 @@ export default function Register() {
         <Text style={{ color: 'blue'}}>{t("TermsOfService")}</Text>
       </TouchableOpacity>
     </View>
-                        <Pressable style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></Pressable>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

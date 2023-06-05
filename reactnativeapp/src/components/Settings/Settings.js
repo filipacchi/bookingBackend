@@ -1,9 +1,9 @@
 
-import { StyleSheet, View, Text, Pressable, ScrollView, Image } from "react-native"
-import React from 'react';
+import { View, Text } from "react-native"
+import React, {useContext} from 'react';
 import { AuthContext } from "../../../auth/UserContextProvider";
 import styles from "../../screens/Style";
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
 import * as SecureStore from 'expo-secure-store';
 import axios from "../../../axios/axios";
 import { Entypo } from '@expo/vector-icons';
@@ -59,7 +59,6 @@ export default function Settings() {
                     <Text style={styles.settingLabel}>{t("Language")}</Text>
                     <View style={{ width: "40%" }}>
                         <SelectList
-                            //dropdownStyles
                             arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
                             boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
                             search={false}
@@ -77,7 +76,6 @@ export default function Settings() {
                     <Text style={styles.settingLabel}>{t("ColorTheme")}</Text>
                     <View style={{ width: "40%" }}>
                         <SelectList
-                            //dropdownStyles
                             arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
                             boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly" }}
                             search={false}

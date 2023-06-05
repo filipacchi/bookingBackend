@@ -25,7 +25,7 @@
     "ResetPassword": "Glömt lösenord?",
     "HintSchedule": "Dra ner för att uppdatera",
     "IAgreeToThe": "Jag accepterar",
-    "TermsOfService": "Användarvilkoren",
+    "TermsOfService": "Användarvillkor",
     "Register": "Registrera",
     "NativeLanguage": "Modersmål",
 
@@ -75,8 +75,10 @@
     "LogOut": "Logga ut",
     "Language": "Språk",
     "ChangePassword": "Ändra lösenord",
-    "Information": "Information",
+    "Information": "Information / Feedback",
     "SureLogOut?": "Vill du logga ut?",
+    "BookeaseInfoTitle": "är en app utvecklad av bookease AB.",
+    "Feedback": "Om du har några åsikter om appen får du gärna lämna feedback till: ",
     
 
     "AssociationsPage": "Mina föreningar",
@@ -105,6 +107,10 @@
     "Save": "Spara",
     "RemoveThisObject": "Radera objekt",
     "BookAhead": "Max förbokning",
+    "hour": "timme",
+    "hours": "timmar",
+    "week": "vecka",
+    "weeks": "veckor",
 
     "AddBookableObject": "Lägg till bokningsbart objekt",
     "ObjectName": "Objektets namn",
@@ -112,6 +118,12 @@
     "Avboka": "Avboka",
 
     "Key": "Nyckel",
-    "Members": "Medlemmar"
+    "Members": "Medlemmar",
+
+    "NotAdminYet": "Du är inte admin för någon förrening än, ifall detta är fel kontakta bookease teamet",
+
+    "FeedbackSupport": "Feedback / Support",
+
+    "NotJoinedAssociationYet": "Du har ännu inte anslutigt dig till en förening, klicka på knappen nedan för att gå med i en förening"
     
 }

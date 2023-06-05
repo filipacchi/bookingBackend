@@ -1,20 +1,9 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, Image, View } from 'react-native';
+import React, {useContext} from 'react'
+import { StyleSheet} from 'react-native';
 import Swiper from 'react-native-swiper'
-import { useState } from 'react';
 
 
 export default function BookedObjectSwiper() {
-
-    const [slideArray, setSlideArray] = useState([{date:"2023-04-25"},{date:"2023-04-26"},{date:"2023-04-27"}])
-    const [slideLength, setSlideLength] = useState(2)
-
-    const addToArray = () => {
-        console.log(slideLength)
-        let temp = slideLength + 1
-        setSlideLength(temp)
-        console.log(slideLength)
-    }
 
     return(
         <Swiper style={styles.wrapper} showsButtons={false} loop={false}>

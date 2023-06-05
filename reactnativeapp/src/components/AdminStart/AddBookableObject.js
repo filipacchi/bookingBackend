@@ -1,8 +1,7 @@
-import Style from "../../screens/Style";
-import React, { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Switch, TouchableOpacity, ScrollView, InteractionManager } from 'react-native';
+import React, { useContext, useEffect, useState, useRef } from 'react';
+import { Text, View, Switch, TouchableOpacity, ScrollView } from 'react-native';
 import { TextInput } from "react-native-paper";
-import { MultipleSelectList, SelectList } from 'react-native-dropdown-select-list';
+import { SelectList } from 'react-native-dropdown-select-list';
 import styles from "../../screens/Style";
 import axios from "../../../axios/axios";
 import { AuthContext } from "../../../auth/UserContextProvider";
@@ -28,18 +27,11 @@ export default function AddBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
-  const scrollViewRef = useRef(null);
   const [selectListPosition, setSelectListPosition] = useState(0);
 
-  const { authContext } = React.useContext(AuthContext);
+  const { authContext, colorTheme } = useContext(AuthContext);
   const { signOut, t, setLang, getLang } = authContext
 
-  // var selectedHoursBookable
-  // var earliestBookableTime
-  // var latestBookableTime = '';
-  // var firstStartTime = '';
-  // var slotsBookablePerDay = '';
-  // var slotsBookablePerWeek = '';
   const { state } = React.useContext(AuthContext)
 
   const setBackgroundColor = (oNBackgroundColor, lPBookingBackgroundColor, eBTimeBackgroundColor, lBTimeBackgroundColor, fSTimeBackgroundColor, sBPerDayBackgroundColor, sBPerWeekBackgroundColor) => {
@@ -78,61 +70,46 @@ export default function AddBookableObject({ route }) {
       });
   }
 
-  useEffect(() => {
-    if (scrollViewRef.current && selectListPosition) {
-      scrollViewRef.current.scrollTo({ y: selectListPosition, animated: true });
-    }
-  }, [selectListPosition]);
-
-  const handleLayout = event => {
-    const { y, height } = event.nativeEvent.layout;
-    const screenHeight = scrollViewRef.current?.getLayout?.().height || 0;
-    const scrollPosition = y + height - screenHeight;
-    if (scrollPosition > 0) {
-      setSelectListPosition(scrollPosition);
-    }
-  };
-
   const lengthPerBooking = [
-    { key: '1', value: '1 hour' },
-    { key: '2', value: '2 hours' },
-    { key: '3', value: '3 hours' },
-    { key: '4', value: '4 hours' },
-    { key: '5', value: '5 hours' },
-    { key: '6', value: '6 hours' },
-    { key: '7', value: '7 hours' },
-    { key: '8', value: '8 hours' },
-    { key: '9', value: '9 hours' },
-    { key: '10', value: '10 hours' },
-    { key: '11', value: '11 hours' },
-    { key: '12', value: '12 hours' },
-    { key: '13', value: '13 hours' },
-    { key: '14', value: '14 hours' },
-    { key: '15', value: '15 hours' },
-    { key: '16', value: '16 hours' },
-    { key: '17', value: '17 hours' },
-    { key: '18', value: '18 hours' },
-    { key: '19', value: '19 hours' },
-    { key: '20', value: '20 hours' },
-    { key: '21', value: '21 hours' },
-    { key: '22', value: '22 hours' },
-    { key: '23', value: '23 hours' },
-    { key: '24', value: '24 hours' },
+    { key: '1', value: <Text>1 {t("hour")}</Text>},
+    { key: '2', value: <Text>2 {t("hours")}</Text> },
+    { key: '3', value: <Text>3 {t("hours")}</Text> },
+    { key: '4', value: <Text>4 {t("hours")}</Text> },
+    { key: '5', value: <Text>5 {t("hours")}</Text> },
+    { key: '6', value: <Text>6 {t("hours")}</Text> },
+    { key: '7', value: <Text>7 {t("hours")}</Text> },
+    { key: '8', value: <Text>8 {t("hours")}</Text> },
+    { key: '9', value: <Text>9 {t("hours")}</Text> },
+    { key: '10', value: <Text>10 {t("hours")}</Text> },
+    { key: '11', value: <Text>11 {t("hours")}</Text> },
+    { key: '12', value: <Text>12 {t("hours")}</Text> },
+    { key: '13', value: <Text>13 {t("hours")}</Text> },
+    { key: '14', value: <Text>14 {t("hours")}</Text> },
+    { key: '15', value: <Text>15 {t("hours")}</Text> },
+    { key: '16', value: <Text>16 {t("hours")}</Text> },
+    { key: '17', value: <Text>17 {t("hours")}</Text> },
+    { key: '18', value: <Text>18 {t("hours")}</Text> },
+    { key: '19', value: <Text>19 {t("hours")}</Text> },
+    { key: '20', value: <Text>20 {t("hours")}</Text> },
+    { key: '21', value: <Text>21 {t("hours")}</Text> },
+    { key: '22', value: <Text>22 {t("hours")}</Text> },
+    { key: '23', value: <Text>23 {t("hours")}</Text> },
+    { key: '24', value: <Text>24 {t("hours")}</Text> },
   ]
 
   const maxprebookValues = [
-    { key: '1', value: '1 week' },
-    { key: '2', value: '2 weeks' },
-    { key: '3', value: '3 weeks' },
-    { key: '4', value: '4 weeks' },
-    { key: '5', value: '5 weeks' },
-    { key: '6', value: '6 weeks' },
-    { key: '7', value: '7 weeks' },
-    { key: '8', value: '8 weeks' },
-    { key: '9', value: '9 weeks' },
-    { key: '10', value: '10 weeks' },
-    { key: '11', value: '11 weeks' },
-    { key: '12', value: '12 weeks' },
+    { key: '1', value: <Text>1 {t("week")}</Text> },
+    { key: '2', value: <Text>2 {t("weeks")}</Text> },
+    { key: '3', value: <Text>3 {t("weeks")}</Text> },
+    { key: '4', value: <Text>4 {t("weeks")}</Text> },
+    { key: '5', value: <Text>5 {t("weeks")}</Text> },
+    { key: '6', value: <Text>6 {t("weeks")}</Text> },
+    { key: '7', value: <Text>7 {t("weeks")}</Text> },
+    { key: '8', value: <Text>8 {t("weeks")}</Text> },
+    { key: '9', value: <Text>9 {t("weeks")}</Text> },
+    { key: '10', value: <Text>10 {t("weeks")}</Text> },
+    { key: '11', value: <Text>11 {t("weeks")}</Text> },
+    { key: '12', value: <Text>12 {t("weeks")}</Text> },
   ]
 
   const amountOfTimes = [
@@ -190,7 +167,7 @@ export default function AddBookableObject({ route }) {
   ]
 
   return (
-    <ScrollView style={styles.container} ref={scrollViewRef} scrollEventThrottle={1} contentInset={{ bottom: '30%' }}>
+    <ScrollView style={styles.container} scrollEventThrottle={1} contentInset={{ bottom: '30%' }}>
       <Text style={styles.header}>{t("AddBookableObject")}</Text>
       <View style={[styles.settingContainer, { backgroundColor: objectNameBackgroundColor }]}>
         <TextInput
@@ -205,18 +182,23 @@ export default function AddBookableObject({ route }) {
         <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("LengthPerBooking")}</Text>
           </View>
+          <View style={styles.settingLabelOverhead}>
           <SelectList
+          boxStyles={styles.adminSelectListBoxStyle}
+          dropdownStyles={styles.adminSelectListDropdownStyle}
+          search={true}
+          dropdownShown={false}
             setSelected={(val) => {
               setSelected(val)
-              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
 
-              lengthInHours = lengthPerBooking[val - 1].value.substring(0, 2)
+              lengthInHours = lengthPerBooking[val - 1].key
               lengthInHoursInt = parseInt(lengthInHours)
               console.log('length In Hours: ' + lengthInHoursInt)
               setSelectedHoursBookable(lengthInHoursInt)
             }}
             data={lengthPerBooking}
           />
+          </View>
         </View>
       </View>
       <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor }]}>
@@ -224,18 +206,22 @@ export default function AddBookableObject({ route }) {
         <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("BookAhead")}</Text>
           </View>
+          <View style={styles.settingLabelOverhead}>
           <SelectList
+          boxStyles={styles.adminSelectListBoxStyle}
+          dropdownStyles={styles.adminSelectListDropdownStyle}
+          search={true}
+          dropdownShown={false}
             setSelected={(val) => {
               setSelected(val)
-              // this.selectedHoursBookable = lengthPerBooking[val - 1].value
 
-              lengthInWeeks = maxprebookValues[val - 1].value.substring(0, 2)
+              lengthInWeeks = maxprebookValues[val - 1].key
               lengthInWeeksInt = parseInt(lengthInWeeks)
               console.log('length In Hours: ' + lengthInWeeksInt)
               setSelectedWeeksBookable(lengthInWeeksInt)
             }}
             data={maxprebookValues}
-          />
+          /></View>
         </View>
       </View>
       <View style={styles.settingContainer}>
@@ -243,21 +229,24 @@ export default function AddBookableObject({ route }) {
         <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
         </View>
         <Switch
-          trackColor={{ false: '#767577', true: '#53d5d5' }}
+          trackColor={{ false: '#767577', true: colorTheme.firstColor }}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
       </View>
       <View>
         {allDayEnabled ? (
           <View style={[styles.settingContainer, { backgroundColor: firstStartTimeBackgroundColor }]}>
-            <View style={styles.settingContainer}
-            onLayout={handleLayout}>
+            <View style={styles.settingContainer}>
                <View style={styles.settingLabelOverhead}>
               <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
               </View>
+              <View style={styles.settingLabelOverhead}>
               <SelectList
+              boxStyles={styles.adminSelectListBoxStyle}
+              dropdownStyles={styles.adminSelectListDropdownStyle}
+              search={true}
+              dropdownShown={false}
                 setSelected={(val) => {
                   setSelected(val)
-                  //this.firstStartTime = bookableTimes[val - 1].value
                   setFirstStartTime(bookableTimes[val - 1].value)
 
                   console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' första start tid: ' + firstStartTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
@@ -282,79 +271,91 @@ export default function AddBookableObject({ route }) {
                   }
                 }}
                 data={bookableTimes}
-              />
+              /></View>
             </View>
           </View>
         ) : (
           <View>
             <View style={[styles.settingContainer, { backgroundColor: earliestBookableTimeBackgroundColor }]}>
-              <View style={styles.settingContainer}
-              onLayout={handleLayout}>
+              <View style={styles.settingContainer}>
                  <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
                 </View>
+                <View style={styles.settingLabelOverhead}>
                 <SelectList
+                boxStyles={styles.adminSelectListBoxStyle}
+                dropdownStyles={styles.adminSelectListDropdownStyle}
+                search={true}
+                dropdownShown={false}
                   setSelected={(val) => {
                     setSelected(val)
-                    // this.earliestBookableTime = bookableTimes[val - 1].value
                     setEarliestBookableTime(bookableTimes[val - 1].value)
                   }}
                   data={bookableTimes}
-                />
+                /></View>
               </View>
             </View>
             <View style={[styles.settingContainer, { backgroundColor: latestBookableTimeBackgroundColor }]}>
-              <View style={styles.settingContainer}
-              onLayout={handleLayout}>
+              <View style={styles.settingContainer}>
                  <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
                 </View>
+                <View style={styles.settingLabelOverhead}>
                 <SelectList
+                boxStyles={styles.adminSelectListBoxStyle}
+                dropdownStyles={styles.adminSelectListDropdownStyle}
+                search={true}
+                dropdownShown={false}
                   setSelected={(val) => {
                     setSelected(val)
-                    // this.latestBookableTime = bookableTimes[val - 1].value
                     setLatestBookableTime(bookableTimes[val - 1].value)
                   }}
                   data={bookableTimes}
-                />
+                /></View>
               </View>
             </View>
           </View>
         )}
       </View>
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor }]}>
-        <View style={styles.settingContainer}
-        onLayout={handleLayout}>
+        <View style={styles.settingContainer}>
            <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
           </View>
+          <View style={styles.settingLabelOverhead}>
           <SelectList
+          boxStyles={styles.adminSelectListBoxStyle}
+          dropdownStyles={styles.adminSelectListDropdownStyle}
+          search={true}
+          dropdownShown={false}
             setSelected={(val) => {
               setSelected(val)
-              // this.slotsBookablePerDay = lengthPerBooking[val - 1].value
-              setSlotsBookablePerDay(amountOfTimes[val - 1].value)
+              setSlotsBookablePerDay(amountOfTimes[val - 1].key)
             }}
             data={amountOfTimes}
-          />
+          /></View>
         </View>
       </View>
       <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor }]}>
-        <View style={styles.settingContainer}
-          onLayout={handleLayout}>
+        <View style={styles.settingContainer}>
              <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
           </View>
+          <View style={styles.settingLabelOverhead}>
           <SelectList
+          boxStyles={styles.adminSelectListBoxStyle}
+          dropdownStyles={styles.adminSelectListDropdownStyle}
+          search={true}
+          dropdownShown={false}
             setSelected={(val) => {
               setSelected(val)
-              //this.slotsBookablePerWeek = lengthPerBooking[val - 1].value
-              setSlotsBookablePerWeek(amountOfTimes[val - 1].value)
+              setSlotsBookablePerWeek(amountOfTimes[val - 1].key)
             }}
             data={amountOfTimes}
-          />
+          /></View>
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => {
+      <TouchableOpacity style={[styles.button, {backgroundColor: colorTheme.firstColor}]} onPress={() => {
         if (allDayEnabled) {
           if (objectName == '') {
             setBackgroundColor('#F88379', 'white', 'white', 'white', 'white', 'white', 'white')

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
 import { Card } from "react-native-paper"
-import React from 'react';
+import React, {useContext} from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState, setState } from "react";
@@ -23,6 +23,7 @@ export default function Login() {
 
 
     function handleRequest() {
+        console.log('KLICKAD')
         signIn({ username, password }) 
     }
 
@@ -58,7 +59,7 @@ export default function Login() {
                             autoComplete="off"
                             autoCorrect={false}
                         />
-                        <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>Logga in</Text></Pressable>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></TouchableOpacity>
                     </View>
                 </LinearGradient>
             </TouchableWithoutFeedback>

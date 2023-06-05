@@ -74,8 +74,10 @@
     "LogOut": "Log out",
     "Language": "Language",
     "ChangePassword": "Change Password",
-    "Information": "Information",
+    "Information": "Information / Feedback",
     "SureLogOut?": "Do you want to log out?",
+    "BookeaseInfoTitle": "is an application developed by bookease AB.",
+    "Feedback": "If you have any opinions, feel free to leave your feedback at: ",
 
     "AssociationsPage": "My Associations",
     "EnterKey": "Enter Your Key",
@@ -103,6 +105,10 @@
     "Save": "Save",
     "RemoveThisObject": "Remove this object",
     "BookAhead": "Max prebooking",
+    "hour": "hour",
+    "hours": "hours",
+    "week": "week",
+    "weeks": "weeks",
 
     "AddBookableObject": "Add Bookable Object",
     "ObjectName": "Object Name",
@@ -110,5 +116,11 @@
     "Avboka": "Delete",
 
     "Key": "Key",
-    "Members": "Members"
+    "Members": "Members",
+
+    "NotAdminYet": "You are not admin for any associations, if this is incorrect contact the bookease team",
+
+    "FeedbackSupport": "Feedback / Support",
+
+    "NotJoinedAssociationYet": "You have not joined any associations yet, press the button below to join an association"
 }

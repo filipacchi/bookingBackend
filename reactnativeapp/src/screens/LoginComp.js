@@ -1,20 +1,13 @@
-import { StyleSheet, View, Text, Pressable, PermissionsAndroid } from "react-native"
-import { Card } from "react-native-paper"
-import React from 'react';
-import { AntDesign } from '@expo/vector-icons';
-import { LinearGradient } from "expo-linear-gradient";
-import { useState, setState } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native"
+import React, {useContext} from 'react';
+import { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
-import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Animated,{FadeInLeft, FadeInUp,FadeOut,FadeOutUp} from 'react-native-reanimated'
+import Animated,{FadeInUp,FadeOut} from 'react-native-reanimated'
 
 
 
 export default function LoginComp() {
-
-    const navigation = useNavigation()
 
     const { authContext } = React.useContext(AuthContext);
     const { signIn, t, setLang } = authContext
@@ -24,6 +17,7 @@ export default function LoginComp() {
 
 
     function handleRequest() {
+        console.log('KLICKAD')
         signIn({ username, password })
     }
 
@@ -62,7 +56,7 @@ export default function LoginComp() {
                 autoCorrect={false}
             />
             </View>
-            <Pressable style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></Pressable>
+            <TouchableOpacity style={styles.input} onPress={() => { handleRequest() }}><Text style={styles.inputText}>{t("Login")}</Text></TouchableOpacity>
             </Animated.View>
     )
 

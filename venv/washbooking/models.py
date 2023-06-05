@@ -45,8 +45,6 @@ class Association(models.Model):
     adress = models.CharField(max_length=200, blank=False)
     region = models.CharField(max_length=200, default="")
     join_key = models.CharField(max_length=6, unique=True, validators=[RegexValidator(r'^\d{1,10}$')])
-    # city = models.CharField(max_length=200, blank=False)
-    # postalcode =  models.CharField(max_length=200, blank=False)
     coordinateX = models.FloatField(max_length=200, blank=False)
     coordinateY = models.FloatField(max_length=200, blank=False)
     profile_image = models.ImageField(upload_to=upload_to, blank=True, null=True) 
@@ -60,6 +58,7 @@ class UserData(AbstractUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
+    native_lang = models.CharField(max_length=100, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -79,12 +78,6 @@ class Booking(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     date = models.DateField()
-
-# class User(models.Model):
-#     userName = models.CharField(max_length=200, primary_key=True, unique=True, blank=False)
-#     language = models.CharField(max_length=200)
-#     email = models.CharField(max_length=200, unique=True,blank=False)
-#     password = models.CharField(max_length=200, blank=False)
 
 User = get_user_model()
 
@@ -111,7 +104,6 @@ class Person(models.Model):
     )
     # måste undersöka om manytomany ska användas eller foreign key
     associations = models.ManyToManyField(Association) 
-    #assocation = models.ForeignKey(Association,blank=True, null=True,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.first_name + " " +self.user.last_name

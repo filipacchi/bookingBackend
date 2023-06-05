@@ -1,20 +1,18 @@
 import React from "react";
-import { View, Text, Pressable, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal } from "react-native";
-import LottieView from "lottie-react-native";
+import { View, Text, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal, TouchableOpacity   } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list';
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
 import * as SecureStore from 'expo-secure-store';
-//import { Calendar, CalendarProvider, WeekCalendar} from "react-native-calendars";
 import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
 import { ActivityIndicator } from "react-native-paper";
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import Style from "../../screens/Style";
 import { Animated } from "react-native";
 import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
-import jwt_decode from "jwt-decode";
 import { AuthContext } from "../../../auth/UserContextProvider";
+import SwipeableCalendar from "../Misc/SwipeableCalendar";
 
 
 export default function ScheduleAdmin() {
@@ -30,6 +28,7 @@ export default function ScheduleAdmin() {
     /* loading */
     const [associationsLoading, setAssociationsLoading] = useState(true)
     const [bookingsLoading, setBookingsLoading] = useState(true) /* sätt true */
+    const [refreshLoading, setRefreshLoading] = useState(false)
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [bookableObjectsExist, setBookableObjectsExist] = useState(true)
 
@@ -41,13 +40,8 @@ export default function ScheduleAdmin() {
     const [errorText, setErrorText] = useState()
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
-    const [swiperIndex, setSwiperIndex] = useState(0)
-    const swiper = useRef(null)
-    const [noSwipe, setNoSwipe] = useState(false)
 
     const opacityAnimation = useRef(new Animated.Value(0)).current;
-    const opacityStyle = { opacity: opacityAnimation };
-    const [user, setUser] = useState()
     const [ConfirmModalVisible, setConfirmModalVisible] = useState(false)
     const { authContext } = useContext(AuthContext)
     const {t} = authContext
@@ -104,11 +98,7 @@ export default function ScheduleAdmin() {
             allBookings.length == 0 ? setBookableObjectsExist(false) : setBookableObjectsExist(true)
         }
 
-        /* if (allBookings) {
-            console.log(allBookings[0]["bookedTimes"][selectedDate])
-        } */
-
-}, [allBookings])
+    }, [allBookings])
 
 
 React.useEffect(() => {
@@ -140,9 +130,10 @@ const loadVariableData = async () => {
 const loadAssociations = async (token) => {
     
     console.log("---- Inuti loadAssociations (ScheduleAdmin.js), token = " + token)
-    
+    setRefreshLoading(true)
+
     try {
-        const { data: response } = await axios.get('user/association/get')
+        const { data: response } = await axios.get('user/association/with/bookableobjects/get')
         console.log("response from loadAssociations: ")
         console.log(response)
         
@@ -150,8 +141,6 @@ const loadAssociations = async (token) => {
     }
         
     catch (error) {
-        console.log("ERROR CATCHAT I loadAssociations")
-        console.log(error);
         setErrorText(t('RequestFailed') + error.response.status.toString())
         setErrorPopUpVisible(true)
     }
@@ -170,8 +159,6 @@ const loadAssociations = async (token) => {
             const {data: response} = await axios.get('association/allobjects/bookedtimes/daterange/get/' + myAssociationsWithBO[currentAssoIndex].id + "/" + sdate + "/" + edate)
             console.log("response from getAllBookings: ")
             console.log(response)
-
-            /* setAllBookings(response.data) */
             return(response)
         }
         catch (error) {
@@ -182,26 +169,9 @@ const loadAssociations = async (token) => {
         }
         finally {
             setBookingsLoading(false)
+            setRefreshLoading(false)
         }
     }
-
-        /* axios.get('user/association/get')
-        .then(response => {
-            console.log("mina associations och bokningsbara objekt:")
-            console.log(response.data)
-
-            return(response.data)
-        })
-        .catch(error => {
-            console.log("från catch i getAssociationsWithBO: ")
-            console.log(error)
-        })
-        .finally(() => {
-            setAssociationsLoading(false)
-        }) */
-
-
-        /* getAllBookings(token) */
 
         const addMonth = (startDate) => {
             const month = startDate.slice(5, 7)
@@ -228,12 +198,7 @@ const loadAssociations = async (token) => {
         console.log("startDate från loadWeek: ")
         console.log(selectedDate)
 
-        /*  HÄR ÄR PROBLEMET!! */
         let sdate = selectedDate.slice(0, 10)
-        /* let edate = selectedDate.add(1, "months").slice(0, 10) */
-        /* ger 'TypeError: undefined is not a function' */
-
-        /* let sdate = "2023-05-24" */
         const edate = sdate.slice(0, 5) + addMonth(sdate) + sdate.slice(7, 10);
         
         console.log("sdate från loadWeek: ")
@@ -248,71 +213,8 @@ const loadAssociations = async (token) => {
         } else {
             console.log("ahsdiuhasuidhad")
         }
-        
-        
-        /* setAllBookings(loadedBookings) */
-
-        /* for (let index = 0; index < updatedWeekDates.length; index++) {
-
-            let returnValue = await loadAssociations(objectid, updatedWeekDates[index].format().slice(0, 10))
-
-            tempBookArray.push(returnValue[0])
-            tempTimeSlotArray.push(returnValue[1])
-        } */
-        /* setTimeSlotsWeekArray(tempTimeSlotArray) */
     }
 
-
-    /*  useEffect(() => {
-         if (selectedDayCalendar.diff(selectedDay, 'days') != 0) {
-             setNoSwipe(true)
-             let diff = selectedDayCalendar.diff(selectedDay, 'days')
-             console.log(diff)
-             //swiper.current.scrollBy(diff)
-             setSelectedDay(selectedDayCalendar)
-             setSwipe()
-         }
-     }, [selectedDayCalendar]) */
-
-    /* const markDate = () => {
-        console.log(selectedDay.diff(selectedDayCalendar, 'days'))
-    }
- */
-
-
-    const addBookableObject = async (bodyParameters) => {
-        axios.post('book/add/',
-            bodyParameters
-        )
-            .then(response => {
-                console.log(response.data)
-            })
-            .catch( (error) => {
-                console.log("ERROR CATCHAT I loadBookings")
-                console.log(error);
-                setErrorText(t('RequestFailed') + error.response.status.toString())
-                setErrorPopUpVisible(true)
-            })
-    }
-
-    const bookTime = () => {
-        if (selectedTime != null) {
-            let startTime = selectedTime.slice(0,5)
-            let endTime = selectedTime.slice(8,13)
-            let bookDate = selectedDay.format().slice(0, 10)
-            let bookingObject = route.params.id
-            setBookedSlot([selectedTime, bookDate])
-            let bodyParameters = {
-                start_time: startTime,
-                end_time: endTime,
-                date: bookDate,
-                booking_object: bookingObject
-            }
-
-            addBookableObject(bodyParameters)
-            
-        }
-    }
     const PopUpModalConfirm = () => {
         return (
             <Modal
@@ -328,8 +230,8 @@ const loadAssociations = async (token) => {
                             <Text style={{ textAlign: "center" }}>{t("BookTime")} </Text>
                             <Text style={{ textDecorationLine: "underline", textAlign: "center" }}>{selectedTime}</Text>
                             <View style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}>
-                                <Pressable onPress={() => {/* bookTime(),  */ setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></Pressable>
-                                <Pressable onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></Pressable>
+                                <TouchableOpacity onPress={() => {setConfirmModalVisible(false)}} style={[Style.modalButton, { backgroundColor: "green" }]}><Text style={{ color: "white" }}>{t("Yes")}</Text></TouchableOpacity>
+                                <TouchableOpacity onPress={() => setConfirmModalVisible(false)} style={[Style.modalButton, { backgroundColor: "red" }]}><Text style={{ color: "white" }}>{t("No")}</Text></TouchableOpacity>
                             </View>
                         </View>
                     </View>
@@ -352,7 +254,7 @@ const loadAssociations = async (token) => {
 
     if (associationsLoading || bookingsLoading) {
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                 <ActivityIndicator />
             </View>
         )
@@ -360,32 +262,28 @@ const loadAssociations = async (token) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View>
-                <SelectList 
-                /* placeholder={myAssociationsWithBO[currentAssoIndex].name} */
-                placeholder={myAssociationsWithBO[currentAssoIndex].name}
-                editable={false}
+            <View style={{justifyContent: "center"}}>
 
+                <SelectList 
+                placeholder={myAssociationsWithBO[currentAssoIndex].name}
+                /* editable={false} */
                 setSelected={ (key) => {
                     setcurrentAssoIndex(key)
                 }}
-
-
                 data={getAssociationNames(myAssociationsWithBO)}
-                /* data={myAssociationsWithBO["bookobjects"]} */>
-
-
+                >
                 </SelectList>
+
+
                 <WeekCalendar 
                 selectedDay={selectedDay} 
                 setSelectedDay={setSelectedDay} />
                 
             </View>
 
-            {/* bokningar */}
-
             <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
-            {myAssociationsWithBO.length == 0 ?
+
+                {myAssociationsWithBO.length == 0 ?
                 <View style={{ flex: 1, justifyContent: "center" }}>
                     <View style={{
                         borderStyle: "solid",
@@ -395,8 +293,17 @@ const loadAssociations = async (token) => {
                         margin: 20
                     }}>
                         <Text style={[Style.assoText, Style.noAssoText]}>{t("YouHaveNotJoined")}</Text></View>
-                    <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></Pressable>
+                    <TouchableOpacity onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color={colorTheme.firstColor} /></TouchableOpacity>
                 </View> : 
+
+                refreshLoading ? 
+
+                <View style={{ flex: 1, marginTop: 20}}>
+                    <ActivityIndicator />
+                </View>
+
+                :
+
                 bookableObjectsExist ? 
                 <FlatList
                 data={allBookings}
@@ -410,7 +317,7 @@ const loadAssociations = async (token) => {
                         return(
                             <View style={[Style.assoFlatView, Style.shadowProp]}>
                                 <View style={Style.assoView}>
-                                    <View style={{/* alignSelf: "left",  */width: 45, height: 45}}>
+                                    <View style={{width: 45, height: 45}}>
                                         <AntDesign name="pushpino" size={28} color={"#222222"} />
                                     </View>
                                     <View>
@@ -421,19 +328,17 @@ const loadAssociations = async (token) => {
                                 <View style={Style.assoDarkView}>
                                     <FlatList
                                         data={item["bookedTimes"][selectedDate]}
-                                        /* data={[1, 2, 3]} */
                                         style={{}}
                                         horizontal={true}
                                         renderItem={
                                             ({ item }) => (
                                                 
                                                 
-                                                <Pressable 
+                                                <TouchableOpacity 
                                                 onPress={() => {}} 
                                                 style={Style.bookObject}>
                                                     <Text>{item['title']}</Text>
-                                                    {/* <Text>{item}</Text> */}
-                                                </Pressable>
+                                                </TouchableOpacity>
                                             )
                                         }
                                         
@@ -444,7 +349,9 @@ const loadAssociations = async (token) => {
                             </View>)}}
                 >
                 </FlatList>
+
                 :
+
                 <View style={Style.noBookablesContainer}>
                     <Text style={Style.noBookablesText}>
                         {t("AssoNoBookables")}
@@ -453,24 +360,11 @@ const loadAssociations = async (token) => {
             }
 
             <View style={{ padding: 10 }}>
-                <Pressable onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
+                <TouchableOpacity onPress={() => {setConfirmModalVisible(true)}} style={[Style.pressableBook]}>
                     <Text style={Style.pressableText}>{t("Book")}</Text>
-                </Pressable>
+                </TouchableOpacity>
             </View>
             <PopUpModalConfirm />
-
-            {/* <Pressable 
-            style={Style.addAssociation}
-            onPress={( () => {
-                console.log(
-                    Platform.OS === 'ios'
-            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
-            : NativeModules.I18nManager.localeIdentifier
-            )
-            })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
-                {/* {Associations.length == 0 ? null : <Pressable onPress={() => setEnterModalVisible(true)} style={Style.addAssociation}><Ionicons name="ios-add-circle-outline" size={60} color="#4d70b3" /></Pressable>} */}
-                
             <IOSPopup
             visible={errorPopUpVisible}
             title={t("Error")}

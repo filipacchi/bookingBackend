@@ -1,18 +1,16 @@
 
-import { StyleSheet, View, Text, Pressable, TouchableOpacity, SafeAreaView, Image, FlatList, Modal } from "react-native"
-import { useState, useContext } from "react";
-import { userLanguageContext } from "reactnativeapp/language/languageContext.js";
-import { NativeModules, Platform } from 'react-native';
-import React from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList } from "react-native"
+import { useState } from "react";
+import React, {useContext} from 'react';
 import axios from "reactnativeapp/axios/axios.js";
-import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 import Style from "reactnativeapp/src/screens/Style.js";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-//import * as AllLangs from "reactnativeapp/language/AllLangs.js"
 import { ActivityIndicator } from "react-native-paper";
 import base64 from 'react-native-base64'
+import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
+import { AuthContext } from "../../auth/UserContextProvider";
 
 
 export default function Associations() {
@@ -21,8 +19,14 @@ export default function Associations() {
     const [isRefreshing, setIsRefreshing] = useState(true)
     const [token, setToken] = useState("")
     const [Associations, setAssociation] = useState([])
-    const [image, setImage] = useState(null);
     const [isImageLoaded, setIsImageLoaded] = React.useState(false)
+
+
+    const { authContext, colorTheme } = useContext(AuthContext)
+    const { t } = authContext
+    
+    const [errorText, setErrorText] = useState()
+    const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
     //  this.focusListener = navigation.addListener('focus', () => {
     //      let access_token = SecureStore.getItemAsync('userToken')
@@ -33,48 +37,50 @@ export default function Associations() {
       const loadData = () => {
         async function getUserAssociation() {
 
-            axios.get('user/association/get'
+            axios.get('user/association/with/bookableobjects/get'
             )
-                .then(async (response) => {
+            .then(async (response) => {
                     const updatedData = [];
                     for (let i = 0; i < response.data.length; i++) {
-                      console.log('INUTI FOR LOOP');
-                      console.log(response.data[i].profile_image);
-                      console.log(response.data[i].id);
+                        console.log('INUTI FOR LOOP');
+                        console.log(response.data[i].profile_image);
+                        console.log(response.data[i].id);
             
-                      let item = response.data[i];
-                      if (item.profile_image != null){
-                      try {
+                        let item = response.data[i];
+                        if (item.profile_image != null){
+                    try {
                         let profileImage = await getImage(item.id);
             
                         item.profile_image = profileImage;
             
                         console.log(item.profile_image);
-                      } catch (error) {
+                    } catch (error) {
                         console.log(error);
-                      }}
-            
-                      updatedData.push(item);
-                    }
-            
-                    console.log('UTANFÖR FOR LOOP');
-
-                    setAssociation(updatedData);
-                  })
-                  .catch(error => {
-                    console.log(error);
-                  })
-                  .finally(() => {
-                    setIsLoading(false);
-                    setIsRefreshing(false);
-                  });
+                    }}
+                    
+                    updatedData.push(item);
+                }
+                
+                console.log('UTANFÖR FOR LOOP');
+                
+                setAssociation(updatedData);
+            })
+            .catch(error => {
+                setErrorText(t('RequestFailed') + error.response.status.toString())
+                setErrorPopUpVisible(true)
+                console.log(error);
+            })
+            .finally(() => {
+            setIsLoading(false);
+            setIsRefreshing(false);
+            });
               }
         getUserAssociation()
     }
 
     const getImage = async (associationId) => {
         return new Promise((resolve, reject) => {
-        axios.get(`association/get/${associationId}`, { responseType: "arraybuffer" }
+        axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" }
         )
             .then(response => {
               let uintArray = new Uint8Array(response.data);
@@ -95,8 +101,6 @@ export default function Associations() {
                );
                let base64string = base64Chunks.join('');
         
-
-              //base64string = base64.encode(String.fromCharCode(...uintArray))
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
                 resolve(url);
@@ -105,7 +109,8 @@ export default function Associations() {
             .catch(error => {
                 console.log(error);
                 reject(error);
-            }).finally(()=>setIsImageLoaded(true))
+            })
+            .finally(()=>setIsImageLoaded(true))
         });
     }
 
@@ -113,9 +118,17 @@ export default function Associations() {
         loadData()
     }, [])
 
+    const handlePopupClosePress = () => {
+        console.log("Popup cancel button pressed (Schedule)")
+        setErrorPopUpVisible(false)
+    }
+
+
     if(isLoading) {
         return(
-            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}><ActivityIndicator/></View>
+            <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                <ActivityIndicator/>
+            </View>
             
         )
     }
@@ -130,7 +143,7 @@ export default function Associations() {
                     borderWidth: 3,
                     margin: 20
                 }}>
-                    <Text style={[Style.assoText, Style.noAssoText]}>You are not admin for any associations, if this is incorrect contact the bookease team</Text></View>
+                    <Text style={[Style.assoText, Style.noAssoText]}>{t("NotAdminYet")}</Text></View>
                 </View>
         )
     }
@@ -145,11 +158,11 @@ export default function Associations() {
                 renderItem={
                     ({ item }) =>
                         <View style={Style.assoFlatView}>
-                            <Pressable onPress={() => {
+                            <TouchableOpacity onPress={() => {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key'], associationImage: item['profile_image']})
                                             console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
                                         }} style={Style.assoView}>
-                                            <View style={{/* alignSelf: 'left', */ width: 45, height: 45}}>
+                                            <View style={{width: 45, height: 45}}>
                                             {item.profile_image != null ?
                                                 (<Image
                                                     style={{
@@ -169,29 +182,29 @@ export default function Associations() {
                                         style={Style.assoText}>
                                         {item.name}</Text>
                                     <Text style={{ color: "#767676" }}>{item.region}</Text></View>
-                            </Pressable>
+                            </TouchableOpacity>
                             <View style={Style.assoDarkView}>
                                 <FlatList
                                     data={item['bookobjects']}
                                     style={{}}
                                     horizontal={true}
                                     ListFooterComponent={
-                                        <Pressable onPress={() => {
+                                        <TouchableOpacity onPress={() => {
                                             console.log('HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
                                             navigation.navigate("AddBookableObject", {associationId: item['id']})
                                             console.log(item.id)
                                         }} style={Style.addObject}>
                                             <Ionicons name="ios-add-circle-outline" size={25} color="black" />
-                                            </Pressable>
+                                            </TouchableOpacity>
                                       }
                                     renderItem={
                                         ({item}) => (
-                                            <Pressable onPress={() => {
+                                            <TouchableOpacity onPress={() => {
                                                 console.log('HÄR HAR VI OBJECT ID: ' + item['objectId'] + ' HÄR HAR VI ASSOCIATIONS NAMNET: ' + item['name'] + ' HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
                                                 navigation.navigate("EditBookableObject",{objectId: item['objectId'], associationName: item['name'], associationId: item['id']})
                                             }} style={Style.bookObject}>
                                                 <Text>{item['objectName']}</Text>
-                                            </Pressable>
+                                            </TouchableOpacity>
                                         )
                                     }
                                 >
@@ -200,23 +213,15 @@ export default function Associations() {
                         </View>}
             >
             </FlatList>
-            {/* <Pressable 
-            style={Style.addAssociation}
-            onPress={( () => {
-                console.log(
-            Platform.OS === 'ios'
-            ? NativeModules.SettingsManager.settings.AppleLocale // iOS 13
-            : NativeModules.I18nManager.localeIdentifier
-            )
-            })}>
-                <Ionicons name="ios-add-circle-outline" size={60} color="#999999" /></Pressable> */}
+            <IOSPopup
+            visible={errorPopUpVisible}
+            title={t("Error")}
+            hasInput={false}
+            bodyText={errorText}
+            buttonTexts={[t('PopupCancel')]}
+            buttonColor={colorTheme.firstColor}
+            onButtonPress={handlePopupClosePress}
+            onCancelPress={handlePopupClosePress} />
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    text: {
-        marginTop: 100,
-        backgroundColor: "red"
-    }
-});

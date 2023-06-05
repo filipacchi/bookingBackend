@@ -1,38 +1,10 @@
-import React, { useState } from "react";
+import React, {useContext} from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Logo from "../components/assets/Logo";
-import { useEffect, useRef, useContext } from "react"
 import { AuthContext } from "../../auth/UserContextProvider";
 import { MotiView } from "moti"
 export default function Splash({setLoadingState}) {
     const { state, colorTheme } = useContext(AuthContext)
-    /* const [splashLoaded, setSplashLoaded] = useState(false) */
-    /* const animateElement = () => {
-
-        Animated.timing(opacityAnimation, {
-            toValue: 1,
-            duration: 1500,
-            useNativeDriver: true
-        }).start(() => {
-            Animated.timing(opacityAnimation, {
-                toValue: 1,
-                duration: 1000,
-                useNativeDriver: true
-            }).start(() => {
-                setLoadingState(false)
-            })
-        })
-    };
-
-    useEffect(() => {
-        animateElement()
-    }, []) */
-
-    /* useEffect(() => {
-        setTimeout(()=>{
-            console.log("VÄNTAT KLART")
-            setLoadingState(false)}, 2500)
-    }, []) */
 
     const checkLoading = () => {
         if(!state.isLoading){
@@ -60,7 +32,3 @@ export default function Splash({setLoadingState}) {
       </LinearGradient>)
 
 }
-
-{/* <Animated.View style={opacityStyle}>
-                <Logo />
-            </Animated.View> */}
