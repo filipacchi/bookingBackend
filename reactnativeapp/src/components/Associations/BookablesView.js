@@ -80,7 +80,7 @@ export default function BookablesView() {
 
     const loadData = (token) => {
         async function getUserAssociation(token) {
-            console.log("Inuti getUser: " + token)
+            
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
@@ -92,11 +92,11 @@ export default function BookablesView() {
                 config
             )
                 .then(response => {
-                    console.log(response.data)
+                    
                     setAssociation(response.data)
                 })
                 .catch(error => {
-                    console.log(error);
+                    
                 });
         }
         getUserAssociation(token)
@@ -105,7 +105,7 @@ export default function BookablesView() {
     React.useEffect(() => {
         const getToken = async () => {
             let access_token = await SecureStore.getItemAsync('userToken')
-            console.log("ASSO: " + access_token)
+            
             setToken(access_token)
             loadData(access_token)
 
@@ -144,7 +144,7 @@ export default function BookablesView() {
                                 <View>
                                     <Text suppressHighlighting={true}
                                         onPress={() => {
-                                            console.log(Object.keys(bookableObjects[1]).map((key)=> bookableObjects[1][key]))
+                                            
                                         }}
                                         style={Style.assoText}>
 

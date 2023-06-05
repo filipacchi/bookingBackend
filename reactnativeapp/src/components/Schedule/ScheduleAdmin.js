@@ -37,7 +37,7 @@ export default function ScheduleAdmin() {
     const [myAssociationsWithBO, setMyAssociationsWithBO] = useState([])
     const [allBookings, setAllBookings] = useState()
 
-    const [errorText, setErrorText] = useState()
+    const [errorText, setErrorText] = useState("")
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
 
@@ -70,13 +70,13 @@ export default function ScheduleAdmin() {
     }, [selectedDate])
 
     useEffect(() => {
-        console.log(selectedDay.format().slice(0, 10))
+        
         setSelectedDate(selectedDay.format().slice(0, 10))
     }, [selectedDay])
     
     useEffect(() => {
         const afterAssociationChange = async () => {
-            console.log("blabla currentAssoIndex")
+            
         }
         loadVariableData()
         
@@ -85,14 +85,14 @@ export default function ScheduleAdmin() {
     useEffect(() => {
         loadVariableData()
         
-        console.log("myAssociationsWithBO updated: ");
-        console.log(myAssociationsWithBO);
+        
+        
         
     }, [myAssociationsWithBO])
     
     useEffect(() => {
-        console.log("allBookings updated: ");
-        console.log(allBookings);
+        
+        
         
         if (allBookings) {
             allBookings.length == 0 ? setBookableObjectsExist(false) : setBookableObjectsExist(true)
@@ -104,7 +104,7 @@ export default function ScheduleAdmin() {
 React.useEffect(() => {
     const getData = async () => {
         let access_token = await SecureStore.getItemAsync('userToken')
-        console.log("ASSO: " + access_token)
+        
         setToken(access_token)
         
         loadAssociations(access_token)
@@ -113,29 +113,30 @@ React.useEffect(() => {
     
 }, [])
 
-const handlePopupCancelPress = () => {
-    console.log("Popup cancel button pressed (Schedule)")
+const handleErrorPopupCancelPress = () => {
+    
     setErrorPopUpVisible(false)
+    setErrorText("")
 }
 
 const loadVariableData = async () => {
     if (myAssociationsWithBO && myAssociationsWithBO.length > 0) {
-        console.log("myAssociationsWithBO INTE falsy")
+        
         loadWeek()
     } else {
-        console.log("myAssociationsWithBO falsy")
+        
     }
 }
 
 const loadAssociations = async (token) => {
     
-    console.log("---- Inuti loadAssociations (ScheduleAdmin.js), token = " + token)
+    
     setRefreshLoading(true)
 
     try {
         const { data: response } = await axios.get('user/association/with/bookableobjects/get')
-        console.log("response from loadAssociations: ")
-        console.log(response)
+        
+        
         
         setMyAssociationsWithBO(response)
     }
@@ -152,18 +153,18 @@ const loadAssociations = async (token) => {
     }
     
     const loadBookings = async (sdate, edate) => {
-        console.log("myAssociationsWithBO[currentAssoIndex].id från loadBookings: ")
-        console.log(myAssociationsWithBO[currentAssoIndex].id)
+        
+        
 
         try {
             const {data: response} = await axios.get('association/allobjects/bookedtimes/daterange/get/' + myAssociationsWithBO[currentAssoIndex].id + "/" + sdate + "/" + edate)
-            console.log("response from getAllBookings: ")
-            console.log(response)
+            
+            
             return(response)
         }
         catch (error) {
-            console.log("ERROR CATCHAT I loadBookings")
-            console.log(error);
+            
+            
             setErrorText(t('RequestFailed') + error.response.status.toString())
             setErrorPopUpVisible(true)
         }
@@ -188,30 +189,30 @@ const loadAssociations = async (token) => {
               return "01"
           
             } else {
-              console.log("not a valid month")
+              
               return "notvalid"
             }
         }
 
     const loadWeek = async () => {
 
-        console.log("startDate från loadWeek: ")
-        console.log(selectedDate)
+        
+        
 
         let sdate = selectedDate.slice(0, 10)
         const edate = sdate.slice(0, 5) + addMonth(sdate) + sdate.slice(7, 10);
         
-        console.log("sdate från loadWeek: ")
-        console.log(sdate)
+        
+        
 
-        console.log("edate från loadWeek: ")
-        console.log(edate)
+        
+        
 
         if (sdate && edate) {
             let loadedBookings = await loadBookings(sdate, edate)
             setAllBookings(loadedBookings)
         } else {
-            console.log("ahsdiuhasuidhad")
+            
         }
     }
 
@@ -311,8 +312,8 @@ const loadAssociations = async (token) => {
                     onRefresh={() => loadAssociations(token)}
                     refreshing={isRefreshing}
                     renderItem={({ item }) => {
-                        console.log("från renderItem, item: ")
-                        console.log(item)
+                        
+                        
                         
                         return(
                             <View style={[Style.assoFlatView, Style.shadowProp]}>
@@ -369,12 +370,11 @@ const loadAssociations = async (token) => {
             visible={errorPopUpVisible}
             title={t("Error")}
             hasInput={false}
-            /* bodyText={errorText} */
-            bodyText={""}
+            bodyText={errorText}
             buttonTexts={[t('PopupCancel')]}
             buttonColor={colorTheme.firstColor}
-            onButtonPress={handlePopupCancelPress}
-            onCancelPress={handlePopupCancelPress}/>
+            onButtonPress={handleErrorPopupCancelPress}
+            onCancelPress={handleErrorPopupCancelPress}/>
 
         </View>
         </SafeAreaView>

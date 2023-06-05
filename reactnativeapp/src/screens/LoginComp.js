@@ -17,7 +17,7 @@ export default function LoginComp() {
 
 
     function handleRequest() {
-        console.log('KLICKAD')
+        
         signIn({ username, password })
     }
 

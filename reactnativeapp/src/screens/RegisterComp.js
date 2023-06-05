@@ -18,14 +18,14 @@ export default function RegisterComp() {
 
     function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "") {
-            console.log("Nåt är tomt")
+            
         } else if (password === passwordCheck) {
             let data = { email: username, firstname: firstname, lastname: lastname, password: password }
             signUp(data)
-            console.log("Lösenord ok också")
+            
 
         } else {
-            console.log("Lösenord stämmer ej överens")
+            
         }
     }
 

@@ -23,23 +23,23 @@ export default function SettingsNav() {
     const [logoutPopupVisible, setLogoutPopupVisible] = useState(false)
 
     const handleErrorCancelPress = () => {
-        console.log("Error popup cancel pressed")
+        
         setErrorPopUpVisible(false)
     }
 
     const handleLogoutCancelPress = () => {
-        console.log("Popup cancel button pressed (Schedule)")
+        
         setLogoutPopupVisible(false)
     }
 
     const handleLogoutPress = (index) => {
         if (index === 0) { // Yes button pressed
-            console.log("LOGGA UT TRYCKT")
+            
             setLogoutPopupVisible(false);
             setTimeout(() => signOut(), 1500)
         }
         else if (index === 1) {
-            console.log("INTE LOGGA UT")
+            
             setLogoutPopupVisible(false)
         }
 

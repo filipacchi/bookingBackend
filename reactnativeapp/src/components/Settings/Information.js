@@ -25,7 +25,7 @@ export default function Information() {
         const mailtoUrl = `mailto:${emailAddress}?subject=${subject}`;
 
         Linking.openURL(mailtoUrl)
-            .catch(error => console.log('An error occurred: ', error));
+            .catch(error => 
     };
 
 
