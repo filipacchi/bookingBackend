@@ -20,7 +20,7 @@ export default function Auth() {
     const [isLoginDisplayed, setIsLoginDisplayed] = React.useState(false);
     const resetUrl = axios.defaults.baseURL + "/accounts/password-reset/"
     function changeLang() {
-        console.log("KlickarBenim")
+        
         if (lang == "en") {
             setLang("sv")
             setLanguage("sv")

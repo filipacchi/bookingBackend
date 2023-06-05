@@ -23,7 +23,7 @@ export default function Login() {
 
 
     function handleRequest() {
-        console.log('KLICKAD')
+        
         signIn({ username, password }) 
     }
 

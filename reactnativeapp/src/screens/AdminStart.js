@@ -42,9 +42,9 @@ export default function Associations() {
             .then(async (response) => {
                     const updatedData = [];
                     for (let i = 0; i < response.data.length; i++) {
-                        console.log('INUTI FOR LOOP');
-                        console.log(response.data[i].profile_image);
-                        console.log(response.data[i].id);
+                        
+                        
+                        
             
                         let item = response.data[i];
                         if (item.profile_image != null){
@@ -53,22 +53,22 @@ export default function Associations() {
             
                         item.profile_image = profileImage;
             
-                        console.log(item.profile_image);
+                        
                     } catch (error) {
-                        console.log(error);
+                        
                     }}
                     
                     updatedData.push(item);
                 }
                 
-                console.log('UTANFÖR FOR LOOP');
+                
                 
                 setAssociation(updatedData);
             })
             .catch(error => {
                 setErrorText(t('RequestFailed') + error.response.status.toString())
                 setErrorPopUpVisible(true)
-                console.log(error);
+                
             })
             .finally(() => {
             setIsLoading(false);
@@ -104,10 +104,10 @@ export default function Associations() {
                 contentType = response.headers['content-type']
                 url = "data:" + contentType + ";base64," + base64string
                 resolve(url);
-                console.log('SÄTTER NY BILD')
+                
             })
             .catch(error => {
-                console.log(error);
+                
                 reject(error);
             })
             .finally(()=>setIsImageLoaded(true))
@@ -119,7 +119,7 @@ export default function Associations() {
     }, [])
 
     const handlePopupClosePress = () => {
-        console.log("Popup cancel button pressed (Schedule)")
+        
         setErrorPopUpVisible(false)
     }
 
@@ -160,7 +160,7 @@ export default function Associations() {
                         <View style={Style.assoFlatView}>
                             <TouchableOpacity onPress={() => {
                                             navigation.navigate("AssociationInformation", {associationId: item['id'], associationName: item['name'], associationKey: item['join_key'], associationImage: item['profile_image']})
-                                            console.log("AssociationInformation: " + 'associationId: ' + item['id'] + ' associationName: ' + item['name'])
+                                            
                                         }} style={Style.assoView}>
                                             <View style={{width: 45, height: 45}}>
                                             {item.profile_image != null ?
@@ -190,9 +190,9 @@ export default function Associations() {
                                     horizontal={true}
                                     ListFooterComponent={
                                         <TouchableOpacity onPress={() => {
-                                            console.log('HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
+                                            
                                             navigation.navigate("AddBookableObject", {associationId: item['id']})
-                                            console.log(item.id)
+                                            
                                         }} style={Style.addObject}>
                                             <Ionicons name="ios-add-circle-outline" size={25} color="black" />
                                             </TouchableOpacity>
@@ -200,7 +200,7 @@ export default function Associations() {
                                     renderItem={
                                         ({item}) => (
                                             <TouchableOpacity onPress={() => {
-                                                console.log('HÄR HAR VI OBJECT ID: ' + item['objectId'] + ' HÄR HAR VI ASSOCIATIONS NAMNET: ' + item['name'] + ' HÄR HAR VI ASSOCIATIONS IDT: ' + item['id'])
+                                                
                                                 navigation.navigate("EditBookableObject",{objectId: item['objectId'], associationName: item['name'], associationId: item['id']})
                                             }} style={Style.bookObject}>
                                                 <Text>{item['objectName']}</Text>

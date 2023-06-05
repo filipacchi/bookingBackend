@@ -13,14 +13,14 @@ const WeekCalendar = ({ selectedDay, setSelectedDay }) => {
 
   const updateWeekArray = () => {
 
-    console.log(selectedDay.isoWeekday())
+    
     let weekDay = selectedDay.isoWeekday()
     if (weekDay >= startDay) {
       sDay = selectedDay
     } else {
       let diff = 7 - Math.abs(weekDay - startDay)
       sDay = selectedDay.clone().subtract(diff, "days")
-      console.log("DIFFERANSEN ÄR: "+diff)
+      
     }
     const updatedWeekDates = Array.from({ length: 7 }).map((_, i) =>
         sDay.clone().isoWeekday(startDay).add(i, 'days')
@@ -37,13 +37,13 @@ const WeekCalendar = ({ selectedDay, setSelectedDay }) => {
   const handlePrevWeek = () => {
     let prevWeek = selectedDay.clone().subtract(7, 'days')
     if (prevWeek.format().slice(0, 10) < today.format().slice(0, 10)) {
-      console.log("UTANFÖR")
-      //console.log(prevWeek)
+      
+      //
     }
     else {
       updateWeekArray()
       setSelectedDay((prev) => prev.clone().subtract(7, 'days')); // Decrement the selected day by 1 week
-      //console.log(selectedDay)
+      //
       //updateWeekArray()
       setPrevArrowPressed(true); // Set the previous arrow pressed state to true
       // Revert the previous arrow pressed state back to false after x milliseconds
@@ -57,7 +57,7 @@ const WeekCalendar = ({ selectedDay, setSelectedDay }) => {
   const handleNextWeek = () => {
     updateWeekArray()
     setSelectedDay((prev) => prev.clone().add(7, 'days')); // Increment the selected day by 1 week
-    //console.log(selectedDay)
+    //
     //updateWeekArray()
     setNextArrowPressed(true); // Set the next arrow pressed state to true
     // Revert the next arrow pressed state back to false after x milliseconds
