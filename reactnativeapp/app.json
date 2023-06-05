@@ -16,9 +16,8 @@
     "android.icon": "./assets/play_store_512.png",
     "ios.icon": "./assets/AppIcon_ios.png",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5a97ff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0,

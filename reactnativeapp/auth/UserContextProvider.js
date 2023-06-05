@@ -5,6 +5,8 @@ import { translations } from "../language/localizations";
 import { I18n } from "i18n-js";
 import { getLocales } from "expo-localization"
 import { useState } from 'react';
+import Splash from '../src/screens/Splash';
+import { View } from 'react-native';
 
 
 const AuthContext = React.createContext();
@@ -20,9 +22,10 @@ function UserContextProvider({ children }) {
   i18n.enableFallback = true
   console.log("Språk: " + i18n.locale)
 
-
+  const [appReady, setAppReady] = useState(false)
+  const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
   const [colorTheme, setColorTheme] = useState({ name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff" })
-  const [tabTitles, setTabTitles] = useState({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return")})
+  const [tabTitles, setTabTitles] = useState({ AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return") })
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -59,7 +62,7 @@ function UserContextProvider({ children }) {
             lastName: null,
             isAssociation: null,
           };
-          case 'NO_AUTH':
+        case 'NO_AUTH':
           return {
             ...prevState,
             isLoading: false,
@@ -121,10 +124,12 @@ function UserContextProvider({ children }) {
             dispatch({ type: 'RESTORE_TOKEN', token: response.data });
           })
           .catch(error => {
-            dispatch({ type: 'NO_AUTH'});
+            dispatch({ type: 'NO_AUTH' });
             console.log(error);
             console.log("TOKEN NOT OKAY")
-          });
+          }).finally(()=>{
+            setAppReady(true)
+          })
       }
     };
 
@@ -186,7 +191,7 @@ function UserContextProvider({ children }) {
       },
       setLang: (lang) => {
         i18n.locale = lang
-        setTabTitles({AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return")})
+        setTabTitles({ AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return") })
 
       },
       getLang: () => {
@@ -195,9 +200,9 @@ function UserContextProvider({ children }) {
       getLanguage: () => {
         let lang = i18n.locale
         let language = ""
-        if(lang === "sv"){
+        if (lang === "sv") {
           language = "Svenska"
-        } else if(lang === "en"){
+        } else if (lang === "en") {
           language = "English"
         }
         return language
@@ -208,10 +213,23 @@ function UserContextProvider({ children }) {
   );
   const contextValue = { tabTitles, authContext, state, colorTheme, setColorTheme }
 
+  function AnimatedSplashScreen({ children}) {
+    return (
+      <View style={{ flex: 1 }}>
+        {isSplashAnimationComplete && children}
+        {!isSplashAnimationComplete && (
+          <Splash setAnimationComplete={setAnimationComplete} appReady={appReady}/>
+        )}
+      </View>
+    );
+  }
+
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AnimatedSplashScreen>
+      <AuthContext.Provider value={contextValue}>
+        {children}
+      </AuthContext.Provider>
+    </AnimatedSplashScreen>
   );
 }
 

@@ -1,21 +1,21 @@
 import React, {useContext} from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import Logo from "../components/assets/Logo";
-import { AuthContext } from "../../auth/UserContextProvider";
 import { MotiView } from "moti"
-export default function Splash({setLoadingState}) {
-    const { state, colorTheme } = useContext(AuthContext)
+export default function Splash({setAnimationComplete, appReady}) {
+    /* const { state, colorTheme } = useContext(AuthContext) */
 
     const checkLoading = () => {
-        if(!state.isLoading){
-            setLoadingState(false)
+        /* setAnimationComplete(true) */
+        if(appReady){
+            setAnimationComplete(true)
         }
     }
 
 
     return (
 
-        <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1, alignItems: 'center' }}>
+        <LinearGradient colors={["#5a97ff", "#5a97ff"]} style={{ flex: 1, alignItems: 'center' }}>
 
         <MotiView style={{ marginTop: "50%" }}
             from={{ opacity: 0 }}
