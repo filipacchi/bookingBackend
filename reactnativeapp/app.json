@@ -8,9 +8,9 @@
         }
       ]
     ],
-    "name": "reactnativeapp",
+    "name": "bookease",
     "slug": "reactnativeapp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/AppIcon_ios.png",
     "android.icon": "./assets/ic_launcher_foreground.png",
