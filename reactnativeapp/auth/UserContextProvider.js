@@ -95,13 +95,12 @@ function UserContextProvider({ children }) {
           setColorTheme(JSON.parse(selectedColor))
         }
       } catch (e) {
-        (e)
+        
       }
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
         validateToken(userRefreshToken)
       } catch (e) {
-        // Restoring token failed
       }
 
 
