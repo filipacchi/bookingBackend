@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-
+from django.views.generic import TemplateView
 
 def home(request):
     return render(request, 'webapp/home.html')
@@ -17,3 +17,7 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = "webapp/registration/password_reset_complete.html"
+
+class TermsOfService(TemplateView):
+    template_name = "webapp/termsofservice.html"
+
