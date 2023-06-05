@@ -37,7 +37,7 @@ export default function ScheduleAdmin() {
     const [myAssociationsWithBO, setMyAssociationsWithBO] = useState([])
     const [allBookings, setAllBookings] = useState()
 
-    const [errorText, setErrorText] = useState()
+    const [errorText, setErrorText] = useState("")
     const [errorPopUpVisible, setErrorPopUpVisible] = useState(false)
 
 
@@ -113,9 +113,10 @@ React.useEffect(() => {
     
 }, [])
 
-const handlePopupCancelPress = () => {
+const handleErrorPopupCancelPress = () => {
     console.log("Popup cancel button pressed (Schedule)")
     setErrorPopUpVisible(false)
+    setErrorText("")
 }
 
 const loadVariableData = async () => {
@@ -369,12 +370,11 @@ const loadAssociations = async (token) => {
             visible={errorPopUpVisible}
             title={t("Error")}
             hasInput={false}
-            /* bodyText={errorText} */
-            bodyText={""}
+            bodyText={errorText}
             buttonTexts={[t('PopupCancel')]}
             buttonColor={colorTheme.firstColor}
-            onButtonPress={handlePopupCancelPress}
-            onCancelPress={handlePopupCancelPress}/>
+            onButtonPress={handleErrorPopupCancelPress}
+            onCancelPress={handleErrorPopupCancelPress}/>
 
         </View>
         </SafeAreaView>

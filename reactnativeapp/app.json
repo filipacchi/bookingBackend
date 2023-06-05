@@ -47,11 +47,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d407db70-b6e0-4d0e-a1de-73959b8b00e4"
+        "projectId": "86515c42-677d-4b8e-a7f0-667ceca61212"
       }
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
-    }
+    },
+    "owner": "karlleolsson"
   }
 }
