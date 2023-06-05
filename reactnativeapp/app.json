@@ -50,6 +50,6 @@
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
-    "owner": ["karlleolsson", "marr00m", "filipacchi"]
+    "owner": "karlleolsson"
   }
 }
