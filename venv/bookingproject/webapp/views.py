@@ -20,4 +20,7 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 class TermsOfService(TemplateView):
     template_name = "webapp/termsofservice.html"
+    
+class PrivacyPolicy(TemplateView):
+    template_name = "webapp/privacypolicy.html"
 
