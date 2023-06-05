@@ -27,7 +27,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.filipacchi.reactnativeapp"
     },
     "android": {
       "adaptiveIcon": {
