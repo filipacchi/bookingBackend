@@ -63,10 +63,10 @@ export default function AddBookableObject({ route }) {
       bodyParameters
     )
       .then(response => {
-        console.log(response.data)
+        
       })
       .catch(error => {
-        console.log(error);
+        
       });
   }
 
@@ -193,7 +193,7 @@ export default function AddBookableObject({ route }) {
 
               lengthInHours = lengthPerBooking[val - 1].key
               lengthInHoursInt = parseInt(lengthInHours)
-              console.log('length In Hours: ' + lengthInHoursInt)
+              
               setSelectedHoursBookable(lengthInHoursInt)
             }}
             data={lengthPerBooking}
@@ -217,7 +217,7 @@ export default function AddBookableObject({ route }) {
 
               lengthInWeeks = maxprebookValues[val - 1].key
               lengthInWeeksInt = parseInt(lengthInWeeks)
-              console.log('length In Hours: ' + lengthInWeeksInt)
+              
               setSelectedWeeksBookable(lengthInWeeksInt)
             }}
             data={maxprebookValues}
@@ -249,25 +249,25 @@ export default function AddBookableObject({ route }) {
                   setSelected(val)
                   setFirstStartTime(bookableTimes[val - 1].value)
 
-                  console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' första start tid: ' + firstStartTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
+                  
                   startTime = bookableTimes[val - 1].value.substring(0, 2)
                   startTimeInt = parseInt(startTime) //THIS WILL BE THE timeSlotStartTime
-                  console.log('Start Time:' + startTimeInt)
+                  
 
                   amountOfHoursADay = 24 - 24 % selectedHoursBookable
-                  console.log('Amount of hours:' + amountOfHoursADay)
+                  
 
                   endTimeInt = startTimeInt + amountOfHoursADay //THIS WILL BE THE timeSlotEndTime; IF > 24 => GÅR ÖVER NATTEN
                   setEarliestBookableTime(bookableTimes[startTimeInt].value)
-                  console.log('Start Time 1: ' + earliestBookableTime)
+                  
 
                   if (endTimeInt <= 24) {
                     setLatestBookableTime(bookableTimes[endTimeInt].value)
-                    console.log('End Time 1: ' + latestBookableTime)
+                    
                   } else {
                     endTimeInt = endTimeInt - 24
                     setLatestBookableTime(bookableTimes[endTimeInt].value)
-                    console.log('End Time 2: ' + latestBookableTime)
+                    
                   }
                 }}
                 data={bookableTimes}
@@ -370,7 +370,7 @@ export default function AddBookableObject({ route }) {
           } else {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')
 
-            console.log('HÄR HAR VI ALL INFO OM OBJEKTET 2: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
+            
             addBookableObject()
             navigation.goBack()
           }
@@ -378,7 +378,7 @@ export default function AddBookableObject({ route }) {
         else {
           if (objectName == '') {
             setBackgroundColor('#F88379', 'white', 'white', 'white', 'white', 'white', 'white')
-            console.log('Object name:Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
+            
           } else if (selectedHoursBookable == undefined) {
             setBackgroundColor('white', '#F88379', 'white', 'white', 'white', 'white', 'white')
           } else if (earliestBookableTime == undefined) {
@@ -392,7 +392,7 @@ export default function AddBookableObject({ route }) {
           } else {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')
 
-            console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' tidigaste bokningsbar: ' + earliestBookableTime + ' senast bokningsbar: ' + latestBookableTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
+            
             addBookableObject()
             navigation.goBack()
           }

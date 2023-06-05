@@ -27,7 +27,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.filipacchi.reactnativeapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -44,12 +45,11 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d407db70-b6e0-4d0e-a1de-73959b8b00e4"
       }
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
-    "owner": "filipacchi"
+    "owner": "karlleolsson"
   }
 }

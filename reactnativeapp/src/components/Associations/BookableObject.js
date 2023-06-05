@@ -41,7 +41,7 @@ export default function BookableObject({ route }) {
     const delBookingAxios = async () => {
 
 
-        console.log("SELECTEDCANCEL: " + selectedCancelTime)
+        
         let data = {
             booking_object: route.params.id,
             date: selectedDay.format().slice(0, 10),
@@ -56,9 +56,9 @@ export default function BookableObject({ route }) {
             setSelectedTime(null)
             loadData()
         } catch (e) {
-            console.log(e)
+            
         }
-        console.log("Avbokar")
+        
 
     }
 
@@ -68,8 +68,8 @@ export default function BookableObject({ route }) {
             bookTime()
         }
 
-        console.log('Button Pressed:', index);
-        console.log('Popup Cancelled: ' + selectedTime);
+        
+        
         setPopupVisible(false);
     };
 
@@ -78,7 +78,7 @@ export default function BookableObject({ route }) {
             delBookingAxios()
         }
 
-        console.log('Button Pressed:', index);
+        
         setPopupVisible(false);
     };
 
@@ -114,7 +114,7 @@ export default function BookableObject({ route }) {
         }
 
         catch (error) {
-            console.log(error);
+            
         }
     }
 
@@ -131,9 +131,9 @@ export default function BookableObject({ route }) {
         setBookedSlot([])
         setSelectedCancelTime(null)
         setSelectedTime(null)
-        console.log("Inne i UseEFFECT")
+        
         if (route.params.id) {
-            console.log("Inne i if")
+            
             loadData()
         }
     }, [selectedDay])
@@ -155,7 +155,7 @@ export default function BookableObject({ route }) {
             loadData()
             setBookingLoading(false)
         } catch (e) {
-            console.log(e)
+            
             setBookingLoading(false)
         }
 

@@ -20,7 +20,7 @@ export default function AssociationInformation({ route }) {
 
 
   const postPhotoToServer = (formData) => {
-    console.log(state.userToken)
+    
     const config = {
       headers: {
         Authorization: `Bearer ${state.userToken}`,
@@ -31,10 +31,10 @@ export default function AssociationInformation({ route }) {
     axios
       .put(`association/image/update/${associationId}`, formData, config)
       .then((response) => {
-        console.log(response.data);
+        
       })
       .catch((error) => {
-        console.log(error);
+        
       });
   };
 
@@ -48,14 +48,14 @@ export default function AssociationInformation({ route }) {
       aspect: [4, 3],
       quality: 1
     });
-    console.log('RESULT: ' + result.assets[0].uri);
+    
 
     if (!result.canceled) {
       if(associationImage != null){
         axios.delete(`association/image/delete/${associationId}`)
       }
       setImage(result.assets[0].uri);
-      console.log('NÅGOT: ' + result.assets[0].uri)
+      
 
       const uri = result.uri;
       const filename = uri.split('/').pop();
@@ -105,11 +105,11 @@ const getImage = async () => {
           contentType = response.headers['content-type']
           url = "data:" + contentType + ";base64," + base64string
           setImage(url)
-          console.log("URL: "+url)
+          
 
       })
       .catch(error => {
-          console.log(error);
+          
       }).finally(()=>setIsLoaded(true))
 }
   

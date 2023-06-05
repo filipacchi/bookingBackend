@@ -9,7 +9,7 @@ export default function AllLanguages () {
     const [userLanguage, setUserLanguage] = useContext(userLanguageContext)
 
     setUserLanguage(userLanguage.slice(0, 2))
-    console.log(userLanguage)
+    
 
     const allLangs = [
         {

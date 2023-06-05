@@ -20,7 +20,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
                 style={Style.toSwipe}
                 onPress={() => {
                     ref.current.close()
-                    console.log("REMOVE")
+                    
                     onDelete(index, item)
                 }}
                 >
@@ -31,7 +31,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
     }
 
     useEffect(()=>{
-        console.log("ÖPPEN? "+item.opened)
+        
         if(item.opened == false){
             ref.current.close()
         }
@@ -39,7 +39,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
     return (
         <GestureHandlerRootView>
         <Swipeable ref={ref} renderRightActions={rigthSwipe} onSwipeableOpen={() => {
-            console.log("OPEN")
+            
             onComponentOpen(index)
         }}
         >
