@@ -78,6 +78,10 @@
     "SureLogOut?": "Do you want to log out?",
     "BookeaseInfoTitle": "is an application developed by bookease AB.",
     "Feedback": "If you have any opinions, feel free to leave your feedback at: ",
+    "DeleteAccount": "Delete Account",
+    "Confirm": "CONFIRM",
+    "ConfirmMsg": "Enter the word: CONFIRM to delete your account permanently, this action can not be undone. ",
+    "AccountDeleted": "Accound deleted! You will be logged out in a few seconds...",
 
     "AssociationsPage": "My Associations",
     "EnterKey": "Enter Your Key",
