@@ -18,7 +18,7 @@ const SwipeableCalendar = ({ selectedDay, setSelectedDay, bookAhead }) => {
     let dateArrayTemp = new Array();
     let dateObject = {}
     let currentDate = today.clone()
-    console.log("BOOKAHEAD: "+bookAhead)
+    
     let endDate = today.clone().add(parseInt(bookAhead), "weeks")
     while(currentDate <= endDate){
       dateObject = {
@@ -52,7 +52,7 @@ const SwipeableCalendar = ({ selectedDay, setSelectedDay, bookAhead }) => {
             <TouchableOpacity 
             activeOpacity={0.5}
             onPress={() => {
-              console.log("VALDDAG: "+item.day)
+              
               flatListRef.current.scrollToIndex({
                 index: index,
                 animated: true,

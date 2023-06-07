@@ -36,22 +36,22 @@ export default function Register() {
         };
       
         const handleTermsLinkPress = () => {
-          const termsURL = 'https://bookease.se/'; 
+          const termsURL = 'https://bookease.se/app/termsofservice'; 
           Linking.openURL(termsURL);
         };
 
     function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "" || !isChecked) {
-            console.log(selectedLanguage)
-            console.log("Nåt är tomt")
+            
+            
         } else if (password === passwordCheck) {
             let data = { email: username, firstname: firstname, lastname: lastname, password: password, nativeLang: selectedLanguage }
             signUp(data)
-            console.log(selectedLanguage)
-            console.log("Lösenord ok också")
+            
+            
 
         } else {
-            console.log("Lösenord stämmer ej överens")
+            
         }
     }
 

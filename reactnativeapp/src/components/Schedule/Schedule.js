@@ -35,7 +35,7 @@ export default function Schedule() {
     })
 
     const handlePopupClosePress = () => {
-        console.log("Popup cancel button pressed (Schedule)")
+        
         setErrorPopUpVisible(false)
     }
 
@@ -45,19 +45,19 @@ export default function Schedule() {
 
             let item = data[i];
             try {
-                console.log(item.associationId)
+                
                 let profileImage = await getImage(item.associationId);
                 item.profile_image = profileImage;
                 
             } catch (error) {
-                console.log(error);
+                
                 /* behöver inte ha pop-up för error på bilderna */
             }
 
             updatedData.push(item);
         }
 
-        console.log('UTANFÖR FOR LOOP');
+        
         setBookedTimes(sortObjectsByDate(updatedData))
         setIsRefreshing(false)
     }
@@ -71,7 +71,7 @@ export default function Schedule() {
             .catch(error => {
                 setErrorText(t('RequestFailed') + error.response.status.toString())
                 setErrorPopUpVisible(true)
-                console.log(error);
+                
             });
         }
         getUserBookings()
@@ -108,8 +108,8 @@ export default function Schedule() {
             const response = await axios.get(`association/image/get/${associationId}`, { responseType: "arraybuffer" })
             return loadImages(response)
         } catch (error) {
-            console.log(error)
-            /* behöver inte ha pop-up för error på bilderna */
+            
+            
         } finally {
             setisLoading(false)
         }
@@ -154,10 +154,10 @@ export default function Schedule() {
             { data }
         )
             .then(response => {
-                console.log(response.data)
+                
             })
             .catch(error => {
-                console.log(error)
+                
             })
     }
 
@@ -205,7 +205,7 @@ export default function Schedule() {
             renderItem={
                 ({ item, index }) => {
                     return (<Item item={item} index={index} onComponentOpen={(x) => {
-                        console.log("aiosdjioas");
+                        
                         openComp(x)
                     }}
                         onDelete={(x, y) => {

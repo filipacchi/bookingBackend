@@ -34,17 +34,17 @@ export default function EditBookableObject({ route }) {
       removeBookableObject()
       navigation.goBack()
     }
-    console.log('Button Pressed:', index);
+    
     setPopupVisible(false);
   };
 
   const handleCancelPress = () => {
-    console.log('Popup Cancelled');
+    
     setPopupVisible(false);
   };
 
   const editBookableObject = async () => {
-    console.log('Assosiation name?: ' + associationName + 'Association id: ' + associationId + 'object id: ' + objectId)
+    
     const config = {
       headers: { Authorization: `Bearer ${state.userToken}` }
     };
@@ -64,10 +64,10 @@ export default function EditBookableObject({ route }) {
       config
     )
       .then(response => {
-        console.log(response.data)
+        
       })
       .catch(error => {
-        console.log(error);
+        
       });
   }
 
@@ -79,17 +79,17 @@ export default function EditBookableObject({ route }) {
 
     axios.delete(`association/bookableobject/delete/${objectId}`, config)
       .then(response => {
-        console.log(response.data)
+        
       })
       .catch(error => {
-        console.log(error);
+        
       });
   }
 
   async function GetObjectData(objectId) {
     axios.get('association/bookableobject/get/' + objectId)
       .then(response => {
-        console.log("OBJECT DATAN HÄR: " + response.data)
+        
         setObjectData(response.data)
         setObjectName(response.data.objectName)
         setSelectedHoursBookable(response.data.timeSlotLength)
@@ -102,7 +102,7 @@ export default function EditBookableObject({ route }) {
 
       })
       .catch(error => {
-        console.log(error);
+        
       })
       .finally(() => {
         setIsLoading(false)
@@ -111,7 +111,7 @@ export default function EditBookableObject({ route }) {
   }
 
   useEffect(() => {
-    console.log('OBJECT ID: ' + objectId)
+    
     GetObjectData(objectId)
   }, [])
 
@@ -242,7 +242,7 @@ export default function EditBookableObject({ route }) {
             setSelected(val)
             lengthInHours = lengthPerBooking[val - 1].key
             lengthInHoursInt = parseInt(lengthInHours)
-            console.log('length In Hours: ' + lengthInHoursInt)
+            
             setSelectedHoursBookable(lengthInHoursInt)
           }}
           data={lengthPerBooking}
@@ -265,7 +265,7 @@ export default function EditBookableObject({ route }) {
 
               lengthInWeeks = maxprebookValues[val - 1].key
               lengthInWeeksInt = parseInt(lengthInWeeks)
-              console.log('length In Hours: ' + lengthInWeeksInt)
+              
               setSelectedWeeksBookable(lengthInWeeksInt)
             }}
             data={maxprebookValues}
@@ -296,25 +296,25 @@ export default function EditBookableObject({ route }) {
                 setSelected(val)
                 setFirstStartTime(bookableTimes[val - 1].value)
 
-                console.log('HÄR HAR VI ALL INFO OM OBJEKTET: Associations id: ' + associationId + ' Namn: ' + objectName + ' slot längd: ' + selectedHoursBookable + ' första start tid: ' + firstStartTime + ' gånger per dag: ' + slotsBookablePerDay + ' gånger per vecka: ' + slotsBookablePerWeek)
+                
                 startTime = bookableTimes[val - 1].value.substring(0, 2)
                 startTimeInt = parseInt(startTime) //THIS WILL BE THE timeSlotStartTime
-                console.log('Start Time:' + startTimeInt)
+                
 
                 amountOfHoursADay = 24 - 24 % selectedHoursBookable
-                console.log('Amount of hours:' + amountOfHoursADay)
+                
 
                 endTimeInt = startTimeInt + amountOfHoursADay //THIS WILL BE THE timeSlotEndTime; IF > 24 => GÅR ÖVER NATTEN
                 setEarliestBookableTime(bookableTimes[startTimeInt].value)
-                console.log('Start Time 1: ' + earliestBookableTime)
+                
 
                 if (endTimeInt <= 24) {
                   setLatestBookableTime(bookableTimes[endTimeInt].value)
-                  console.log('End Time 1: ' + latestBookableTime)
+                  
                 } else {
                   endTimeInt = endTimeInt - 24
                   setLatestBookableTime(bookableTimes[endTimeInt].value)
-                  console.log('End Time 2: ' + latestBookableTime)
+                  
                 }
               }}
               data={bookableTimes}

@@ -9,6 +9,9 @@
     "YouHaveNotJoined": "Du har inte gått med i någon förening ännu. Klicka på knappen nedan för att gå med.",
     "Bookings": "Mina bokningar",
     "Booked": "Bokad!",
+    "Confirm": "BEKRÄFTA",
+    "ConfirmMsg": "Skriv in ordet: BEKRÄFTA för att radera ditt konto permanent, detta kan inte ångras.",
+    "AccountDeleted": "Konto raderat! Du kommer loggas ut om några sekunder...",
     
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",
@@ -79,6 +82,7 @@
     "SureLogOut?": "Vill du logga ut?",
     "BookeaseInfoTitle": "är en app utvecklad av bookease AB.",
     "Feedback": "Om du har några åsikter om appen får du gärna lämna feedback till: ",
+    "DeleteAccount": "Radera konto",
     
 
     "AssociationsPage": "Mina föreningar",

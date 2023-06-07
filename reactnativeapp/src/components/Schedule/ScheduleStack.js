@@ -10,8 +10,8 @@ const Stack = createNativeStackNavigator()
 function ScheduleStack() {
     const {state} = React.useContext(AuthContext)
 
-    console.log("inne i ScheduleStack")
-    console.log("isAssociation: " + state.isAssociation)
+    
+    
 
     return (
     <Stack.Navigator screenOptions={{

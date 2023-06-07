@@ -8,17 +8,16 @@
         }
       ]
     ],
-    "name": "reactnativeapp",
+    "name": "bookease",
     "slug": "reactnativeapp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/AppIcon_ios.png",
-    "android.icon": "./assets/play_store_512.png",
+    "android.icon": "./assets/ic_launcher_foreground.png",
     "ios.icon": "./assets/AppIcon_ios.png",
     "splash": {
-      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#5a97ff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0,
@@ -28,12 +27,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.filipacchi.reactnativeapp"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/ic_launcher_foreground.png",
+        "backgroundColor": "#5C89D9"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
@@ -45,11 +45,12 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d407db70-b6e0-4d0e-a1de-73959b8b00e4"
+        "projectId": "86515c42-677d-4b8e-a7f0-667ceca61212"
       }
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
-    }
+    },
+    "owner": "karlleolsson"
   }
 }

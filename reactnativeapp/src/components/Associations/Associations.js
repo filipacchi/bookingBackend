@@ -31,15 +31,15 @@ export default function Associations() {
 
     const handleButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
-            console.log('Input Value:', inputValue);
+            
             checkKeyMatch(inputValue)
         }
-        console.log('Button Pressed:', index);
+        
         setPopupVisible(false);
     };
 
     const handleCancelPress = () => {
-        console.log('Popup Cancelled');
+        
         setPopupVisible(false);
     };
 
@@ -47,12 +47,12 @@ export default function Associations() {
         if (index === 0) { // Yes button pressed
             JoinAssociation()
         }
-        console.log('Button Pressed:', index);
+        
         setConfirmPopupVisible(false);
     };
 
     const handleConfirmCancelPress = () => {
-        console.log('Popup Cancelled');
+        
         setConfirmPopupVisible(false);
     };
 
@@ -62,12 +62,12 @@ export default function Associations() {
         } else {
             setInputValue("")
         }
-        console.log('Button Pressed:', index);
+        
         setErrorPopupVisible(false);
     };
 
     const handleErrorCancelPress = () => {
-        console.log('Popup Cancelled');
+        
         setErrorPopupVisible(false);
     };
 
@@ -97,10 +97,10 @@ export default function Associations() {
                     contentType = response.headers['content-type']
                     url = "data:" + contentType + ";base64," + base64string
                     resolve(url);
-                    console.log('SÄTTER NY BILD')
+                    
                 })
                 .catch(error => {
-                    console.log(error);
+                    
                     reject(error);
                 })
                 .finally(() => setIsImageLoaded(true))
@@ -119,9 +119,9 @@ export default function Associations() {
                 .then(async (response) => {
                     const updatedData = [];
                     for (let i = 0; i < response.data.length; i++) {
-                        console.log('INUTI FOR LOOP');
-                        console.log(response.data[i].profile_image);
-                        console.log(response.data[i].id);
+                        
+                        
+                        
 
                         let item = response.data[i];
                         if (item.profile_image != null) {
@@ -133,21 +133,21 @@ export default function Associations() {
                                 item.profile_image = profileImage;
 
                                 // Debugging: Verify the correct profile_image is set
-                                console.log(item.profile_image);
+                                
                             } catch (error) {
-                                console.log(error);
+                                
                             }
                         }
 
                         updatedData.push(item);
                     }
 
-                    console.log('UTANFÖR FOR LOOP');
+                    
                     // Update the state with the updated data
                     setAssociation(updatedData);
                 })
                 .catch(error => {
-                    console.log(error);
+                    
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -165,11 +165,11 @@ export default function Associations() {
         axios.post('user/association/join/add/' + inputText
         )
             .then(response => {
-                console.log("" + response.data)
+                
                 loadData()
             })
             .catch(error => {
-                console.log(error);
+                
             }).finally()
     }
 
@@ -181,12 +181,12 @@ export default function Associations() {
         axios.get('user/association/join/get/' + tI
         )
             .then(response => {
-                console.log("" + response.data)
+                
                 setJoinAssociationName(response.data.name)
                 setConfirmPopupVisible(true)
             })
             .catch(error => {
-                console.log(error);
+                
                 setErrorPopupVisible(true)
             })
             .finally(() => {
@@ -204,7 +204,7 @@ export default function Associations() {
     let tempInput = ""
     const handleChangeText = ((newText) => {
         tempInput = newText
-        console.log(tempInput)
+        
     })
 
     const emptyFlatComp = () => {
@@ -272,7 +272,7 @@ export default function Associations() {
                                             renderItem={
                                                 ({ item }) => (
                                                     <TouchableOpacity onPress={() => {
-                                                        console.log(item['objectId'])
+                                                        
                                                         navigation.navigate("BookableObject", { name: item['objectName'], id: item['objectId'], bookAhead: item['bookAheadWeeks'], token: state.userToken })
                                                     }} style={Style.bookObject}>
                                                         <Text style={{ color: "#1a1a1a" }}>{item['objectName']}</Text>

@@ -14,5 +14,13 @@
         "developmentClient": true
       },
       "production": {}
-    }
+    },
+    "submit": {
+      "production": {
+        "ios": {
+          "appleId": "m.romedahl@gmail.com",
+          "appName": "bookease"
+        }
+      }
   }
+}
