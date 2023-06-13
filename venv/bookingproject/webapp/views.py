@@ -14,6 +14,7 @@ import pprint
 from datetime import datetime, timedelta
 import os
 from django.conf import settings
+from washbooking.models import *
 
 
 def home(request):
@@ -42,6 +43,8 @@ class DeleteUser(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
+        person = Person.objects.get(user=self.request.user)
+        BookedTime.objects.filter(booked_by=person).delete()
         self.request.user.delete()
         return Response(status=status.HTTP_200_OK)
 
