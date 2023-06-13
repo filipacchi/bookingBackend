@@ -10,6 +10,7 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 import { Item } from "./Item";
 import IOSPopup from "reactnativeapp/src/components/Misc/PopUp";
 import base64 from 'react-native-base64'
+import moment from 'moment';
 
 
 
@@ -54,7 +55,9 @@ export default function Schedule() {
                 /* behöver inte ha pop-up för error på bilderna */
             }
 
-            updatedData.push(item);
+            if (moment().format().slice(0,10)<=item.date){
+                updatedData.push(item);
+            }
         }
 
         
