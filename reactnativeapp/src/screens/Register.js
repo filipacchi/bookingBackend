@@ -62,79 +62,97 @@ export default function Register() {
             style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
-                    <View style={{
-                        position: "absolute",
-                        bottom: 150,
-                        width: "100%",
-                        gap: 20,
-                        alignItems: "center"
-                    }}>
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                onChangeText={onChangeUsername}
-                                placeholder={t("Email")}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                onChangeText={onChangeFirstname}
-                                placeholder={t("Firstname")}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                onChangeText={onChangeLastname}
-                                placeholder={t("Lastname")}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                onChangeText={onChangePassword}
-                                placeholder={t("Password")}
-                                secureTextEntry={true}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                onChangeText={onChangePasswordCheck}
-                                placeholder={t("PasswordRepeat")}
-                                secureTextEntry={true}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <SelectList
-                            //dropdownStyles
-                            arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
-                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly", width:'50%' }}
-                            search={true}
-                            dropdownShown={false}
-                            placeholder={t("NativeLanguage")}
-                            setSelected={(val) => {
-                                setSelectedLanguage(val);
-                            }}
-                            data={languageOptions}
-                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "50%", top: 45, zIndex: 2 }}
-                        />
-                        <View style={{flexDirection: 'row'}}>
-      <Checkbox
-        value={isChecked}
-        onValueChange={handleCheckboxChange}
-      />
-      <Text style={{ color: '#000000', flexDirection: 'row' }} onPress={handleCheckboxChange}> {t("IAgreeToThe")} </Text><TouchableOpacity onPress={handleTermsLinkPress}>
-        <Text style={{ color: 'blue'}}>{t("TermsOfService")}</Text>
-      </TouchableOpacity>
-    </View>
-                        <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}><Text style={styles.inputText}>{t("Register")}</Text></TouchableOpacity>
-                    </View>
+                <View style={{
+  position: "absolute",
+  bottom: 150,
+  width: "100%",
+  gap: 20,
+  alignItems: "center",
+  flexDirection: "column-reverse"
+}}>
+  <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}>
+    <Text style={styles.inputText}>{t("Register")}</Text>
+  </TouchableOpacity>
+
+  <View style={{ flexDirection: 'row' }}>
+    <Checkbox
+      value={isChecked}
+      onValueChange={handleCheckboxChange}
+    />
+    <Text style={{ color: '#000000', flexDirection: 'row' }} onPress={handleCheckboxChange}>
+      {t("IAgreeToThe")}
+    </Text>
+    <TouchableOpacity onPress={handleTermsLinkPress}>
+      <Text style={{ color: 'blue' }}>{t("TermsOfService")}</Text>
+    </TouchableOpacity>
+  </View>
+
+  <SelectList
+    //dropdownStyles
+    arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
+    boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly", width: '50%', backgroundColor: "white" }}
+    search={true}
+    dropdownShown={false}
+    placeholder={t("NativeLanguage")}
+    setSelected={(val) => {
+      setSelectedLanguage(val);
+    }}
+    data={languageOptions}
+    dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "50%", top: 45 }}
+  />
+
+  <View style={Style.inputCredentials}>
+    <TextInput
+      style={{ backgroundColor: "white" }}
+      onChangeText={onChangePasswordCheck}
+      placeholder={t("PasswordRepeat")}
+      secureTextEntry={true}
+      autoComplete="off"
+      autoCorrect={false}
+    />
+  </View>
+
+  <View style={Style.inputCredentials}>
+    <TextInput
+      style={{ backgroundColor: "white" }}
+      onChangeText={onChangePassword}
+      placeholder={t("Password")}
+      secureTextEntry={true}
+      autoComplete="off"
+      autoCorrect={false}
+    />
+  </View>
+
+  <View style={Style.inputCredentials}>
+    <TextInput
+      style={{ backgroundColor: "white" }}
+      onChangeText={onChangeLastname}
+      placeholder={t("Lastname")}
+      autoComplete="off"
+      autoCorrect={false}
+    />
+  </View>
+
+  <View style={Style.inputCredentials}>
+    <TextInput
+      style={{ backgroundColor: "white" }}
+      onChangeText={onChangeFirstname}
+      placeholder={t("Firstname")}
+      autoComplete="off"
+      autoCorrect={false}
+    />
+  </View>
+
+  <View style={Style.inputCredentials}>
+    <TextInput
+      style={{ backgroundColor: "white" }}
+      onChangeText={onChangeUsername}
+      placeholder={t("Email")}
+      autoComplete="off"
+      autoCorrect={false}
+    />
+  </View>
+</View>
                 </LinearGradient>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
