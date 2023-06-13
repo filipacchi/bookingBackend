@@ -227,7 +227,7 @@ export default function EditBookableObject({ route }) {
           value={objectName}
         ></TextInput>
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex: 999}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("LengthPerBooking")}</Text>
         </View>
@@ -249,7 +249,7 @@ export default function EditBookableObject({ route }) {
         />
         </View>
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex: 998}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("BookAhead")}</Text>
         </View>
@@ -271,7 +271,7 @@ export default function EditBookableObject({ route }) {
             data={maxprebookValues}
           /></View>
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex: 997}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
         </View>
@@ -279,9 +279,9 @@ export default function EditBookableObject({ route }) {
           trackColor={{ false: '#767577', true: colorTheme.firstColor}}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
       </View>
-      <View>
+      <View style={{zIndex: 996}}>
         {allDayEnabled ? (
-          <View style={styles.settingContainer}>
+          <View style={[styles.settingContainer, {zIndex: 996}]}>
             <View style={styles.settingLabelOverhead}>
             <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
             </View>
@@ -322,7 +322,7 @@ export default function EditBookableObject({ route }) {
           </View>
         ) : (
           <View>
-            <View style={styles.settingContainer}>
+            <View style={[styles.settingContainer, {zIndex: 996}]}>
             <View style={styles.settingLabelOverhead}>
               <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
               </View>
@@ -340,7 +340,7 @@ export default function EditBookableObject({ route }) {
                 data={bookableTimes}
               /></View>
             </View>
-            <View style={styles.settingContainer}>
+            <View style={[styles.settingContainer, {zIndex: 995}]}>
             <View style={styles.settingLabelOverhead}>
               <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
               </View>
@@ -361,7 +361,7 @@ export default function EditBookableObject({ route }) {
           </View>
         )}
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex: 994}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
         </View>
@@ -379,7 +379,7 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         /></View>
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex: 993}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
         </View>
