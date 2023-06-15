@@ -169,7 +169,7 @@ export default function AddBookableObject({ route }) {
   return (
     <ScrollView style={styles.container} scrollEventThrottle={1} contentInset={{ bottom: '30%' }}>
       <Text style={styles.header}>{t("AddBookableObject")}</Text>
-      <View style={[styles.settingContainer, { backgroundColor: objectNameBackgroundColor }]}>
+      <View style={[styles.settingContainer, { backgroundColor: objectNameBackgroundColor, zIndex: 999 }]}>
         <TextInput
           style={styles.objectName}
           placeholder={t("ObjectName")}
@@ -177,7 +177,7 @@ export default function AddBookableObject({ route }) {
           value={objectName}
         ></TextInput>
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor }]}>
+      <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor, zIndex:998 }]}>
         <View style={styles.settingContainer}>
         <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("LengthPerBooking")}</Text>
@@ -201,7 +201,7 @@ export default function AddBookableObject({ route }) {
           </View>
         </View>
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor }]}>
+      <View style={[styles.settingContainer, { backgroundColor: lengthPerBookingBackgroundColor, zIndex:997 }]}>
         <View style={styles.settingContainer}>
         <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("BookAhead")}</Text>
@@ -224,7 +224,7 @@ export default function AddBookableObject({ route }) {
           /></View>
         </View>
       </View>
-      <View style={styles.settingContainer}>
+      <View style={[styles.settingContainer, {zIndex:996}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("BookableAllDay")}</Text>
         </View>
@@ -232,9 +232,9 @@ export default function AddBookableObject({ route }) {
           trackColor={{ false: '#767577', true: colorTheme.firstColor }}
           value={allDayEnabled} onValueChange={setAllDayEnabled} />
       </View>
-      <View>
+      <View style={{zIndex: 995}}>
         {allDayEnabled ? (
-          <View style={[styles.settingContainer, { backgroundColor: firstStartTimeBackgroundColor }]}>
+          <View style={[styles.settingContainer, { backgroundColor: firstStartTimeBackgroundColor, zIndex:995 }]}>
             <View style={styles.settingContainer}>
                <View style={styles.settingLabelOverhead}>
               <Text style={styles.settingLabel}>{t("FirstStartTime")}</Text>
@@ -276,7 +276,7 @@ export default function AddBookableObject({ route }) {
           </View>
         ) : (
           <View>
-            <View style={[styles.settingContainer, { backgroundColor: earliestBookableTimeBackgroundColor }]}>
+            <View style={[styles.settingContainer, { backgroundColor: earliestBookableTimeBackgroundColor, zIndex:995 }]}>
               <View style={styles.settingContainer}>
                  <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("EarliestBookableTime")}</Text>
@@ -295,7 +295,7 @@ export default function AddBookableObject({ route }) {
                 /></View>
               </View>
             </View>
-            <View style={[styles.settingContainer, { backgroundColor: latestBookableTimeBackgroundColor }]}>
+            <View style={[styles.settingContainer, { backgroundColor: latestBookableTimeBackgroundColor, zIndex: 994 }]}>
               <View style={styles.settingContainer}>
                  <View style={styles.settingLabelOverhead}>
                 <Text style={styles.settingLabel}>{t("LatestBookableTime")}</Text>
@@ -317,7 +317,7 @@ export default function AddBookableObject({ route }) {
           </View>
         )}
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor }]}>
+      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor, zIndex: 993 }]}>
         <View style={styles.settingContainer}>
            <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
@@ -336,7 +336,7 @@ export default function AddBookableObject({ route }) {
           /></View>
         </View>
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor }]}>
+      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor, zIndex: 992 }]}>
         <View style={styles.settingContainer}>
              <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
