@@ -68,7 +68,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
                                 {item.startTime + " - " + item.endTime}
                             </Text>
                         </Text>
-                        <Text style={{ color: "#767676" }}> {item.association + ", "}
+                        <Text style={{ color: "#767676" }}>{item.association + ", "}
                             <Text style={{ color: "black" }}> {item.date} </Text>
                         </Text>
 
