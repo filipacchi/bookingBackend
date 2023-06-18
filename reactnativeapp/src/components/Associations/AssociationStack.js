@@ -11,11 +11,16 @@ import AddBookableObject from 'reactnativeapp/src/components/AdminStart/AddBooka
 import EditBookableObject from 'reactnativeapp/src/components/AdminStart/EditBookableObject.js';
 import { AuthContext } from '../../../auth/UserContextProvider.js';
 import BookedObjectSwiper from './BookedObjectSwiper.js';
+import { Ionicons } from '@expo/vector-icons';
+import { GlobalContext } from 'reactnativeapp/GlobalContext.js';
+
 
 const Stack = createNativeStackNavigator()
 
 function AssociationStack() {
   const {tabTitles, authContext, colorTheme, state} = React.useContext(AuthContext)
+  const { showInformation, setShowInformation, updateShowInformation } = useContext(GlobalContext);
+
   return (
     <Stack.Navigator screenOptions={{
 
@@ -49,7 +54,19 @@ function AssociationStack() {
               headerBackTitle: tabTitles.Return,
             }} />
             <Stack.Screen name="BookablesView" component={BookablesView} options={{ headerTintColor: "white", headerBackTitle: tabTitles.Return, }} />
-            <Stack.Screen name="BookableObject" component={BookableObject} options={({ route}) => ({ title: route.params.name ,headerTintColor: "white", headerBackTitle: tabTitles.Return,})}/>
+            <Stack.Screen name="BookableObject" component={BookableObject} options={({ route}) => ({ title: route.params.name, headerTintColor: "white", headerBackTitle: tabTitles.Return, 
+            headerRight: () => (
+                <Ionicons
+                  name="ios-information-circle-outline" 
+                  size={24} 
+                  color="white"
+                  style={{ marginRight: 10 }}
+                  onPress={() => {
+                    updateShowInformation()
+                  }}
+                />
+              ),
+              })}/>
             <Stack.Screen name="BookedObjectSwiper" component={BookedObjectSwiper} />
           </Stack.Group>
         )}

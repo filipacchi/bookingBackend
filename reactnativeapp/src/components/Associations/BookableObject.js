@@ -15,6 +15,7 @@ import IOSPopup from "../Misc/PopUp";
 import customLoadIcon from "../Misc/customLoadIcon";
 import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
+import { GlobalContext } from 'reactnativeapp/GlobalContext.js';
 
 
 
@@ -37,9 +38,9 @@ export default function BookableObject({ route }) {
     const [timeBooked, setTimeBooked] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const { showInformation, setShowInformation, updateShowInformation } = useContext(GlobalContext);
 
     const delBookingAxios = async () => {
-
 
         
         let data = {
@@ -62,14 +63,14 @@ export default function BookableObject({ route }) {
 
     }
 
+    const handleInfoButtonPress = () => {
+        setShowInformation(false)
+    };
 
     const handleButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
             bookTime()
         }
-
-        
-        
         setPopupVisible(false);
     };
 
@@ -234,6 +235,15 @@ export default function BookableObject({ route }) {
                     buttonColor={colorTheme.firstColor}
                     onButtonPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
                     onCancelPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
+                />
+                 <IOSPopup
+                    visible={showInformation}
+                    title={route.params.name}
+                    bodyText={t('ObjectBookable') + route.params.bookAhead + t('WeeksAheadOfTimeItsAlsoBookable') + route.params.perDay + t('TimesADayAnd') + route.params.perWeek + t('TimesAWeek')}
+                    hasInput={false}
+                    buttonTexts={[t('Okay')]}
+                    buttonColor={colorTheme.firstColor}
+                    onButtonPress={handleInfoButtonPress}
                 />
             </View>
         </SafeAreaView>

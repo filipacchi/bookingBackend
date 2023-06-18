@@ -128,6 +128,12 @@
 
     "FeedbackSupport": "Feedback / Support",
 
-    "NotJoinedAssociationYet": "Du har ännu inte anslutigt dig till en förening, klicka på knappen nedan för att gå med i en förening"
+    "NotJoinedAssociationYet": "Du har ännu inte anslutigt dig till en förening, klicka på knappen nedan för att gå med i en förening",
+
+    "Okay": "Okej",
+    "ObjectBookable": "Detta objekt är bokningsbart ",
+    "WeeksAheadOfTimeItsAlsoBookable": " veckor i förtid. Det är också bokningsbart ",
+    "TimesADayAnd": " gånger per dag, och ",
+    "TimesAWeek": " gånger per vecka."
     
 }
