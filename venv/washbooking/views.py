@@ -200,7 +200,9 @@ class GetBookingsFromDateRange(APIView):
         return Response(time_slot_array)
     
 class GetBookingsFromAssociationAndDateRange(APIView):
-    authentication_classes = [IsAuthenticated]
+    """ authentication_classes = [IsAuthenticated] förut """
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, associationid, startdate, enddate):
         sorted_bookings = []
 
