@@ -256,6 +256,20 @@ class GetBookingsFromObject(APIView):
         print(bookings)
         print(json.dumps(bookedSerializer.data))
         return Response([bookableSeralizer.data,bookedSerializer.data] )
+    
+def checkUserBookings(user, object, date_str):
+    date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
+    start_date = date_object - timedelta(days=date_object.weekday())
+    end_date = start_date + timedelta(days=6)
+    user_bookings_week = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).count()
+    user_bookings_day = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date=date_object).count()
+    print(user_bookings_day)
+    bookings_day = object.slotsPerDay - user_bookings_day
+    bookings_week = object.slotsPerWeek - user_bookings_week
+    booking_info = {"day": bookings_day, "week": bookings_week}
+
+    return booking_info
+
 
 
 class GetBookingsFromDay(APIView):
@@ -272,7 +286,9 @@ class GetBookingsFromDay(APIView):
         print(json.dumps(bookedSerializer.data))
         time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate)
         #time.sleep(2)
-        return Response(time_slot_array)
+        booking_info = checkUserBookings(self.request.user, bookable_object, date)
+        data = {"time_slot_array": time_slot_array, "booking_info": booking_info}
+        return Response(data)
 
 class GetBookableObject(APIView):
     permission_classes = [IsAuthenticated]
@@ -399,6 +415,8 @@ class GetUserAssociation(APIView):
         user_associations = person.associations.all()
         serializer = AssociationSerializer(user_associations, many=True)
         return Response(serializer.data)
+    
+
 
 def checkBooking(serializer, object_pk):
     bookRequest = serializer.data
