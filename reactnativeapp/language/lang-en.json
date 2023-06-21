@@ -96,6 +96,8 @@
     "PopupCancel": "Close", 
     "RequestFailed": "Request failed with status code: ",
     "AssoNoBookables": "The association does not have any bookable objects",
+    "BookingFailed": "Maximum bookings reached",
+    "BookingFailedMsg": "You have reached the maximum amount of bookings for this week or day, cancel another booking to book this time. ",
 
     "WantToDelete": "Are you sure you want to permanently remove this object?",
     "EditBookableObject": "Edit Bookable Object",

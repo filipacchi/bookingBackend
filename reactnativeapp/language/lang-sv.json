@@ -42,6 +42,8 @@
     "NoBookingsMsg": "Gå till Mina föreningar för att boka!",
     "NoAssociations": "Du har inte gått med i någon förening",
     "NoAssociationsMsg": "Klicka på knappen nedan för att gå med!",
+    "BookingFailed": "För många bokningar",
+    "BookingFailedMsg": "Du har uppnåt taket för antal bokningar denna vecka eller dag, avboka en annan tid för att genomföra denna bokning. ",
 
     "Monday": "Måndag",
     "Mon": "Mån",

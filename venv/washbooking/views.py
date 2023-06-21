@@ -310,16 +310,32 @@ class CreateBookingAPIVIEW(APIView):
         date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
         start_date = date_object - timedelta(days=date_object.weekday())
         end_date = start_date + timedelta(days=6)
-        user_bookings_week = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).count()
+        distinct_bookings = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).values('date').distinct()
+        user_bookings_week = distinct_bookings.count()
         user_bookings_day = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date=date_object).count()
-        print(user_bookings_day)
+        print("VECKORKOLLA: "+str(distinct_bookings))
         #pprint.pprint(date_object.weekday())
         #print(user_bookings_amount)
         slots_per_day = object.slotsPerDay
         slots_per_week = object.slotsPerWeek
         #print(slots_per_day)
         #print(slots_per_week)
-        if user_bookings_week < slots_per_week:
+        if(user_bookings_week == slots_per_week):
+            if distinct_bookings.filter(date=date_object).exists():
+                if user_bookings_day < slots_per_day:
+                    print("OK DAG")
+                    serializer = BookedTimeSerializer(data=request.data)
+                    if serializer.is_valid():
+                #return checkBooking(serializer, object_pk)
+                        serializer.save()
+                #time.sleep(2)
+                        return Response("Bokar")
+                    return Response("An error occured, this time might not be available")
+                else:
+                    return Response("ToManyBookingsPerDay")
+            else:
+                return Response("ToManyBookingsPerWeek")
+        elif user_bookings_week < slots_per_week:
             if user_bookings_day < slots_per_day:
                 print("OK DAG")
                 serializer = BookedTimeSerializer(data=request.data)
