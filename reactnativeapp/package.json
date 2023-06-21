@@ -1,6 +1,6 @@
 {
   "name": "reactnativeapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -21,6 +21,7 @@
     "base-64": "^1.0.0",
     "bootstrap": "^5.2.3",
     "cocoapods": "^0.0.0",
+    "eas": "^0.1.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "expo": "^48.0.19",
     "expo-checkbox": "~2.3.1",
@@ -38,6 +39,7 @@
     "i18n-js": "^4.2.3",
     "iso-639-1": "^2.1.15",
     "jwt-decode": "^3.1.2",
+    "login": "^0.8.0",
     "lottie-react-native": "5.1.4",
     "moment": "^2.29.4",
     "moti": "^0.25.3",
