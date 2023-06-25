@@ -15,6 +15,7 @@ import IOSPopup from "../Misc/PopUp";
 import customLoadIcon from "../Misc/customLoadIcon";
 import { Skeleton } from "moti/skeleton";
 import { MotiView } from "moti";
+import { GlobalContext } from 'reactnativeapp/GlobalContext.js';
 
 
 
@@ -37,9 +38,12 @@ export default function BookableObject({ route }) {
     const [timeBooked, setTimeBooked] = useState(false)
     const [bookingLoading, setBookingLoading] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [bookingsLeftDay, setBookingsLeftDay] = useState()
+    const [bookingsLeftWeek, setBookingsLeftWeek] = useState()
+    const  [showNoBookingsLeft, setShowNoBookingsLeft] = useState(false)
+    const { showInformation, setShowInformation, updateShowInformation } = useContext(GlobalContext);
 
     const delBookingAxios = async () => {
-
 
         
         let data = {
@@ -62,14 +66,14 @@ export default function BookableObject({ route }) {
 
     }
 
+    const handleInfoButtonPress = () => {
+        setShowInformation(false)
+    };
 
     const handleButtonPress = (index) => {
         if (index === 0) { // Yes button pressed
             bookTime()
         }
-
-        
-        
         setPopupVisible(false);
     };
 
@@ -109,12 +113,15 @@ export default function BookableObject({ route }) {
         let sdate = selectedDay.format().slice(0, 10)
         try {
             const { data: response } = await axios.get('association/bookableobject/bookedtimes/get/' + objectId + "/" + sdate)
-            setTimeSlots(response)
+            setTimeSlots(response["time_slot_array"])
+            setBookingsLeftDay(response["booking_info"]["day"])
+            setBookingsLeftWeek(response["booking_info"]["week"])
+            
             setLoading(false)
         }
 
         catch (error) {
-            
+            setLoading(false)
         }
     }
 
@@ -150,10 +157,15 @@ export default function BookableObject({ route }) {
     const bookTimeRequest = async (bodyParameters) => {
         try {
             let response = await axios.post('user/booking/create/', bodyParameters)
-            setButtonBooked(true)
-            setBookedSlot([selectedTime, bodyParameters.date])
-            loadData()
+            if(response.data=="Bokar"){
+                setButtonBooked(true)
+                setBookedSlot([selectedTime, bodyParameters.date])
+                loadData()
+            } else if (response.data="ToManyBookingsPerWeek"){
+                setShowNoBookingsLeft(true)
+            }
             setBookingLoading(false)
+            
         } catch (e) {
             
             setBookingLoading(false)
@@ -234,6 +246,24 @@ export default function BookableObject({ route }) {
                     buttonColor={colorTheme.firstColor}
                     onButtonPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
                     onCancelPress={selectedCancelTime == null ? handleButtonPress : handleDeleteButtonPress}
+                />
+                 <IOSPopup
+                    visible={showInformation}
+                    title={route.params.name}
+                    bodyText={t('ObjectBookable') + route.params.bookAhead + t('WeeksAheadOfTimeItsAlsoBookable') + route.params.perDay + t('TimesADayAnd') + route.params.perWeek + t('TimesAWeek')}
+                    hasInput={false}
+                    buttonTexts={[t('Okay')]}
+                    buttonColor={colorTheme.firstColor}
+                    onButtonPress={handleInfoButtonPress}
+                />
+                <IOSPopup
+                    visible={showNoBookingsLeft}
+                    title={t('BookingFailed')}
+                    bodyText={t('BookingFailedMsg')}
+                    hasInput={false}
+                    buttonTexts={[t('Okay')]}
+                    buttonColor={colorTheme.firstColor}
+                    onButtonPress={()=>setShowNoBookingsLeft(false)}
                 />
             </View>
         </SafeAreaView>

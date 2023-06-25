@@ -273,7 +273,7 @@ export default function Associations() {
                                                 ({ item }) => (
                                                     <TouchableOpacity onPress={() => {
                                                         
-                                                        navigation.navigate("BookableObject", { name: item['objectName'], id: item['objectId'], bookAhead: item['bookAheadWeeks'], token: state.userToken })
+                                                        navigation.navigate("BookableObject", { name: item['objectName'], id: item['objectId'], bookAhead: item['bookAheadWeeks'], token: state.userToken, perDay: item['slotsPerDay'], perWeek: item['slotsPerWeek']})
                                                     }} style={Style.bookObject}>
                                                         <Text style={{ color: "#1a1a1a" }}>{item['objectName']}</Text>
                                                     </TouchableOpacity>

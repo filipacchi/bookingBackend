@@ -10,7 +10,7 @@
     ],
     "name": "bookease",
     "slug": "reactnativeapp",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/AppIcon_ios.png",
     "android.icon": "./assets/ic_launcher_foreground.png",
@@ -28,9 +28,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.filipacchi.reactnativeapp"
+      "bundleIdentifier": "com.filipacchi.reactnativeapp",
+      "buildNumber": "2"
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/ic_launcher_foreground.png",
         "backgroundColor": "#5C89D9"
