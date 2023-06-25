@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, SafeAreaView, StatusBar, Modal, Touch
 import { SelectList } from 'react-native-dropdown-select-list';
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "../../../axios/axios";
+import jwt_decode from "jwt-decode";
 import * as SecureStore from 'expo-secure-store';
 import WeekCalendar from "reactnativeapp/src/components/Associations/WeekCalendar.js";
 import moment from 'moment';
@@ -19,6 +20,7 @@ export default function ScheduleAdmin() {
 
     const { colorTheme } = useContext(AuthContext)
     const [token, setToken] = useState("")
+    const [user, setUser] = useState()
 
     /* datum */
     const [selectedDate, setSelectedDate] = useState(moment());
@@ -35,7 +37,7 @@ export default function ScheduleAdmin() {
 
     /* Kalle */
     const [currentAssoIndex, setcurrentAssoIndex] = useState(0)
-    const [myAssociationsWithBO, setMyAssociationsWithBO] = useState([])
+    const [Associations, setAssociations] = useState([])
     const [allBookings, setAllBookings] = useState()
 
     const [errorText, setErrorText] = useState("")
@@ -89,16 +91,13 @@ export default function ScheduleAdmin() {
 
 
 
-    }, [myAssociationsWithBO])
+    }, [Associations])
 
     useEffect(() => {
-
-
 
         if (allBookings) {
             allBookings.length == 0 ? setBookableObjectsExist(false) : setBookableObjectsExist(true)
         }
-
     }, [allBookings])
 
 
@@ -110,6 +109,10 @@ export default function ScheduleAdmin() {
 
             loadAssociations(access_token)
         }
+        /* if (token) {
+            let decoded = jwt_decode(token)
+            setUser(decoded["user_id"])
+        } */
         getData()
 
     }, [])
@@ -121,7 +124,7 @@ export default function ScheduleAdmin() {
     }
 
     const loadVariableData = async () => {
-        if (myAssociationsWithBO && myAssociationsWithBO.length > 0) {
+        if (Associations && Associations.length > 0) {
 
             loadWeek()
         } else {
@@ -133,20 +136,15 @@ export default function ScheduleAdmin() {
 
 
         setRefreshLoading(true)
-
         try {
             const { data: response } = await axios.get('user/association/with/bookableobjects/get')
-
-
-
-            setMyAssociationsWithBO(response)
+            setAssociations(response)
         }
 
         catch (error) {
             setErrorText(t('RequestFailed') + error.response.status.toString())
             setErrorPopUpVisible(true)
         }
-
         finally {
             setAssociationsLoading(false)
             setIsRefreshing(false)
@@ -154,13 +152,9 @@ export default function ScheduleAdmin() {
     }
 
     const loadBookings = async (sdate, edate) => {
-
-
-
         try {
-            const { data: response } = await axios.get('association/allobjects/bookedtimes/daterange/get/' + myAssociationsWithBO[currentAssoIndex].id + "/" + sdate + "/" + edate)
-
-
+            const { data: response } = await axios.get('association/allobjects/bookedtimes/daterange/get/' + Associations[currentAssoIndex].id + "/" + sdate + "/" + edate)
+            console.log(response)
             return (response)
         }
         catch (error) {
@@ -195,17 +189,8 @@ export default function ScheduleAdmin() {
 
     const loadWeek = async () => {
 
-
-
-
         let sdate = selectedDate.slice(0, 10)
         const edate = sdate.slice(0, 5) + addMonth(sdate) + sdate.slice(7, 10);
-
-
-
-
-
-
 
         if (sdate && edate) {
             let loadedBookings = await loadBookings(sdate, edate)
@@ -267,27 +252,27 @@ export default function ScheduleAdmin() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ justifyContent: "center" }}>
-
+                <View style={{zIndex: 999}}>
                 <SelectList
-                    placeholder={myAssociationsWithBO[currentAssoIndex].name}
+                    /* boxStyles={Style.adminSelectListBoxStyle}
+                    dropdownStyles={Style.adminSelectListDropdownStyle} */
+                    search={false}
+                    dropdownShown={false}
+                    placeholder={Associations[currentAssoIndex].name}
                     /* editable={false} */
                     setSelected={(key) => {
                         setcurrentAssoIndex(key)
                     }}
-                    data={getAssociationNames(myAssociationsWithBO)}
+                    data={getAssociationNames(Associations)}
                 >
                 </SelectList>
-
-
-                <WeekCalendar
-                    selectedDay={selectedDay}
-                    setSelectedDay={setSelectedDay} />
-
+                </View>
+                <SwipeableCalendar selectedDay={selectedDay} setSelectedDay={setSelectedDay} /* bookAhead={route.params.bookAhead} */ />
             </View>
 
             <View style={{ flex: 1, backgroundColor: "#dcdcdc" }}>
 
-                {myAssociationsWithBO.length == 0 ?
+                {Associations.length == 0 ?
                     <View style={{ flex: 1, justifyContent: "center" }}>
                         <View style={{
                             borderStyle: "solid",
@@ -342,7 +327,7 @@ export default function ScheduleAdmin() {
                                                                 borderColor: "black"
                                                             }]}
                                                         >
-                                                            <Text>{outerItem["bookingObject"]} - {nestedItem['title']}</Text>
+                                                            <Text>{nestedItem['title']}</Text>
                                                         </TouchableOpacity>
                                                     )}
                                                 />
