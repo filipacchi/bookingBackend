@@ -42,7 +42,7 @@ class BookableObjectSerializer(serializers.ModelSerializer):
 class AddBookableObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model=BookableObject
-        fields=("inAssociation", "objectName", "timeSlotLength","timeSlotStartTime","timeSlotEndTime", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
+        fields=("inAssociation", "objectName", "timeSlotLength","timeSlotStartTime", "timeSlotEndTime", "bookableAfterLast", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
 
 class UpdateAssociationImageSerializer(serializers.ModelSerializer):
     class Meta:

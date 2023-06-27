@@ -23,10 +23,11 @@ export default function EditBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
+  const [bookableAfterLastEnabled, setBookableAfterLastEnabled] = useState();
   const navigation = useNavigation()
   const [popupVisible, setPopupVisible] = useState(false);
-    const { state, colorTheme, authContext  } = useContext(AuthContext)
-    const {t} = authContext
+  const { state, colorTheme, authContext  } = useContext(AuthContext)
+  const {t} = authContext
 
   const handleButtonPress = (index) => {
     if (index === 0) { // Yes button pressed
@@ -55,6 +56,7 @@ export default function EditBookableObject({ route }) {
       timeSlotLength: selectedHoursBookable,
       timeSlotStartTime: earliestBookableTime,
       timeSlotEndTime: latestBookableTime,
+      bookableAfterLast: bookableAfterLastEnabled,
       slotsPerDay: slotsBookablePerDay,
       slotsPerWeek: slotsBookablePerWeek,
       bookAheadWeeks: selectedWeeksBookable
@@ -97,6 +99,7 @@ export default function EditBookableObject({ route }) {
         setEarliestBookableTime(response.data.timeSlotStartTime)
         setLatestBookableTime(response.data.timeSlotEndTime)
         setFirstStartTime(response.data.timeSlotStartTime)
+        setBookableAfterLastEnabled(response.data.bookableAfterLast)
         setSlotsBookablePerDay(response.data.slotsPerDay)
         setSlotsBookablePerWeek(response.data.slotsPerWeek)
 
@@ -361,7 +364,17 @@ export default function EditBookableObject({ route }) {
           </View>
         )}
       </View>
-      <View style={[styles.settingContainer, {zIndex: 994}]}>
+      <View style={[styles.settingContainer, {zIndex:994}]}>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("BookableAfterLast")}</Text>
+        </View>
+        <Switch
+          trackColor={{ false: '#767577', true: colorTheme.firstColor }}
+          value={bookableAfterLastEnabled} onValueChange={setBookableAfterLastEnabled} />
+      </View>
+      <View style={{zIndex: 993}}>
+      {bookableAfterLastEnabled ? (<View></View>) : (<View>
+      <View style={[styles.settingContainer, {zIndex: 993}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
         </View>
@@ -379,7 +392,7 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         /></View>
       </View>
-      <View style={[styles.settingContainer, {zIndex: 993}]}>
+      <View style={[styles.settingContainer, {zIndex: 992}]}>
       <View style={styles.settingLabelOverhead}>
         <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
         </View>
@@ -397,6 +410,9 @@ export default function EditBookableObject({ route }) {
           data={amountOfTimes}
         /></View>
       </View>
+      </View>)}
+      </View>
+
       <TouchableOpacity style={[styles.button, {backgroundColor: colorTheme.firstColor}]}
         onPress={() => {
           editBookableObject()

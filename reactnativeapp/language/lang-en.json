@@ -102,6 +102,7 @@
     "WantToDelete": "Are you sure you want to permanently remove this object?",
     "EditBookableObject": "Edit Bookable Object",
     "LengthPerBooking": "Length per booking",
+    "BookableAfterLast": "Only bookable after last booking has passed",
     "BookableAllDay": "Bookable all day",
     "FirstStartTime": "First start time",
     "EarliestBookableTime": "Earliest bookable time",

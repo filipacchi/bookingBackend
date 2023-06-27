@@ -2,7 +2,7 @@ from django.urls import path
 from django.conf import settings
 from .views import *
 from django.conf.urls.static import static 
-
+ 
 urlpatterns = [
     path('user/account/register/', RegisterView.as_view(), name='auth_user_create'),
     path('user/booking/create/', CreateBookingAPIVIEW.as_view(), name='add_booking'),

@@ -104,6 +104,7 @@
     "WantToDelete": "Är du säker på att du vill radera detta objekt permanent?",
     "EditBookableObject": "Redigera bokningsbart objekt",
     "LengthPerBooking": "Längd per bokning",
+    "BookableAfterLast": "Endast bokningsbar efter att senaste tiden passerat",
     "BookableAllDay": "Bokningsbar hela dygnet",
     "FirstStartTime": "Starttid",
     "EarliestBookableTime": "Tidigaste bokningsbara tiden",

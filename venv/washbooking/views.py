@@ -52,7 +52,7 @@ class AddBookableObject(APIView):
             serializer.save()
             return Response('Added object!')
         else:
-            return Response("An error occured, please try again later")
+            return Response("An error occured, please try again later") 
         
 class UpdateBookableObject(APIView):
     permission_classes = [IsAuthenticated]
