@@ -27,7 +27,8 @@ export default function AddBookableObject({ route }) {
   const [firstStartTime, setFirstStartTime] = useState();
   const [slotsBookablePerDay, setSlotsBookablePerDay] = useState();
   const [slotsBookablePerWeek, setSlotsBookablePerWeek] = useState();
-  const [selectListPosition, setSelectListPosition] = useState(0);
+  const [bookableAfterLastEnabled, setBookableAfterLastEnabled] = useState(false);
+  
 
   const { authContext, colorTheme } = useContext(AuthContext);
   const { signOut, t, setLang, getLang } = authContext
@@ -55,6 +56,7 @@ export default function AddBookableObject({ route }) {
       timeSlotLength: selectedHoursBookable,
       timeSlotStartTime: earliestBookableTime,
       timeSlotEndTime: latestBookableTime,
+      bookableAfterLast: bookableAfterLastEnabled,
       slotsPerDay: slotsBookablePerDay,
       slotsPerWeek: slotsBookablePerWeek,
       bookAheadWeeks: selectedWeeksBookable
@@ -317,7 +319,17 @@ export default function AddBookableObject({ route }) {
           </View>
         )}
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor, zIndex: 993 }]}>
+      <View style={[styles.settingContainer, {zIndex:993}]}>
+      <View style={styles.settingLabelOverhead}>
+        <Text style={styles.settingLabel}>{t("BookableAfterLast")}</Text>
+        </View>
+        <Switch
+          trackColor={{ false: '#767577', true: colorTheme.firstColor }}
+          value={bookableAfterLastEnabled} onValueChange={setBookableAfterLastEnabled} />
+      </View>
+      <View style={{zIndex: 992}}>
+      {bookableAfterLastEnabled ? (<View></View>) : (<View>
+      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerDayBackgroundColor, zIndex: 992 }]}>
         <View style={styles.settingContainer}>
            <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerDay")}</Text>
@@ -336,7 +348,7 @@ export default function AddBookableObject({ route }) {
           /></View>
         </View>
       </View>
-      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor, zIndex: 992 }]}>
+      <View style={[styles.settingContainer, { backgroundColor: slotsBookablePerWeekBackgroundColor, zIndex: 991 }]}>
         <View style={styles.settingContainer}>
              <View style={styles.settingLabelOverhead}>
           <Text style={styles.settingLabel}>{t("SlotsBookablePerWeek")}</Text>
@@ -355,6 +367,9 @@ export default function AddBookableObject({ route }) {
           /></View>
         </View>
       </View>
+      </View>)}
+      </View>
+    
       <TouchableOpacity style={[styles.button, {backgroundColor: colorTheme.firstColor}]} onPress={() => {
         if (allDayEnabled) {
           if (objectName == '') {
@@ -363,9 +378,9 @@ export default function AddBookableObject({ route }) {
             setBackgroundColor('white', '#F88379', 'white', 'white', 'white', 'white', 'white')
           } else if (firstStartTime == undefined) {
             setBackgroundColor('white', 'white', 'white', 'white', '#F88379', 'white', 'white')
-          } else if (slotsBookablePerDay == undefined) {
+          } else if (!bookableAfterLastEnabled && slotsBookablePerDay == undefined) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', '#F88379', 'white')
-          } else if (slotsBookablePerWeek == undefined) {
+          } else if (!bookableAfterLastEnabled && slotsBookablePerWeek == undefined) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', '#F88379')
           } else {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')
@@ -385,9 +400,9 @@ export default function AddBookableObject({ route }) {
             setBackgroundColor('white', 'white', '#F88379', 'white', 'white', 'white', 'white')
           } else if (latestBookableTime == undefined) {
             setBackgroundColor('white', 'white', 'white', '#F88379', 'white', 'white', 'white')
-          } else if (slotsBookablePerDay == undefined) {
+          } else if (!bookableAfterLastEnabled && slotsBookablePerDay == undefined) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', '#F88379', 'white')
-          } else if (slotsBookablePerWeek == undefined) {
+          } else if (!bookableAfterLastEnabled && slotsBookablePerWeek == undefined) {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', '#F88379')
           } else {
             setBackgroundColor('white', 'white', 'white', 'white', 'white', 'white', 'white')

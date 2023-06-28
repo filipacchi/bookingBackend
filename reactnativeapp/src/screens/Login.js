@@ -9,6 +9,7 @@ import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, ScrollView, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Style from "./Style";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 
 export default function Login() {

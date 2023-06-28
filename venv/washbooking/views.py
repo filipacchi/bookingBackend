@@ -15,6 +15,7 @@ from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
 import pandas
+from django.core.mail import EmailMessage
 
 class DeleteImage(APIView):
     permission_classes = [IsAuthenticated]
@@ -28,6 +29,7 @@ class DeleteImage(APIView):
                 association.profile_image.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
     
 class UpdateAssociationImage(APIView):
@@ -52,7 +54,7 @@ class AddBookableObject(APIView):
             serializer.save()
             return Response('Added object!')
         else:
-            return Response("An error occured, please try again later")
+            return Response("An error occured, please try again later") 
         
 class UpdateBookableObject(APIView):
     permission_classes = [IsAuthenticated]
@@ -76,7 +78,7 @@ class DeleteBookableObject(APIView):
             return Response('Deleted object!')
         except BookableObject.DoesNotExist:
             return Response("Object does not exist", status=status.HTTP_404_NOT_FOUND)
-
+        
 
 class RegisterView(APIView):
     authentication_classes = []
@@ -87,9 +89,36 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user = UserData.objects.get(id=serializer.data["id"])
-        refresh = RefreshToken.for_user(user)
+        email_subject = 'Verify Email'
+        email_body = 'Verification code: '+str(user.confirmation_code)
+        sender_email = 'noreply@bookease.se'
+        recipient_email = str(user.email)
+        email = EmailMessage(email_subject, email_body, sender_email, [recipient_email])
+        email.send()
+        """ refresh = RefreshToken.for_user(user)
         data = {"info": serializer.data, "access_token": str(refresh.access_token), "refresh_token": str(refresh) }
-        return Response(data)
+        return Response(data) """
+        return Response(status=200)
+    
+class ActivateAccount(APIView):
+    def post(self, request):
+        email = request.data["email"]
+        confirmation_code = request.data["confirmation_code"]
+
+        try: 
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'result': False})
+        if str(user.confirmation_code) == str(confirmation_code):
+            try:
+                user.is_active = True
+                user.save()
+                return Response({'result': True})
+            except:
+                return Response({"error": "error saving"})
+            
+        else: 
+            return Response({'result': False})
     
 
 class LogoutUserAPIView(APIView):
@@ -147,6 +176,7 @@ class GetUserBookingsAPIVIEW(APIView):
                 booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
                 for booked_time in booked_times:
+                    print('HÄR')
                     print(booked_time)
                     my_bookings.append(
                     {
@@ -158,7 +188,9 @@ class GetUserBookingsAPIVIEW(APIView):
                     "association": association["name"],
                     "associationId": association["id"],
                     "profile_image": association["profile_image"],
-                    "opened": False
+                    "opened": False,
+                    "timePast": booked_time["time_past"],
+                    "bookingId": booked_time["bookingId"]
                     })
 
         return Response(my_bookings)
@@ -350,6 +382,19 @@ class CreateBookingAPIVIEW(APIView):
         else:
             return Response("ToManyBookingsPerWeek")
         
+class UpdateBookedTime(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        booked_time = get_object_or_404(BookedTime, pk=pk)
+        serializer = BookedTimeSerializer(booked_time, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()  # Update the object with the new data
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print(request.data)
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]

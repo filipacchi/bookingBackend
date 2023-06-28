@@ -55,7 +55,7 @@ export default function Auth() {
                             :
                             <View style={{gap: 10}}>
                                 <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { setIsLoginDisplayed(true) }}><Text style={[styles.inputText, styles.login]}>{t("Login")}</Text></TouchableOpacity>
-                                <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate('Register') }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>
+                                <TouchableOpacity style={[styles.input, styles.presslogin]} onPress={() => { navigation.navigate("Register") }}><AntDesign name="adduser" size={20} color="white" /><Text style={styles.inputText}>{t("CreateAccount")}</Text></TouchableOpacity>
                             </View>
                         }
                     </View>

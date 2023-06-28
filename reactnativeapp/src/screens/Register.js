@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native"
 import React, { useContext } from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { TextInput } from "react-native-paper";
+import { ActivityIndicator, TextInput } from "react-native-paper";
 import { AuthContext } from "../../auth/UserContextProvider";
 import { KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import Style from "./Style";
@@ -10,10 +10,13 @@ import Checkbox from 'expo-checkbox';
 import { getAllCodes, getName } from 'iso-639-1';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Entypo } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
 
 export default function Register() {
 
+
+    const navigation = useNavigation()
     const { colorTheme, authContext } = React.useContext(AuthContext);
     const { signUp, t, setLang } = authContext
     const [username, onChangeUsername] = useState("");
@@ -23,6 +26,7 @@ export default function Register() {
     const [lastname, onChangeLastname] = useState("");
     const [isChecked, setIsChecked] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
 
 
     const languageOptions = getAllCodes().map((code) => ({
@@ -40,13 +44,19 @@ export default function Register() {
         Linking.openURL(termsURL);
     };
 
-    function handleSignUp() {
+    async function handleSignUp() {
         if (username == "" || firstname == "" || lastname == "" || password == "" || passwordCheck == "" || !isChecked) {
 
 
         } else if (password === passwordCheck) {
+            setIsLoading(true)
             let data = { email: username, firstname: firstname, lastname: lastname, password: password, nativeLang: selectedLanguage }
-            signUp(data)
+            let response = await signUp(data)
+            setIsLoading(false)
+            if(response) {
+                navigation.navigate("ConfirmationCode", {email: username})
+            }
+            console.log(response)
 
 
 
@@ -71,7 +81,7 @@ export default function Register() {
                         flexDirection: "column-reverse"
                     }}>
                         <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}>
-                            <Text style={styles.inputText}>{t("Register")}</Text>
+                            {isLoading ? <ActivityIndicator></ActivityIndicator> : <Text style={styles.inputText}>{t("Register")}</Text>}
                         </TouchableOpacity>
 
                         <View style={{ flexDirection: 'row' }}>
@@ -171,7 +181,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         alignSelf: "center",
-        padding: 15,
+        height: 50,
         flexDirection: "row",
         gap: 10
     },

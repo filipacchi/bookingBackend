@@ -30,19 +30,20 @@ class AssociationSerializer(serializers.ModelSerializer):
         fields=('name', 'adress', 'coordinateX', 'coordinateY', 'id', 'region', 'profile_image', 'join_key')
 
 class BookedTimeSerializer(serializers.ModelSerializer): 
+    bookingId = serializers.PrimaryKeyRelatedField(read_only=True, source='id')
     class Meta:
         model=BookedTime
-        fields=('start_time','end_time','booking_object','booked_by','date')
+        fields=('bookingId','start_time','end_time','booking_object','booked_by','date', 'time_past')
 
 class BookableObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model=BookableObject
-        fields=("objectId", "inAssociation", "objectName", "timeSlotLength","timeSlotStartTime","timeSlotEndTime", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
+        fields=("objectId", "inAssociation", "objectName", "timeSlotLength","timeSlotStartTime","timeSlotEndTime", "bookableAfterLast", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
 
 class AddBookableObjectSerializer(serializers.ModelSerializer):
     class Meta:
         model=BookableObject
-        fields=("inAssociation", "objectName", "timeSlotLength","timeSlotStartTime","timeSlotEndTime", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
+        fields=("inAssociation", "objectName", "timeSlotLength","timeSlotStartTime", "timeSlotEndTime", "bookableAfterLast", "slotsPerDay", "slotsPerWeek", "bookAheadWeeks")
 
 class UpdateAssociationImageSerializer(serializers.ModelSerializer):
     class Meta:

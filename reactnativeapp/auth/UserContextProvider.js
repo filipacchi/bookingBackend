@@ -35,6 +35,7 @@ function UserContextProvider({ children }) {
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
             isAssociation: action.token.isAssociation,
+            isActive: action.token.isActive,
             firstName: action.token.firstName,
             lastName: action.token.lastName,
             isLoading: false,
@@ -46,6 +47,7 @@ function UserContextProvider({ children }) {
             userToken: action.token.access,
             userRefreshToken: action.token.refresh,
             isAssociation: action.token.isAssociation,
+            isActive: action.token.isActive,
             firstName: action.token.firstName,
             lastName: action.token.lastName,
             isLoading: false,
@@ -79,6 +81,7 @@ function UserContextProvider({ children }) {
       isSignout: false,
       userToken: null,
       userRefreshToken: null,
+      isActive: null,
       isAssociation: null,
       firstName: null,
       lastName: null,
@@ -145,7 +148,7 @@ function UserContextProvider({ children }) {
 
           })
           .catch(error => {
-            
+            console.log(error)
           });
 
       },
@@ -156,7 +159,7 @@ function UserContextProvider({ children }) {
       },
       signUp: async (data) => {
         
-        axios.post('user/account/register/', {
+       return axios.post('user/account/register/', {
           email: data.email,
           first_name: data.firstname,
           last_name: data.lastname,
@@ -165,20 +168,39 @@ function UserContextProvider({ children }) {
           is_association: false
         })
           .then(response => {
-            
-            data = { "access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association }
-            
-            axios.defaults.headers.common = { 'Authorization': `Bearer ${data.access}` }
-            save("userRefreshToken", data.refresh)
-            save("userToken", data.access).then(() => {
-              dispatch({ type: 'SIGN_IN', token: data });
-            })
-
+            return true
           })
           .catch(error => {
-            
+            return false
           });
       },
+      activatedAccount: async (data) => {
+        
+        return axios.post('user/account/register/', {
+           email: data.email,
+           first_name: data.firstname,
+           last_name: data.lastname,
+           password: data.password,
+           native_lang: data.nativeLang,
+           is_association: false
+         })
+           .then(response => {
+             
+             data = { "access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association }
+             
+             axios.defaults.headers.common = { 'Authorization': `Bearer ${data.access}` }
+             save("userRefreshToken", data.refresh)
+             save("userToken", data.access).then(() => {
+               dispatch({ type: 'SIGN_IN', token: data });
+             }).then(() => {
+               return true
+             })
+ 
+           })
+           .catch(error => {
+             return false
+           });
+       },
       t: (translate) => {
         return i18n.t(translate)
       },
