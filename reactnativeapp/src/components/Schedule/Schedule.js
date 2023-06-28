@@ -41,10 +41,12 @@ export default function Schedule() {
     }
 
     const loadBookingsAndImages = async (data) => {
+        const currentDate = moment();
         const updatedData = [];
         for (let i = 0; i < data.length; i++) {
-
             let item = data[i];
+            targetDate = moment(item.date).set({ hour: item.endTime.slice(0,2), minute: item.endTime.slice(3,5), second: 0 });
+            differenceInMinutes = currentDate.diff(targetDate, 'minutes');
             try {
                 
                 let profileImage = await getImage(item.associationId);
@@ -55,7 +57,7 @@ export default function Schedule() {
                 /* behöver inte ha pop-up för error på bilderna */
             }
 
-            if (moment().format().slice(0,10)<=item.date){
+            if (differenceInMinutes <= 0){
                 updatedData.push(item);
             }
         }

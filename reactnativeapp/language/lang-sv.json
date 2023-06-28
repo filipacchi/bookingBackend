@@ -104,6 +104,7 @@
     "WantToDelete": "Är du säker på att du vill radera detta objekt permanent?",
     "EditBookableObject": "Redigera bokningsbart objekt",
     "LengthPerBooking": "Längd per bokning",
+    "BookableAfterLast": "Endast bokningsbar efter att senaste tiden passerat",
     "BookableAllDay": "Bokningsbar hela dygnet",
     "FirstStartTime": "Starttid",
     "EarliestBookableTime": "Tidigaste bokningsbara tiden",
@@ -136,6 +137,7 @@
     "ObjectBookable": "Detta objekt är bokningsbart ",
     "WeeksAheadOfTimeItsAlsoBookable": " veckor i förtid. Det är också bokningsbart ",
     "TimesADayAnd": " gånger per dag, och ",
-    "TimesAWeek": " gånger per vecka."
+    "TimesAWeek": " gånger per vecka.",
+    "BookableAfterLastUser": "Du kan boka detta rum/objekt först när din senaste bokning har passerat."
     
 }

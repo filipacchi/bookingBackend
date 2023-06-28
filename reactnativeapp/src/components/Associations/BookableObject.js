@@ -40,6 +40,7 @@ export default function BookableObject({ route }) {
     const [isLoading, setIsLoading] = useState(false)
     const [bookingsLeftDay, setBookingsLeftDay] = useState()
     const [bookingsLeftWeek, setBookingsLeftWeek] = useState()
+    const [bookingLeft, setBookingLeft] = useState(true)
     const  [showNoBookingsLeft, setShowNoBookingsLeft] = useState(false)
     const { showInformation, setShowInformation, updateShowInformation } = useContext(GlobalContext);
 
@@ -116,7 +117,8 @@ export default function BookableObject({ route }) {
             setTimeSlots(response["time_slot_array"])
             setBookingsLeftDay(response["booking_info"]["day"])
             setBookingsLeftWeek(response["booking_info"]["week"])
-            
+            if (route.params.bookableAfterLast){
+                checkTimePast()}
             setLoading(false)
         }
 
@@ -125,10 +127,61 @@ export default function BookableObject({ route }) {
         }
     }
 
+    const checkTimePast = async () => {
+        const currentDate = moment();
+        console.log(currentDate)
+        axios.get('user/bookedtimes/get')
+        .then(response => {
+            console.log('Route: ' + route.params.id)
+            for (let index = 0; index < response.data.length; index++) {
+                console.log('Response: ' + response.data[index].bookingObjectKey)
+                if(route.params.id == response.data[index].bookingObjectKey){
+                targetDate = moment(response.data[index].date).set({ hour: response.data[index].endTime.slice(0,2), minute: response.data[index].endTime.slice(3,5), second: 0 });
+                differenceInDays = currentDate.diff(targetDate, 'days')
+                differenceInMinutes = currentDate.diff(targetDate, 'minutes');
+                if (differenceInDays >= 30) {
+                    let data = {
+                        booking_object: route.params.id,
+                        date: response.data[index].date,
+                        start_time: response.data[index].startTime,
+                        end_time: response.data[index].endTime
+                    }
+                    try {
+                        axios.delete('user/booking/delete/', { data })
+                    } catch (e) {
+                        
+                    }
+
+                  } else if (differenceInMinutes >= 0) {
+                    console.log('Hej')
+                    console.log(response.data[index].bookingId)
+
+                    const data = {
+                        time_past: true,
+                    }
+                    axios.put(`user/booking/update/${response.data[index].bookingId}`, data)
+                    .then((response) => {
+                        console.log('Tja')
+                    })
+                    .catch((error) => {
+                      
+                    });
+                    
+                  } else {
+                    setBookingLeft(false)
+                  }}
+            }
+        })
+        .catch(error => {  
+        });
+    }
+
     React.useEffect(() => {
         if (route.params.token) {
             let decoded = jwt_decode(route.params.token)
             setUser(decoded["user_id"])
+            if (route.params.bookableAfterLast){
+            checkTimePast()}
         }
 
     }, [])
@@ -184,11 +237,25 @@ export default function BookableObject({ route }) {
                 start_time: startTime,
                 end_time: endTime,
                 date: bookDate,
-                booking_object: bookingObject
+                booking_object: bookingObject,
+                time_past: false
             }
-
-            bookTimeRequest(bodyParameters)
-
+            console.log('BookableAfter: ' + route.params.bookableAfterLast)
+            if (route.params.bookableAfterLast && bookingLeft){
+                console.log('1 && 1')
+                axios.post('user/booking/create/', bodyParameters)
+                setButtonBooked(true)
+                setBookedSlot([selectedTime, bodyParameters.date])
+                loadData()
+            } else if (route.params.bookableAfterLast && !bookingLeft){
+                console.log('1 && 0')
+                setShowNoBookingsLeft(true)
+            } else {
+                console.log('0')
+            bookTimeRequest(bodyParameters)}
+            setBookingLoading(false)
+            setButtonBooked(false)
+            console.log(bookingLeft)
         }
     }
 
@@ -250,7 +317,7 @@ export default function BookableObject({ route }) {
                  <IOSPopup
                     visible={showInformation}
                     title={route.params.name}
-                    bodyText={t('ObjectBookable') + route.params.bookAhead + t('WeeksAheadOfTimeItsAlsoBookable') + route.params.perDay + t('TimesADayAnd') + route.params.perWeek + t('TimesAWeek')}
+                    bodyText={route.params.bookableAfterLast ? (t('BookableAfterLastUser')) : (t('ObjectBookable') + route.params.bookAhead + t('WeeksAheadOfTimeItsAlsoBookable') + route.params.perDay + t('TimesADayAnd') + route.params.perWeek + t('TimesAWeek'))}
                     hasInput={false}
                     buttonTexts={[t('Okay')]}
                     buttonColor={colorTheme.firstColor}
@@ -259,7 +326,7 @@ export default function BookableObject({ route }) {
                 <IOSPopup
                     visible={showNoBookingsLeft}
                     title={t('BookingFailed')}
-                    bodyText={t('BookingFailedMsg')}
+                    bodyText={route.params.bookableAfterLast ? (t('BookableAfterLastUser')) : (t('BookingFailedMsg'))}
                     hasInput={false}
                     buttonTexts={[t('Okay')]}
                     buttonColor={colorTheme.firstColor}
