@@ -5,6 +5,7 @@ from django.conf.urls.static import static
  
 urlpatterns = [
     path('user/account/register/', RegisterView.as_view(), name='auth_user_create'),
+    path('user/account/activate/', ActivateAccount.as_view(), name='auth_user_activate'),
     path('user/booking/create/', CreateBookingAPIVIEW.as_view(), name='add_booking'),
     path('user/booking/delete/', DeleteBookingAPIVIEW.as_view(), name='delete_booking'),
     path('user/booking/update/<int:pk>', UpdateBookedTime.as_view(), name='update_booking'),

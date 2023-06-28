@@ -8,6 +8,7 @@ import MainNav from "../src/screens/MainNav";
 import { AuthContext } from "../auth/UserContextProvider";
 import Splash from "../src/screens/Splash";
 import { useFonts } from 'expo-font';
+import VerificationSuccess from "../src/screens/VerificationSuccess";
 import {
   OpenSans_300Light,
   OpenSans_400Regular,
@@ -26,6 +27,7 @@ import {
 
 
 import { useContext } from "react";
+import ConfirmationCode from "../src/components/Misc/ConfirmationCode";
 
 
 export default function AppStack() {
@@ -61,12 +63,16 @@ export default function AppStack() {
             <Stack.Screen name="Auth" component={Auth} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ConfirmationCode" component={ConfirmationCode}/>
+            <Stack.Screen name="VerificationSuccess" component={VerificationSuccess}/>
           </Stack.Group>
 
-        ) : (
+        ) : state.isActive == true ? 
+        
+        (
           <Stack.Screen name="MainNav" component={MainNav} />
 
-        )}
+         ) : <Stack.Screen name="Splash" component={Splash}/>}
       </Stack.Navigator>
 
     </NavigationContainer>

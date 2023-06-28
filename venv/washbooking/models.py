@@ -7,6 +7,10 @@ from django.db.models.signals import post_save;
 from django.dispatch import receiver
 from django.core.validators import RegexValidator
 import uuid 
+import random
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 
 # lets us explicitly set upload path and filename
 def upload_to(instance, filename):
@@ -61,10 +65,11 @@ class UserData(AbstractUser):
     native_lang = models.CharField(max_length=100, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_association = models.BooleanField(default=False)
+    confirmation_code = models.IntegerField(unique=True)
     
     objects = UserManager()
     
@@ -73,6 +78,15 @@ class UserData(AbstractUser):
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+
+def generate_random_code(sender, instance, *args, **kwargs):
+    if not instance.confirmation_code:
+        unique_code = random.randint(1000, 9999)
+        instance.confirmation_code = unique_code
+
+# Register the function as a signal receiver
+pre_save.connect(generate_random_code, sender=UserData)
 
 class Booking(models.Model):
     id = models.AutoField(primary_key=True)

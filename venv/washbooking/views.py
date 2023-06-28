@@ -15,6 +15,7 @@ from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
 import pandas
+from django.core.mail import EmailMessage
 
 class DeleteImage(APIView):
     permission_classes = [IsAuthenticated]
@@ -28,6 +29,7 @@ class DeleteImage(APIView):
                 association.profile_image.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
     
 class UpdateAssociationImage(APIView):
@@ -76,7 +78,7 @@ class DeleteBookableObject(APIView):
             return Response('Deleted object!')
         except BookableObject.DoesNotExist:
             return Response("Object does not exist", status=status.HTTP_404_NOT_FOUND)
-
+        
 
 class RegisterView(APIView):
     authentication_classes = []
@@ -87,9 +89,36 @@ class RegisterView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         user = UserData.objects.get(id=serializer.data["id"])
-        refresh = RefreshToken.for_user(user)
+        email_subject = 'Verify Email'
+        email_body = 'Verification code: '+str(user.confirmation_code)
+        sender_email = 'noreply@bookease.se'
+        recipient_email = str(user.email)
+        email = EmailMessage(email_subject, email_body, sender_email, [recipient_email])
+        email.send()
+        """ refresh = RefreshToken.for_user(user)
         data = {"info": serializer.data, "access_token": str(refresh.access_token), "refresh_token": str(refresh) }
-        return Response(data)
+        return Response(data) """
+        return Response(status=200)
+    
+class ActivateAccount(APIView):
+    def post(self, request):
+        email = request.data["email"]
+        confirmation_code = request.data["confirmation_code"]
+
+        try: 
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'result': False})
+        if str(user.confirmation_code) == str(confirmation_code):
+            try:
+                user.is_active = True
+                user.save()
+                return Response({'result': True})
+            except:
+                return Response({"error": "error saving"})
+            
+        else: 
+            return Response({'result': False})
     
 
 class LogoutUserAPIView(APIView):
