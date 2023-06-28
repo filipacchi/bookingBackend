@@ -50,6 +50,30 @@ export default function ScheduleAdmin() {
     const { t } = authContext
 
 
+    const delBookingAxios = async () => {
+
+        
+        let data = {
+            booking_object: route.params.id, 
+            date: selectedDay.format().slice(0, 10),
+            start_time: selectedCancelTime.slice(0, 5), /* gör om till valt objekt */
+            end_time: selectedCancelTime.slice(8, 13)
+        }
+
+        try {
+            let response = await axios.delete('user/booking/delete/', { data })
+            setBookedSlot([])
+            setSelectedCancelTime(null)
+            setSelectedTime(null)
+            loadData()
+        } catch (e) {
+            
+        }
+        
+
+    }
+
+
     const animateElement = () => {
 
         Animated.timing(opacityAnimation, {
