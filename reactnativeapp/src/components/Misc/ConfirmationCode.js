@@ -1,4 +1,4 @@
-import { Animated, Image, SafeAreaView, Text, View } from 'react-native';
+import { Animated, Image, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Octicons } from '@expo/vector-icons';
 import axios from '../../../axios/axios';
@@ -21,7 +21,7 @@ import styles, {
   DEFAULT_CELL_BG_COLOR,
   NOT_EMPTY_CELL_BG_COLOR,
 } from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 const { Value, Text: AnimatedText } = Animated;
 

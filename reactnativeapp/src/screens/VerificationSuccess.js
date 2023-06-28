@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Linking } from "react-native"
+import { StyleSheet, View, Text, Linking,TouchableOpacity } from "react-native"
 import React, { useContext } from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -16,7 +16,6 @@ import { Ionicons } from '@expo/vector-icons';
 import ConfirmationCode from "../components/Misc/ConfirmationCode";
 import { Octicons } from '@expo/vector-icons';
 import styles from "../components/Misc/styles";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function VerificationSuccess() {
 
