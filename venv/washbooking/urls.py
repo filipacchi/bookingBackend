@@ -7,6 +7,7 @@ urlpatterns = [
     path('user/account/register/', RegisterView.as_view(), name='auth_user_create'),
     path('user/booking/create/', CreateBookingAPIVIEW.as_view(), name='add_booking'),
     path('user/booking/delete/', DeleteBookingAPIVIEW.as_view(), name='delete_booking'),
+    path('user/booking/update/<int:pk>', UpdateBookedTime.as_view(), name='update_booking'),
     path('user/association/with/bookableobjects/get', GetUserAssociationWithBookableObjects.as_view(), name="get_user_association"), #
     path('user/association/join/add/<int:join_key>', UserJoinAssociation.as_view(), name="user_join_association"), #
     path('user/association/join/get/<int:join_key>', GetJoinAssociation.as_view(), name="get_join_association"), #

@@ -135,5 +135,6 @@
     "ObjectBookable": "This object is bookable ",
     "WeeksAheadOfTimeItsAlsoBookable": " weeks ahead of time. It's also bookable ",
     "TimesADayAnd": " times a day, and ",
-    "TimesAWeek": " times a week."
+    "TimesAWeek": " times a week.",
+    "BookableAfterLastUser": "You can only book this room/object after your last booking has passed."
 }

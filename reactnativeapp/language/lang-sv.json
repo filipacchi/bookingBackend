@@ -137,6 +137,7 @@
     "ObjectBookable": "Detta objekt är bokningsbart ",
     "WeeksAheadOfTimeItsAlsoBookable": " veckor i förtid. Det är också bokningsbart ",
     "TimesADayAnd": " gånger per dag, och ",
-    "TimesAWeek": " gånger per vecka."
+    "TimesAWeek": " gånger per vecka.",
+    "BookableAfterLastUser": "Du kan boka detta rum/objekt först när din senaste bokning har passerat."
     
 }

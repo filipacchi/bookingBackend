@@ -147,6 +147,7 @@ class GetUserBookingsAPIVIEW(APIView):
                 booked_times = json.loads(json.dumps(booked_times_serializer.data))
 
                 for booked_time in booked_times:
+                    print('HÄR')
                     print(booked_time)
                     my_bookings.append(
                     {
@@ -158,7 +159,9 @@ class GetUserBookingsAPIVIEW(APIView):
                     "association": association["name"],
                     "associationId": association["id"],
                     "profile_image": association["profile_image"],
-                    "opened": False
+                    "opened": False,
+                    "timePast": booked_time["time_past"],
+                    "bookingId": booked_time["bookingId"]
                     })
 
         return Response(my_bookings)
@@ -350,6 +353,19 @@ class CreateBookingAPIVIEW(APIView):
         else:
             return Response("ToManyBookingsPerWeek")
         
+class UpdateBookedTime(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        booked_time = get_object_or_404(BookedTime, pk=pk)
+        serializer = BookedTimeSerializer(booked_time, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()  # Update the object with the new data
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            print(request.data)
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DeleteBookingAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]

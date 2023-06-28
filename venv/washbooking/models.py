@@ -90,8 +90,8 @@ class BookableObject(models.Model):
     timeSlotStartTime = models.TimeField(blank=False)
     timeSlotEndTime = models.TimeField(blank=False)
     bookableAfterLast = models.BooleanField(blank=False, default=False)
-    slotsPerDay = models.IntegerField(blank=True, default=1)
-    slotsPerWeek = models.IntegerField(blank=True, default=2)
+    slotsPerDay = models.IntegerField(blank=True, default=100)
+    slotsPerWeek = models.IntegerField(blank=True, default=100)
     bookAheadWeeks = models.IntegerField(blank=False, default=4)
 
     def __str__(self):
@@ -123,6 +123,7 @@ class BookedTime(models.Model):
     date = models.DateField(help_text="YYYY-MM-DD", blank=False)
     start_time = models.TimeField(help_text="HH:MM:SS", blank=False)
     end_time = models.TimeField(help_text="HH:MM:SS", blank=False)
+    time_past = models.BooleanField(blank=False, default=False)
 
     class Meta:
         unique_together = ('date', 'start_time', 'end_time', 'booking_object')
