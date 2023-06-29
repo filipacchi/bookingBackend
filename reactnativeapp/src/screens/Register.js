@@ -11,6 +11,7 @@ import { getAllCodes, getName } from 'iso-639-1';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 
 export default function Register() {
@@ -70,6 +71,7 @@ export default function Register() {
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={-200} /* att ta bort denna gör  */
             style={{ flex: 1 }}>
+                
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
                     <View style={{
