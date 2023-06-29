@@ -20,18 +20,19 @@ import styles from "../components/Misc/styles";
 export default function VerificationSuccess() {
 
     const { colorTheme, authContext } = React.useContext(AuthContext);
+    const {t} = authContext
     const navigation = useNavigation()
     return (
         <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Text style={[styles.title]}>Verification Succesful</Text>
+                <Text style={[styles.title]}>{t('VerificationSuccesful')}</Text>
                 <Octicons style={{ alignSelf: "center" }} name="verified" size={100} color="#3dc236" />
             </View>
             <View style={{ flex: 1 }}>
                 <TouchableOpacity style={styles.nextButton}
                     onPress={()=>navigation.navigate("Auth")}
                 >
-                    <Text style={styles.nextButtonText}>Login</Text>
+                    <Text style={styles.nextButtonText}>{t('Login')}</Text>
                 </TouchableOpacity>
             </View>
 
