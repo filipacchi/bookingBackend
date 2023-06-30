@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, Linking } from "react-native"
+import { StyleSheet, View, Text, TouchableOpacity, Linking, SafeAreaView, Dimensions } from "react-native"
 import React, { useContext } from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -11,12 +11,13 @@ import { getAllCodes, getName } from 'iso-639-1';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useHeaderHeight } from '@react-navigation/elements'
 
 
 export default function Register() {
 
-
+    const height = useHeaderHeight()
     const navigation = useNavigation()
     const { colorTheme, authContext } = React.useContext(AuthContext);
     const { signUp, t, setLang } = authContext
@@ -54,8 +55,8 @@ export default function Register() {
             let data = { email: username, firstname: firstname, lastname: lastname, password: password, nativeLang: selectedLanguage }
             let response = await signUp(data)
             setIsLoading(false)
-            if(response) {
-                navigation.navigate("ConfirmationCode", {email: username})
+            if (response) {
+                navigation.navigate("ConfirmationCode", { email: username })
             }
             console.log(response)
 
@@ -67,107 +68,115 @@ export default function Register() {
     }
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={-200} /* att ta bort denna gör  */
-            style={{ flex: 1 }}>
-                
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
-                    <View style={{
-                        position: "absolute",
-                        bottom: 150,
-                        width: "100%",
-                        gap: 20,
-                        alignItems: "center",
-                        flexDirection: "column-reverse"
-                    }}>
-                        <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}>
-                            {isLoading ? <ActivityIndicator></ActivityIndicator> : <Text style={styles.inputText}>{t("Register")}</Text>}
-                        </TouchableOpacity>
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <Checkbox
-                                value={isChecked}
-                                onValueChange={handleCheckboxChange}
-                            />
-                            <Text style={{ color: '#000000', flexDirection: 'row' }} onPress={handleCheckboxChange}>
-                                {t("IAgreeToThe")}
-                            </Text>
-                            <TouchableOpacity onPress={handleTermsLinkPress}>
-                                <Text style={{ color: 'blue' }}>{t("TermsOfService")}</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <SelectList
-                            //dropdownStyles
-                            arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
-                            boxStyles={{ height: 45, alignItems: "center", justifyContent: "space-evenly", width: '50%', backgroundColor: "white" }}
-                            search={true}
-                            dropdownShown={false}
-                            placeholder={t("NativeLanguage")}
-                            setSelected={(val) => {
-                                setSelectedLanguage(val);
-                            }}
-                            data={languageOptions}
-                            dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "50%", top: 45 }}
-                        />
+        <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ minHeight: Math.round(Dimensions.get('window').height) }}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1, height: "100%", width: "100%" }}>
+                <SafeAreaView style={{ flex: 1, width: "100%", alignItems: "center" }}>
+                    {/* <KeyboardAvoidingView style={{ flex: 1, alignItems: "center",height: "100%", position: "absolute", backgroundColor: "blue", left: 0, right: 0, justifyContent: "center" }} behavior={Platform.OS === 'ios' ? 'padding' : null}> */}
+                    {/* <KeyboardAwareScrollView contentContainerStyle={{justifyContent: "center", flex: 1}} style={{backgroundColor: "red"}}>
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "blue" }}> */}
+                    <View style={{ height: "65%", width: "80%", alignItems: "center", justifyContent: "center" }}>
 
                         <View style={Style.inputCredentials}>
                             <TextInput
-                                style={{ backgroundColor: "white" }}
-                                onChangeText={onChangePasswordCheck}
-                                placeholder={t("PasswordRepeat")}
-                                secureTextEntry={true}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                style={{ backgroundColor: "white" }}
-                                onChangeText={onChangePassword}
-                                placeholder={t("Password")}
-                                secureTextEntry={true}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                style={{ backgroundColor: "white" }}
-                                onChangeText={onChangeLastname}
-                                placeholder={t("Lastname")}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                style={{ backgroundColor: "white" }}
-                                onChangeText={onChangeFirstname}
-                                placeholder={t("Firstname")}
-                                autoComplete="off"
-                                autoCorrect={false}
-                            />
-                        </View>
-
-                        <View style={Style.inputCredentials}>
-                            <TextInput
-                                style={{ backgroundColor: "white" }}
+                                style={{ backgroundColor: "white", flex: 1, justifyContent: "center" }}
                                 onChangeText={onChangeUsername}
                                 placeholder={t("Email")}
                                 autoComplete="off"
                                 autoCorrect={false}
                             />
                         </View>
+
+
+                        <View style={{
+                            flexDirection: "row-reverse", height: "10%", width: "100%", justifyContent: "space-evenly", marginTop: "2%",
+                            marginBottom: "2%",
+                        }}>
+                            <View style={Style.inputCredInside}>
+                                <TextInput
+                                    style={{ backgroundColor: "white", flex: 1, justifyContent: "center" }}
+                                    onChangeText={onChangeLastname}
+                                    placeholder={t("Lastname")}
+                                    autoComplete="off"
+                                    autoCorrect={false}
+                                />
+                            </View>
+
+                            <View style={Style.inputCredInside}>
+                                <TextInput
+                                    style={{ backgroundColor: "white", flex: 1, justifyContent: "center" }}
+                                    onChangeText={onChangeFirstname}
+                                    placeholder={t("Firstname")}
+                                    autoComplete="off"
+                                    autoCorrect={false}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                style={{ backgroundColor: "white", flex: 1, justifyContent: "center", textAlign: "left" }}
+                                onChangeText={onChangePassword}
+                                placeholder={t("Password")}
+                                secureTextEntry={true}
+                                autoComplete="off"
+                                autoCorrect={false}
+                                autoCapitalize="none"
+                            />
+                        </View>
+                        <View style={Style.inputCredentials}>
+                            <TextInput
+                                style={{backgroundColor: "white", flex: 1, justifyContent: "center"}}
+                                onChangeText={onChangePasswordCheck}
+                                placeholder={t("PasswordRepeat")}
+                                textContentType="none"
+                                secureTextEntry={true}
+                                autoComplete="off"
+                                autoCorrect={false}
+                                autoCapitalize="none"
+                            />
+                        </View>
+
+                        <View style={{ width: "65%", marginTop: "2%", height: "11%", minHeight: 45 }}>
+                            <SelectList
+                                //dropdownStyles
+                                arrowicon={<Entypo name="chevron-down" size={15} color="grey" />}
+                                boxStyles={{ borderRadius: 1000, height: "100%", alignItems: "center", justifyContent: "space-evenly", width: '100%', backgroundColor: "white", alignSelf: "center" }}
+                                search={true}
+                                dropdownShown={false}
+                                placeholder={t("NativeLanguage")}
+                                setSelected={(val) => {
+                                    setSelectedLanguage(val);
+                                }}
+                                data={languageOptions}
+                                dropdownStyles={{ position: "absolute", backgroundColor: "white", width: "100%", top: 45, zIndex: 10 }}
+                            />
+                        </View>
                     </View>
-                </LinearGradient>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+                    <View style={{ height: "35%", justifyContent: "center", gap: 20, alignItems: "center", width: "100%", zIndex: -1 }}>
+
+                        <View style={{
+                            flexDirection: "row", width: "100%", justifyContent: "center", alignItems: "center", zIndex: -1, gap: 5
+                        }}>
+                            <Checkbox
+                                value={isChecked}
+                                onValueChange={handleCheckboxChange}
+                                style={{ zIndex: -1 }}
+                            />
+                            <Text style={{ zIndex: -1, color: '#000000', flexDirection: 'row' }} onPress={handleCheckboxChange}>
+                                {t("IAgreeToThe")}
+                            </Text>
+
+                            <TouchableOpacity onPress={handleTermsLinkPress}>
+                                <Text style={{ zIndex: -1, color: 'blue' }}>{t("TermsOfService")}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity style={styles.input} onPress={() => { handleSignUp() }}>
+                            {isLoading ? <ActivityIndicator></ActivityIndicator> : <Text style={styles.inputText}>{t("Register")}</Text>}
+                        </TouchableOpacity>
+                    </View>
+                </SafeAreaView>
+            </TouchableWithoutFeedback >
+        </LinearGradient>
     )
 
 }
