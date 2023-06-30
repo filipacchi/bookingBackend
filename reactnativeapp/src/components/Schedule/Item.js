@@ -43,7 +43,7 @@ export const Item = ({item, index, onComponentOpen, onDelete}) => {
             onComponentOpen(index)
         }}
         >
-            <View style={Style.bookedTimesView}>
+            <View style={[Style.bookedTimesView, {paddingVertical: 4}]}>
                 <View style={Style.assoView}>
                 <View style={{ width: 45, height: 45, justifyContent: "center", alignItems: "center"}}>
                 {item.profile_image != null ?

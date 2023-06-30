@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Linking } from "react-native"
+import { StyleSheet, View, Text, Linking,TouchableOpacity } from "react-native"
 import React, { useContext } from 'react';
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
@@ -16,23 +16,23 @@ import { Ionicons } from '@expo/vector-icons';
 import ConfirmationCode from "../components/Misc/ConfirmationCode";
 import { Octicons } from '@expo/vector-icons';
 import styles from "../components/Misc/styles";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function VerificationSuccess() {
 
     const { colorTheme, authContext } = React.useContext(AuthContext);
+    const {t} = authContext
     const navigation = useNavigation()
     return (
         <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Text style={[styles.title]}>Verification Succesful</Text>
+                <Text style={[styles.title]}>{t('VerificationSuccesful')}</Text>
                 <Octicons style={{ alignSelf: "center" }} name="verified" size={100} color="#3dc236" />
             </View>
             <View style={{ flex: 1 }}>
                 <TouchableOpacity style={styles.nextButton}
                     onPress={()=>navigation.navigate("Auth")}
                 >
-                    <Text style={styles.nextButtonText}>Login</Text>
+                    <Text style={styles.nextButtonText}>{t('Login')}</Text>
                 </TouchableOpacity>
             </View>
 

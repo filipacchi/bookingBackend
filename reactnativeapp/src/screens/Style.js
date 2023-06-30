@@ -1,4 +1,4 @@
-import { Platform,StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     addAssociation: {
@@ -10,15 +10,15 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
     },
-    adminSelectListBoxStyle:{
-        height: 45, 
+    adminSelectListBoxStyle: {
+        height: 45,
         alignItems: "center"
     },
-    adminSelectListDropdownStyle:{
-        position: "absolute", 
-        backgroundColor: "white", 
-        width: "100%", 
-        top: 45, 
+    adminSelectListDropdownStyle: {
+        position: "absolute",
+        backgroundColor: "white",
+        width: "100%",
+        top: 45,
         zIndex: 2
     },
     assoDarkView: {
@@ -84,8 +84,8 @@ export default StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderBottomWidth: 3
-      },
-      container: {
+    },
+    container: {
         flex: 1,
         backgroundColor: '#F0F0F0',
         padding: 20,
@@ -106,7 +106,7 @@ export default StyleSheet.create({
         alignSelf: "center",
     },
     expandFlatlist: {
-        
+
     },
     assoText: {
         color: "#222222",
@@ -141,11 +141,11 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginVertical: "5%"
-      },
-      emptyFlatInner: {
+    },
+    emptyFlatInner: {
         marginHorizontal: 20
-      },
-      emptyFlatOuter: {
+    },
+    emptyFlatOuter: {
         backgroundColor: "white",
         borderRadius: 10,
         borderColor: "white",
@@ -155,9 +155,9 @@ export default StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center"
-      },
+    },
     expandFlatlist: {
-        
+
     },
     header: {
         fontSize: 24,
@@ -169,16 +169,31 @@ export default StyleSheet.create({
         width: 30,
         alignItems: "center",
         justifyContent: "center"
-      },
-      innerContainerSettings: {
+    },
+    innerContainerSettings: {
         flexDirection: 'row',
         alignItems: 'center',
-      },
-      inputCredentials: {
+    },
+    width: {
+        width: "100%"
+    },
+    inputCredentials: {
         overflow: "hidden",
-        width: "70%",
-        height: 50,
-        borderRadius: 10,
+        width: "100%",
+        height: "11%",
+        margin: "2%",
+        /*  borderRadius: "100%", */
+        borderRadius: 100,
+        borderWidth: 0,
+        borderColor: "white",
+        justifyContent: "center",
+        minHeight: 45
+    },
+    inputCredInside: {
+        overflow: "hidden",
+        width: "49%",
+        borderRadius: 1000,
+        borderColor: "white",
         justifyContent: "center",
     },
     langSwitchBox: {
@@ -223,12 +238,12 @@ export default StyleSheet.create({
     nameHeader: {
         justifyContent: "center",
         alignItems: "center"
-      },
-      nameTextLarge: {
+    },
+    nameTextLarge: {
         fontSize: 20,
         fontWeight: 500
-      },
-      noAssoText: {
+    },
+    noAssoText: {
         textAlign: "center",
         padding: 10
     },
@@ -296,7 +311,7 @@ export default StyleSheet.create({
     settingContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center', 
+        alignItems: 'center',
         backgroundColor: '#FFFFFF',
         borderRadius: 5,
         padding: 10,
@@ -307,7 +322,7 @@ export default StyleSheet.create({
     settingLabel: {
         fontSize: 16,
     },
-    settingLabelOverhead:{
+    settingLabelOverhead: {
         width: '48%'
     },
     settingNameText: {

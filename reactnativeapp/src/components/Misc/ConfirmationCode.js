@@ -1,4 +1,4 @@
-import { Animated, Image, SafeAreaView, Text, View } from 'react-native';
+import { Animated, Image, SafeAreaView, Text, View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { Octicons } from '@expo/vector-icons';
 import axios from '../../../axios/axios';
@@ -21,7 +21,7 @@ import styles, {
   DEFAULT_CELL_BG_COLOR,
   NOT_EMPTY_CELL_BG_COLOR,
 } from './styles';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 const { Value, Text: AnimatedText } = Animated;
 
@@ -52,8 +52,9 @@ const ConfirmationCode = ({ route }) => {
   const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(false)
   const [btnColor, setBtnColor] = useState('#3557b7')
-  const [btnText, setBtnText] = useState("Verify")
   const { colorTheme, authContext } = React.useContext(AuthContext);
+  const {t} = authContext
+  const [btnText, setBtnText] = useState(t('Verify'))
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -108,7 +109,7 @@ const ConfirmationCode = ({ route }) => {
     if (btnColor == "red") {
       setTimeout(() => {
         setBtnColor('#3557b7')
-        setBtnText("Verify")
+        setBtnText(t('Verify'))
       }, 2000)
     }
   }, [btnColor])
@@ -126,7 +127,7 @@ const ConfirmationCode = ({ route }) => {
         } else if (response.data['result'] == false) {
           console.log("Not Verified")
           setBtnColor("red")
-          setBtnText("Try Again")
+          setBtnText(t('TryAgainShort'))
         }
         setIsLoading(false)
       }).catch(error => {
@@ -141,10 +142,10 @@ const ConfirmationCode = ({ route }) => {
   return (
     <LinearGradient colors={[colorTheme.firstColor, colorTheme.secondColor]} style={{ flex: 1 }}>
       <SafeAreaView style={styles.root}>
-        <Text style={styles.title}>Email Verification</Text>
+        <Text style={styles.title}>{t('EmailVerification')}</Text>
         <Octicons style={{ alignSelf: "center" }} name="verified" size={75} color="white" />
         <Text style={styles.subTitle}>
-          Please enter the verification code we sent to {'\n'}
+           {t('VerifyMsg') +'\n'}
         </Text>
         <Text style={{ alignSelf: "center", color: "white" }}>{route.params.email}</Text>
 

@@ -67,12 +67,12 @@ export default function AppStack() {
             <Stack.Screen name="VerificationSuccess" component={VerificationSuccess}/>
           </Stack.Group>
 
-        ) : state.isActive == true ? 
-        
+        ) 
+         :
         (
           <Stack.Screen name="MainNav" component={MainNav} />
 
-         ) : <Stack.Screen name="Splash" component={Splash}/>}
+         ) }
       </Stack.Navigator>
 
     </NavigationContainer>

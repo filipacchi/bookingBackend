@@ -27,6 +27,11 @@
     "TermsOfService": "Terms of Service",
     "Register": "Register",
     "NativeLanguage": "Native Language",
+    "VerificationSuccesful": "Verification Successful",
+    "EmailVerification": "Email Verification",
+    "VerifyMsg": "Please enter the verification code we sent to ",
+    "Verify": "Verify",
+    "TryAgainShort": "Try Again",
 
     "BookingPage": "Booking",
     "Date": "Date",
