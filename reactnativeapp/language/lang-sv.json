@@ -12,6 +12,8 @@
     "Confirm": "BEKRÄFTA",
     "ConfirmMsg": "Skriv in ordet: BEKRÄFTA för att radera ditt konto permanent, detta kan inte ångras.",
     "AccountDeleted": "Konto raderat! Du kommer loggas ut om några sekunder...",
+    "UpdateRequired": "Uppdatering krävs",
+    "UpdateRequiredMsg": "En ny version av appen är tillgänglig. Uppdatera till den senaste versionen.",
     
     "CreateAccountPage": "Skapa konto",
     "Username": "Användarnamn",

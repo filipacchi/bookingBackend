@@ -10,12 +10,13 @@ from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.http import HttpResponse
 import pprint
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from .forms import UpdateAssociationImageForm
 import os
 from django.conf import settings
 import pandas
 from django.core.mail import EmailMessage
+import time
 
 class DeleteImage(APIView):
     permission_classes = [IsAuthenticated]
@@ -208,7 +209,6 @@ class GetUserAccount(APIView):
 class GetBookingsAPIVIEW(APIView):
     permission_classes= [IsAuthenticated]#[checkGroup]
     def get(self,request):
-        print(self.request.data)
         bookings = BookedTime.objects.all()
         serializer = BookedTimeSerializer(bookings, many=True)
         return Response(serializer.data)
@@ -218,16 +218,17 @@ class GetBookingsAPIVIEW(APIView):
 class GetBookingsFromDateRange(APIView):
     authentication_classes = [IsAuthenticated]
     def get(self, request, bookid, startdate, enddate):
-
+        
         bookable_object = BookableObject.objects.get(objectId=bookid)
         bookings = BookedTime.objects.filter(booking_object=bookable_object, date__range=[startdate, enddate])
         serializer = BookedTimeSerializer(bookings, many=True)
         format = "%Y-%m-%d"
         print(startdate)
+        today = datetime.now()
         sdate = datetime.strptime(startdate, format)
         edate = datetime.strptime(enddate, format)
         print(bookable_object)
-        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object).data, sdate, edate)
+        time_slot_array = populateTimeSlots(serializer.data, BookableObjectSerializer(bookable_object).data, sdate, edate, today)
 
         return Response(time_slot_array)
     
@@ -248,10 +249,8 @@ class GetBookingsFromAssociationAndDateRange(APIView):
             bookings_serializer = BookedTimeSerializer(bookings_db, many=True)
             bookings = json.loads(json.dumps(bookings_serializer.data))
             format = "%Y-%m-%d"
-            print(startdate)
             sdate = datetime.strptime(startdate, format)
             edate = datetime.strptime(enddate, format)
-            print(object)
             time_slot_array = populateTimeSlots(bookings, object, sdate, edate)
 
             sorted_bookings.append({"bookingObject": object["objectName"], "bookedTimes": time_slot_array})
@@ -309,6 +308,7 @@ def checkUserBookings(user, object, date_str):
 class GetBookingsFromDay(APIView):
     permission_classes=[IsAuthenticated]
     def get(self,request,object_pk,date):
+        now = datetime.now()
         bookable_object = BookableObject.objects.get(objectId=object_pk)
         bookings = BookedTime.objects.filter(booking_object=bookable_object,date=date)
         bookedSerializer = BookedTimeSerializer(bookings, many=True)
@@ -318,7 +318,7 @@ class GetBookingsFromDay(APIView):
         
         print(bookings)
         print(json.dumps(bookedSerializer.data))
-        time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate)
+        time_slot_array = populateTimeSlots(bookedSerializer.data, bookableSeralizer.data, sdate, sdate, now)
         #time.sleep(2)
         booking_info = checkUserBookings(self.request.user, bookable_object, date)
         data = {"time_slot_array": time_slot_array, "booking_info": booking_info}
@@ -336,51 +336,81 @@ class CreateBookingAPIVIEW(APIView):
     def post(self,request): 
         user = self.request.user
         object = BookableObject.objects.get(objectId=request.data["booking_object"])
-
+        bookableAfterLast = object.bookableAfterLast
         request.data["booked_by"] = user.id
         date_str = request.data["date"]
         date_object = datetime.strptime(date_str, '%Y-%m-%d').date()
         start_date = date_object - timedelta(days=date_object.weekday())
         end_date = start_date + timedelta(days=6)
-        distinct_bookings = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).values('date').distinct()
-        user_bookings_week = distinct_bookings.count()
-        user_bookings_day = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date=date_object).count()
-        print("VECKORKOLLA: "+str(distinct_bookings))
+        serializer = BookedTimeSerializer(data=request.data)
+
+
+
+        """ print("VECKORKOLLA: "+str(distinct_bookings)) """
         #pprint.pprint(date_object.weekday())
         #print(user_bookings_amount)
-        slots_per_day = object.slotsPerDay
-        slots_per_week = object.slotsPerWeek
         #print(slots_per_day)
         #print(slots_per_week)
-        if(user_bookings_week == slots_per_week):
-            if distinct_bookings.filter(date=date_object).exists():
+        if (bookableAfterLast):
+            request_book_end_time = datetime.strptime(request.data['end_time'], "%H:%M").time()
+            request_book_date = datetime.strptime(request.data["date"],"%Y-%m-%d")
+            request_booking_datetime = datetime.combine(request_book_date, request_book_end_time)
+            print("KOLLA FUCKING HÄR: "+str(request_booking_datetime))
+            user_bookings = BookedTime.objects.filter(booked_by=user.id, booking_object=object)
+            if user_bookings.exists():
+                """   """
+                for booking in user_bookings:
+                    """ start_time = datetime.strptime(booking.start_time, "%H:%M:%S").time()
+                    end_time = datetime.strptime(booking.end_time, "%H:%M:%S").time()"""
+                    existing_booking_date_time = datetime.combine(booking.date, booking.end_time)
+                    print("Booking date time: "+str(existing_booking_date_time)) 
+                    if(existing_booking_date_time > datetime.now()):
+                        print("Sluttid mindre än nu tid")
+                        return Response("ToManyBookingsPerWeek")          
+            if serializer.is_valid():
+                serializer.save()
+        
+                return Response("Bokar")  
+            else:
+                return Response("Error")
+        else:
+            slots_per_day = object.slotsPerDay
+            slots_per_week = object.slotsPerWeek
+            distinct_bookings = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date__range=[start_date, end_date] ).values('date').distinct()
+            user_bookings_week = distinct_bookings.count()
+            user_bookings_day = BookedTime.objects.filter(booked_by=user.id, booking_object=object, date=date_object).count()
+
+            if(user_bookings_week == slots_per_week):
+                if distinct_bookings.filter(date=date_object).exists():
+                    if user_bookings_day < slots_per_day:
+                        ("OK DAG")
+                        
+                        if serializer.is_valid():
+                    #return checkBooking(serializer, object_pk)
+                            serializer.save()
+                    #time.sleep(2)
+                            return Response("Bokar")
+                        else: 
+                            return Response("Error")
+                        
+                    else:
+                        return Response("ToManyBookingsPerDay")
+                else:
+                    return Response("ToManyBookingsPerWeek")
+            elif user_bookings_week < slots_per_week:
                 if user_bookings_day < slots_per_day:
                     print("OK DAG")
                     serializer = BookedTimeSerializer(data=request.data)
                     if serializer.is_valid():
-                #return checkBooking(serializer, object_pk)
+                    #return checkBooking(serializer, object_pk)
                         serializer.save()
-                #time.sleep(2)
+                    #time.sleep(2)
                         return Response("Bokar")
                     return Response("An error occured, this time might not be available")
                 else:
                     return Response("ToManyBookingsPerDay")
             else:
                 return Response("ToManyBookingsPerWeek")
-        elif user_bookings_week < slots_per_week:
-            if user_bookings_day < slots_per_day:
-                print("OK DAG")
-                serializer = BookedTimeSerializer(data=request.data)
-                if serializer.is_valid():
-                #return checkBooking(serializer, object_pk)
-                    serializer.save()
-                #time.sleep(2)
-                    return Response("Bokar")
-                return Response("An error occured, this time might not be available")
-            else:
-                return Response("ToManyBookingsPerDay")
-        else:
-            return Response("ToManyBookingsPerWeek")
         
 class UpdateBookedTime(APIView):
     permission_classes = [IsAuthenticated]
@@ -504,17 +534,21 @@ def checkBooking(serializer, object_pk):
 
 def calculateTimeDifference(t1, t2):
     
-    print("CALCULATE: "+t1)
+
     return int(t2[0:2]) - int(t1[0:2])
 
-def populateTimeSlots(booked_times, bookable_object, sdate, edate):
+def populateTimeSlots(booked_times, bookable_object, sdate, edate, now):
     time_slot_dict = {}
     format = "%Y-%m-%d"
     date_array = pandas.date_range(sdate,edate,freq='d')
     for date in date_array:
-    
+        today = datetime.strftime(now, format)
         currentdate = datetime.strftime(date, format)
-        time_slot_dict[currentdate] = createTimeSlots(bookable_object)
+        if(today==currentdate):
+            slot_today = True
+        else:
+            slot_today = False
+        time_slot_dict[currentdate] = createTimeSlots(bookable_object, slot_today, now)
     
     for booking in booked_times:
         for slot in time_slot_dict[booking["date"]]:
@@ -524,11 +558,9 @@ def populateTimeSlots(booked_times, bookable_object, sdate, edate):
     return time_slot_dict
 
 
-def createTimeSlots(bookable_object):
-    """ print("type and value of bookableobject")
-    print(type(bookable_object))
-    print(bookable_object) """
-
+def createTimeSlots(bookable_object, slot_today, now):
+    time_string = now.strftime('%H:%M:%S')
+    time_today = datetime.strptime(time_string, "%H:%M:%S").time()
     start_time = int(bookable_object["timeSlotStartTime"][0:2])
     end_time = int(bookable_object["timeSlotEndTime"][0:2])
     slot_length = int(bookable_object["timeSlotLength"])
@@ -550,7 +582,16 @@ def createTimeSlots(bookable_object):
     while index < end_range:
         next_index = (index+slot_length) % 24
         
-        if (index+slot_length) <= end_range:
+        if(slot_today):
+            date_time_object = datetime.strptime(str(next_index), "%H").time()
+            if(date_time_object > time_today):
+                if (index+slot_length) <= end_range:
+                    title_temp = prettyDate(index % 24, next_index)
+                    time_slot_array.append({ "id": index % 24, "title": title_temp, "booked": False, "booked_by": "" })
+                    print("IDAG BENIM!!!: "+str(time_today))
+
+        elif (index+slot_length) <= end_range:
+
             title_temp = prettyDate(index % 24, next_index)
             time_slot_array.append({ "id": index % 24, "title": title_temp, "booked": False, "booked_by": "" })
         """  timeSlotArray.append({"id": index, "title": titleTemp, "booked": False}) """

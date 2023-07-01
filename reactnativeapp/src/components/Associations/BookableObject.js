@@ -213,11 +213,11 @@ export default function BookableObject({ route }) {
             if(response.data=="Bokar"){
                 setButtonBooked(true)
                 setBookedSlot([selectedTime, bodyParameters.date])
-                loadData()
             } else if (response.data="ToManyBookingsPerWeek"){
                 setShowNoBookingsLeft(true)
-            }
+            } 
             setBookingLoading(false)
+            loadData()
             
         } catch (e) {
             
@@ -240,23 +240,7 @@ export default function BookableObject({ route }) {
                 booking_object: bookingObject,
                 time_past: false
             }
-            console.log('BookableAfter: ' + route.params.bookableAfterLast)
-            if (route.params.bookableAfterLast && bookingLeft){
-                console.log('1 && 1')
-                axios.post('user/booking/create/', bodyParameters)
-                setButtonBooked(true)
-                setBookedSlot([selectedTime, bodyParameters.date])
-                loadData()
-            } else if (route.params.bookableAfterLast && !bookingLeft){
-                console.log('1 && 0')
-                setShowNoBookingsLeft(true)
-            } else {
-                console.log('0')
             bookTimeRequest(bodyParameters)}
-            setBookingLoading(false)
-            setButtonBooked(false)
-            console.log(bookingLeft)
-        }
     }
 
     const slotSkeleton = () => {

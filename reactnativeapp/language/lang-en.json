@@ -32,6 +32,8 @@
     "VerifyMsg": "Please enter the verification code we sent to ",
     "Verify": "Verify",
     "TryAgainShort": "Try Again",
+    "UpdateRequired": "Update Required",
+    "UpdateRequiredMsg": "A new version of the app is available. Please update to the latest version.",
 
     "BookingPage": "Booking",
     "Date": "Date",

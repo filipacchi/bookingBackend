@@ -7,6 +7,9 @@ import { getLocales } from "expo-localization"
 import { useState } from 'react';
 import Splash from '../src/screens/Splash';
 import { View } from 'react-native';
+import VersionCheck from "react-native-version-check-expo"
+import { Linking } from 'react-native';
+import { Alert } from 'react-native';
 
 
 const AuthContext = React.createContext();
@@ -17,14 +20,44 @@ async function save(key, value) {
 
 function UserContextProvider({ children }) {
   const i18n = new I18n(translations)
-  i18n.defaultLocale = getLocales()[0].languageCode
-  i18n.locale = getLocales()[0].languageCode
+ /*  if (getLocales()[0].languageCode == "sv" || "en") {
+    console.log(getLocales()[0].languageCode)
+    i18n.defaultLocale = getLocales()[0].languageCode
+    i18n.locale = getLocales()[0].languageCode
+  } */
+  
   i18n.enableFallback = true
 
   const [appReady, setAppReady] = useState(false)
   const [isSplashAnimationComplete, setAnimationComplete] = useState(false);
   const [colorTheme, setColorTheme] = useState({ name: "The Original", firstColor: "#4d70b3", secondColor: "#6ea1ff" })
   const [tabTitles, setTabTitles] = useState({ AssociationsPage: i18n.t("AssociationsPage"), Profile: i18n.t("Profile"), Bookings: i18n.t("Bookings"), Return: i18n.t("Return") })
+
+  React.useEffect(() => {
+    VersionCheck.needUpdate()
+      .then(async res => {
+        console.log(res.isNeeded);    // true
+        if (res.isNeeded) {
+          Alert.alert(
+            i18n.t("UpdateRequired"),
+            i18n.t("UpdateRequiredMsg"),
+            [
+              {
+                text: 'OK',
+                onPress: () => {
+                  Linking.openURL(res.storeUrl);  // open store if update is needed.
+                }
+              }
+            ]
+          )
+
+        }
+      });
+  }, [])
+
+
+
+
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -98,7 +131,7 @@ function UserContextProvider({ children }) {
           setColorTheme(JSON.parse(selectedColor))
         }
       } catch (e) {
-        
+
       }
       try {
         userRefreshToken = await SecureStore.getItemAsync('userRefreshToken')
@@ -123,7 +156,7 @@ function UserContextProvider({ children }) {
           })
           .catch(error => {
             dispatch({ type: 'NO_AUTH' });
-          }).finally(()=>{
+          }).finally(() => {
             setAppReady(true)
           })
       }
@@ -158,8 +191,8 @@ function UserContextProvider({ children }) {
         dispatch({ type: 'SIGN_OUT' })
       },
       signUp: async (data) => {
-        
-       return axios.post('user/account/register/', {
+
+        return axios.post('user/account/register/', {
           email: data.email,
           first_name: data.firstname,
           last_name: data.lastname,
@@ -175,32 +208,32 @@ function UserContextProvider({ children }) {
           });
       },
       activatedAccount: async (data) => {
-        
+
         return axios.post('user/account/register/', {
-           email: data.email,
-           first_name: data.firstname,
-           last_name: data.lastname,
-           password: data.password,
-           native_lang: data.nativeLang,
-           is_association: false
-         })
-           .then(response => {
-             
-             data = { "access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association }
-             
-             axios.defaults.headers.common = { 'Authorization': `Bearer ${data.access}` }
-             save("userRefreshToken", data.refresh)
-             save("userToken", data.access).then(() => {
-               dispatch({ type: 'SIGN_IN', token: data });
-             }).then(() => {
-               return true
-             })
- 
-           })
-           .catch(error => {
-             return false
-           });
-       },
+          email: data.email,
+          first_name: data.firstname,
+          last_name: data.lastname,
+          password: data.password,
+          native_lang: data.nativeLang,
+          is_association: false
+        })
+          .then(response => {
+
+            data = { "access": response.data.access_token, "refresh": response.data.refresh_token, "isAssociation": response.data.info.is_association }
+
+            axios.defaults.headers.common = { 'Authorization': `Bearer ${data.access}` }
+            save("userRefreshToken", data.refresh)
+            save("userToken", data.access).then(() => {
+              dispatch({ type: 'SIGN_IN', token: data });
+            }).then(() => {
+              return true
+            })
+
+          })
+          .catch(error => {
+            return false
+          });
+      },
       t: (translate) => {
         return i18n.t(translate)
       },
@@ -228,12 +261,12 @@ function UserContextProvider({ children }) {
   );
   const contextValue = { tabTitles, authContext, state, colorTheme, setColorTheme }
 
-  function AnimatedSplashScreen({ children}) {
+  function AnimatedSplashScreen({ children }) {
     return (
       <View style={{ flex: 1 }}>
         {isSplashAnimationComplete && children}
         {!isSplashAnimationComplete && (
-          <Splash setAnimationComplete={setAnimationComplete} appReady={appReady}/>
+          <Splash setAnimationComplete={setAnimationComplete} appReady={appReady} />
         )}
       </View>
     );

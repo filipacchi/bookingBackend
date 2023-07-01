@@ -19,8 +19,13 @@ export default function Information() {
     const { i18n, colorTheme, setColorTheme } = React.useContext(AuthContext);
     const { signOut, t, setLang, getLanguage } = authContext
 
+    const handleTermsLinkPress = () => {
+        const termsURL = 'https://bookease.se/app/termsofservice';
+        Linking.openURL(termsURL);
+    };
+
     const handleEmailLinkPress = () => {
-        const emailAddress = 'feedback@bookease.se';
+        const emailAddress = 'contact@bookease.se';
         const subject = 'Feedback';
         const mailtoUrl = `mailto:${emailAddress}?subject=${subject}`;
 
@@ -33,9 +38,9 @@ export default function Information() {
         <View style={styles.container}>
             <Text><Text style={{ color: colorTheme.firstColor, textDecorationLine: "underline" }}>Bookease </Text>{t("BookeaseInfoTitle")}</Text>
             <Text></Text>
-            <Text>{t("Feedback")}<TouchableOpacity onPress={handleEmailLinkPress} style={{ justifyContent: "center", alignItems: "center" }}><Text style={{ color: colorTheme.firstColor, textDecorationLine: "underline" }} >feedback@bookease.se</Text></TouchableOpacity></Text>
+            <Text>{t("Feedback")}<TouchableOpacity onPress={handleEmailLinkPress} style={{ justifyContent: "center", alignItems: "center" }}><Text style={{ color: colorTheme.firstColor, textDecorationLine: "underline" }} >contact@bookease.se</Text></TouchableOpacity></Text>
             <View style={{ flex: 1 }}></View>
-            <TouchableOpacity style={{ alignSelf: "center", borderWidth: 2, borderRadius: 6, padding: 10, borderColor: colorTheme.firstColor }}><Text style={{ color: colorTheme.firstColor }}>{t('TermsOfService')}</Text></TouchableOpacity>
+            <TouchableOpacity onPress={handleTermsLinkPress} style={{ alignSelf: "center", borderWidth: 2, borderRadius: 6, padding: 10, borderColor: colorTheme.firstColor }}><Text style={{ color: colorTheme.firstColor }}>{t('TermsOfService')}</Text></TouchableOpacity>
         </View>
 
     )
