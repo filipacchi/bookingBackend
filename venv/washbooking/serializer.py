@@ -19,6 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
     
+class PersonSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+
+    class Meta:
+        model = Person
+        fields = ["user", "associations"]
+    
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model=Booking

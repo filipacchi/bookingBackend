@@ -9,6 +9,7 @@ import { AuthContext } from "../../../auth/UserContextProvider";
 import base64 from 'react-native-base64'
 import FormData from 'form-data'
 import { ActivityIndicator } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AssociationInformation({ route }) {
   const { associationId, associationName, associationKey,associationImage } = route.params
@@ -16,6 +17,7 @@ export default function AssociationInformation({ route }) {
   const [isLoaded, setIsLoaded] = React.useState(false)
   const { state, colorTheme, authContext  } = React.useContext(AuthContext)
   const {t} = authContext
+  const navigation = useNavigation()
 
 
 
@@ -144,10 +146,13 @@ const getImage = async () => {
           <MaterialIcons name="vpn-key" size={24} color="black" />
           <Text style={styles.objectName}>   {t("Key")} <Text style={{fontWeight: 500}}>{associationKey}</Text></Text>
         </View>
-        <View style={styles.settingContainer}>
+        <TouchableOpacity style={styles.settingContainer}
+        onPress={() => {                                  
+          navigation.navigate("Members", {associationId: associationId})
+      }}>
           <MaterialCommunityIcons name="account" size={24} color="black" />
           <Text style={styles.objectName}>  {t("Members")}</Text>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   )

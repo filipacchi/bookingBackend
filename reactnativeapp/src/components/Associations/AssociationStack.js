@@ -13,6 +13,7 @@ import { AuthContext } from '../../../auth/UserContextProvider.js';
 import BookedObjectSwiper from './BookedObjectSwiper.js';
 import { Ionicons } from '@expo/vector-icons';
 import { GlobalContext } from 'reactnativeapp/GlobalContext.js';
+import Members from "reactnativeapp/src/components/AdminStart/Members.js";
 
 
 const Stack = createNativeStackNavigator()
@@ -42,9 +43,10 @@ function AssociationStack() {
       {state.isAssociation ? (
         <Stack.Group>
           <Stack.Screen name="Admin" component={AdminStart} />
-          <Stack.Screen name="AssociationInformation" component={AssociationInformation} />
-          <Stack.Screen name="AddBookableObject" component={AddBookableObject} />
-          <Stack.Screen name="EditBookableObject" component={EditBookableObject} />
+          <Stack.Screen name="AssociationInformation" component={AssociationInformation} options={{ headerTintColor: "white", headerBackTitle: tabTitles.Return, }} />
+          <Stack.Screen name="AddBookableObject" component={AddBookableObject} options={{ headerTintColor: "white", headerBackTitle: tabTitles.Return, }}/>
+          <Stack.Screen name="EditBookableObject" component={EditBookableObject} options={{ headerTintColor: "white", headerBackTitle: tabTitles.Return, }}/>
+          <Stack.Screen name="Members" component={Members} options={{ headerTintColor: "white", headerBackTitle: tabTitles.Return, }} />
         </Stack.Group>
       ) :
         (

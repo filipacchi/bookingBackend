@@ -13,6 +13,7 @@ urlpatterns = [
     path('user/association/join/add/<int:join_key>', UserJoinAssociation.as_view(), name="user_join_association"), #
     path('user/association/join/get/<int:join_key>', GetJoinAssociation.as_view(), name="get_join_association"), #
     path('user/bookedtimes/get', GetUserBookingsAPIVIEW.as_view(), name='get_user_booked_times'), #
+    path('association/members/get/<int:pk>', GetAssociationUsersAPIView.as_view(), name="get_user_association"), #
     path('association/bookableobject/add', AddBookableObject.as_view(), name='add_bookableobject'), #
     path('association/bookableobject/delete/<int:pk>', DeleteBookableObject.as_view(), name='delete_bookable_object'), #
     path('association/bookableobject/update/<int:pk>', UpdateBookableObject.as_view(), name='update_bookable_object'), #

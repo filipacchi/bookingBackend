@@ -439,6 +439,21 @@ class checkValidationAPIVIEW(APIView):
     def get(self,request):
         return Response(True)
     
+class GetAssociationUsersAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            association = Association.objects.get(pk=pk)
+        except Association.DoesNotExist:
+            return Response({"error": "Association not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        users = association.person_set.all()
+        person_serializer = PersonSerializer(users, many=True)
+
+        return Response(person_serializer.data)
+
+    
 class GetUserAssociation(APIView):
     permission_classes = [IsAuthenticated]
     
